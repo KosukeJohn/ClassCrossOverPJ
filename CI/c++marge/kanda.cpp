@@ -9,6 +9,6 @@ int main()
 	Output();
 	Output();
 	Output();
-
+	cout << "sakamoto" << "\n";
 	return 0;
 }

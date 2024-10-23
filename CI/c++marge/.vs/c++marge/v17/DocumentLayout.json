@@ -1,9 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\public SSS\\CI\\c\u002B\u002Bmarge\\",
+  "WorkspaceRootPath": "C:\\Users\\kosuk\\OneDrive\\Desktop\\ClassCrossOverPJd\\ClassCrossOverPJ\\CI\\c\u002B\u002Bmarge\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A07C2929-D740-4DF2-B60A-64F0D350A2D6}|c\u002B\u002Bmarge.vcxproj|C:\\public SSS\\CI\\c\u002B\u002Bmarge\\kanda.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{A07C2929-D740-4DF2-B60A-64F0D350A2D6}|c\u002B\u002Bmarge.vcxproj|C:\\Users\\kosuk\\OneDrive\\Desktop\\ClassCrossOverPJd\\ClassCrossOverPJ\\CI\\c\u002B\u002Bmarge\\kanda.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A07C2929-D740-4DF2-B60A-64F0D350A2D6}|c\u002B\u002Bmarge.vcxproj|solutionrelative:kanda.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
@@ -24,30 +24,25 @@
               "DocumentIndex": 1,
               "Title": "kadai09-1.cpp",
               "DocumentMoniker": "C:\\\u7DF4\u7FD2\\kadai09\\kadai09-1.cpp",
-              "RelativeDocumentMoniker": "..\\..\\..\\\u7DF4\u7FD2\\kadai09\\kadai09-1.cpp",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\..\\\u7DF4\u7FD2\\kadai09\\kadai09-1.cpp",
               "ToolTip": "C:\\\u7DF4\u7FD2\\kadai09\\kadai09-1.cpp",
-              "RelativeToolTip": "..\\..\\..\\\u7DF4\u7FD2\\kadai09\\kadai09-1.cpp",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\..\\\u7DF4\u7FD2\\kadai09\\kadai09-1.cpp",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-10-23T09:55:02.522Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-23T09:55:02.522Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "kanda.cpp",
-              "DocumentMoniker": "C:\\public SSS\\CI\\c\u002B\u002Bmarge\\kanda.cpp",
+              "DocumentMoniker": "C:\\Users\\kosuk\\OneDrive\\Desktop\\ClassCrossOverPJd\\ClassCrossOverPJ\\CI\\c\u002B\u002Bmarge\\kanda.cpp",
               "RelativeDocumentMoniker": "kanda.cpp",
-              "ToolTip": "C:\\public SSS\\CI\\c\u002B\u002Bmarge\\kanda.cpp",
+              "ToolTip": "C:\\Users\\kosuk\\OneDrive\\Desktop\\ClassCrossOverPJd\\ClassCrossOverPJ\\CI\\c\u002B\u002Bmarge\\kanda.cpp",
               "RelativeToolTip": "kanda.cpp",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAsAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAASAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-10-23T09:54:45.21Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
             }
           ]
         }
