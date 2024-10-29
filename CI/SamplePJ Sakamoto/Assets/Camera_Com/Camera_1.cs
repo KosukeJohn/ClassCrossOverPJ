@@ -22,7 +22,7 @@ public class Camera_1 : MonoBehaviour
         //Player‚Ì‰ñ“]‘¬“x‚ğæ“¾
         AngleSpeed = Player.GetComponent<Player>().ro_speed;
 
-        //Camera‚ğPlayer‚ÌˆÊ’u‚É‰Šú‰»
+        //Camera‚ÌŒü‚«‚ğPlayer‚ÌŒü‚«‚É‰Šú‰»
         Camera1.transform.rotation = Player.GetComponent<Transform>().rotation;
     }
 
