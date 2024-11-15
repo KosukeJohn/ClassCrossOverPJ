@@ -24,7 +24,10 @@ public class Player_cont : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            Player.GetComponent<Material_Change>().ChangeValue();
+        }
         
     }
     void FixedUpdate()
