@@ -16,9 +16,6 @@ public class Enemy_Attak : MonoBehaviour
         if (EnemyState == (int)Enemy_State.EnemyState.Attak)
         {
             Debug.Log("Attak");
-
-            //F•Ï‚¦
-            State.GetComponent<Enemy_Material>().ChangeValue();
         }
     }
 }

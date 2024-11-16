@@ -9,7 +9,9 @@ public class Enemy_Material : MonoBehaviour
     [SerializeField]
     string targetPropertyName = "_Color";
     [SerializeField]
-    Color targetColor = Color.red;
+    Color targetColor_Red = Color.red;
+    [SerializeField]
+    Color targetColor_White = Color.white;
 
     int targetPropertyId;
     Material targetMaterial;
@@ -23,9 +25,14 @@ public class Enemy_Material : MonoBehaviour
         targetMaterial = meshRenderer.material;
     }
 
-    public void ChangeValue()
+    public void ChangeValueRed()
     {
         // 色変更
-        targetMaterial.SetColor(targetPropertyId, targetColor);
+        targetMaterial.SetColor(targetPropertyId, targetColor_Red);
+    }
+    public void ChangeValueWhite()
+    {
+        // 色変更
+        targetMaterial.SetColor(targetPropertyId, targetColor_White);
     }
 }

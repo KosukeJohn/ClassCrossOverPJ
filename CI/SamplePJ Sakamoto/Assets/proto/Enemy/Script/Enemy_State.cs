@@ -33,15 +33,26 @@ public class Enemy_State : MonoBehaviour
             Destroy(this.State);
         }
     }
-    //ステータス変更関数
     public void SetState(EnemyState state)
     {
+        //ステータス変更関数
         this.enemyState = (int)state;
-    }
-    //ステータス参照関数
+    } 
     public int GetState()
     {
+        //ステータス参照関数
         return this.enemyState;
+    }
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            Debug.Log("Player Hit");
+            if(enemyState == (int)EnemyState.Non)
+            {
+                enemyState = (int)EnemyState.Non;
+            }
+        }
     }
 
 }

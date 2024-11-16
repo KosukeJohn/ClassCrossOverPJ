@@ -5,52 +5,89 @@ using UnityEngine;
 public class Enemy_Idel : MonoBehaviour
 {
     private int         EnemyState;//仮ステータス
-    public  GameObject  State;//参照用オブジェクト
+    public  GameObject  Enemy;//参照用オブジェクト
     private GameObject Player;//プレイヤーオブジェクト
-    public float FindDir;
+    public float FindDir;//プレイヤー探索範囲
 
     private void Start()
     {
+        //プレイヤーオブジェクトを取得
         Player = GameObject.Find("Player");
     }
 
     private void Update()
     {
         //オブジェクトのステータスを取得
-        EnemyState = State.GetComponent<Enemy_State>().GetState();
+        EnemyState = Enemy.GetComponent<Enemy_State>().GetState();
 
         //待機("Idel")の時のみ更新処理
         if (EnemyState == (int)Enemy_State.EnemyState.Idel)
         {
             Debug.Log("Idel");
 
-            //ステータスの遷移
-            if (Player_Find(State.transform.position.x, State.transform.position.z))
+            //探索範囲内にプレイヤーは存在するか
+            if (Player_Find(Enemy.transform.position.x, Enemy.transform.position.z))
             {
-                Debug.Log("Idel->Chase");
-                State.GetComponent<Enemy_State>().SetState(Enemy_State.EnemyState.Chase);
+                Debug.Log("find");
+
+                //プレイヤーと自分の間に障害物はないか
+                if (Player_FindRay())
+                {
+                    //プレイヤーを追跡
+                    Debug.Log("Idel->Chase");                    
+                    Enemy.GetComponent<Enemy_State>().SetState(Enemy_State.EnemyState.Chase);
+                    return;
+                }
             }
-            else
-            {
-                Debug.Log("Idel->Patrol");
-                State.GetComponent<Enemy_State>().SetState(Enemy_State.EnemyState.Patrol);
-            }
+
+            //巡回
+            Debug.Log("Idel->Patrol");          
+            Enemy.GetComponent<Enemy_State>().SetState(Enemy_State.EnemyState.Patrol);
+            return;
         }
             
     }
     private bool Player_Find(float enemyX,float enemyZ)
     {
-        Vector3 playerpos = Player.transform.position;
-        float playerX = playerpos.x;
-        float playerZ = playerpos.z;
-        float dir = (playerX + enemyX) * (playerX + enemyX) +
-            (playerZ + enemyZ) * (playerZ + enemyZ);
+        //X,Z座標で判断する
+        Vector2 playerdir;
+        playerdir.x = Player.transform.position.x;
+        playerdir.y = Player.transform.position.z;
+        Vector2 enemydir;
+        enemydir.x = enemyX;
+        enemydir.y = enemyZ;
+        Vector2 dir = playerdir - enemydir;
+        float d = dir.magnitude;
 
-        if (Mathf.Sqrt(dir) < FindDir)
+        //指定された範囲にプレイヤーが存在するか
+        if (d < FindDir)
         {
             return true;
         }
-
         return false;
+    }
+    private bool Player_FindRay()
+    {
+        //Rayの生成
+        Ray ray = new Ray(Enemy.transform.position, Player_coll_GetPosition() - Enemy.transform.position);
+        Debug.DrawRay(ray.origin, ray.direction * 900, Color.red, 5.0f);
+        RaycastHit hit;
+
+        //プレイヤーとrayが接触したか判断
+        if (Physics.Raycast(ray, out hit))
+        {
+            //プレイヤーかタグで判断
+            if (hit.collider.CompareTag("Player"))
+            {
+                Debug.Log("hit");
+                return true;
+            }
+        }
+        return false;
+    }
+    private Vector3 Player_coll_GetPosition()
+    {
+        //プレイヤーのコライダーの位置を取得
+        return Player.GetComponent<Collider>().transform.localPosition; ;
     }
 }
