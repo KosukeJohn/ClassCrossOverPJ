@@ -5,7 +5,8 @@ using UnityEngine;
 public class Enemy_State : MonoBehaviour
 {
     public int enemyState;//ステータス
-    public GameObject State;//参照元オブジェクト
+    public GameObject Enemy;//参照元オブジェクト
+    private GameObject Player;
     private bool DestroyFlag;
     //ステータスに名前をつける
     public enum EnemyState
@@ -16,6 +17,10 @@ public class Enemy_State : MonoBehaviour
     {
         //初期化
         enemyState = (int)EnemyState.Non;//最初は0(Non)
+
+        //プレイヤーオブジェクトを取得
+        Player = GameObject.Find("Player");
+
         DestroyFlag = false;
     }
     private void Update()
@@ -30,7 +35,7 @@ public class Enemy_State : MonoBehaviour
         //再びNonになったらオブジェクトを破壊
         if (enemyState == (int)EnemyState.Non && DestroyFlag)
         {
-            Destroy(this.State);
+            Destroy(this.Enemy);
         }
     }
     public void SetState(EnemyState state)
@@ -43,14 +48,18 @@ public class Enemy_State : MonoBehaviour
         //ステータス参照関数
         return this.enemyState;
     }
+    //捕まえる仮実装
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Player")
         {
             Debug.Log("Player Hit");
-            if(enemyState == (int)EnemyState.Non)
+            if(enemyState != (int)EnemyState.Non)
             {
-                enemyState = (int)EnemyState.Non;
+                //enemyState = (int)EnemyState.Non;
+                Player.GetComponent<Player_cont>().enabled = false;
+                //
+                Player.GetComponent<Material_Change>().ChangeValue();
             }
         }
     }

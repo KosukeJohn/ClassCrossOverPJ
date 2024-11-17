@@ -24,6 +24,7 @@ public class Enemy_Idel : MonoBehaviour
         if (EnemyState == (int)Enemy_State.EnemyState.Idel)
         {
             Debug.Log("Idel");
+            Enemy.GetComponent<Enemy_Material>().ChangeValueWhite();
 
             //’Tõ”ÍˆÍ“à‚ÉƒvƒŒƒCƒ„[‚Í‘¶İ‚·‚é‚©
             if (Player_Find(Enemy.transform.position.x, Enemy.transform.position.z))
