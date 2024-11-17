@@ -826,7 +826,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyState: 0
-  State: {fileID: 1635370774}
+  Enemy: {fileID: 0}
 --- !u!114 &1635370783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1049,7 +1049,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2031112650}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 1.31, z: 4.84}
+  m_LocalPosition: {x: -0, y: -0.16, z: 3.54}
   m_LocalScale: {x: 10, y: 3.2553, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
