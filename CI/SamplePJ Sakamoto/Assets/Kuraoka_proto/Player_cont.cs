@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class Player_cont : MonoBehaviour
     public Animator     playerAnim;
     public float    speed;
     public float    AngleSpeed;
+    public bool     isArea;
 
     private Rigidbody   rb;
     private Collider    Coll;
@@ -28,7 +30,9 @@ public class Player_cont : MonoBehaviour
         {
             Player.GetComponent<Material_Change>().ChangeValue();
         }
-        
+
+      
+
     }
     void FixedUpdate()
     {
@@ -76,6 +80,24 @@ public class Player_cont : MonoBehaviour
             playerAnim.SetTrigger("walkBackward");
             playerAnim.ResetTrigger("Idle");
             playerAnim.ResetTrigger("Run");
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    //追跡可能エリアに入ったら
+    {
+        if (other.gameObject.name == "ChaseArea")
+        {
+            isArea = true;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+        //追跡可能エリアから出たら
+    {
+        if (other.gameObject.name == "ChaseArea")
+        {
+            isArea = false;
         }
     }
 
