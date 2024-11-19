@@ -50,7 +50,7 @@ public class Enemy_Chase : MonoBehaviour
                 if (Enemy_MoveToPrePos(PrePos))
                 {
                     //初期化
-                    PrePosFlag = false;
+                    PrePosFlag = true;
                     ChaseCnt = 0;
 
                     //待機
@@ -75,9 +75,15 @@ public class Enemy_Chase : MonoBehaviour
         }
         
         //移動
+        if(Player_FindRay())
         {
             float move = 3.0f;
-            Enemy.transform.position = Vector3.MoveTowards(Enemy.transform.position, pos, move * Time.deltaTime);
+            Enemy.transform.position = 
+                Vector3.MoveTowards(Enemy.transform.position, pos, move * Time.deltaTime);
+        }
+        else
+        {
+            return true;
         }
         return false;
     }
@@ -113,5 +119,24 @@ public class Enemy_Chase : MonoBehaviour
         Vector3 pos = 
             new Vector3(Player.transform.position.x, Enemy.transform.position.y, Player.transform.position.z);
         return pos;
+    }
+    private bool Player_FindRay()
+    {
+        //Rayの生成
+        Ray ray = new Ray(Enemy_GetPosition(), Player_GetPosition() - Enemy_GetPosition());
+        Debug.DrawRay(ray.origin, ray.direction * 900, Color.blue, 5.0f);
+        RaycastHit hit;
+
+        //プレイヤーとrayが接触したか判断
+        if (Physics.Raycast(ray, out hit))
+        {
+            //プレイヤーかタグで判断
+            if (hit.collider.CompareTag("Player"))
+            {
+                Debug.Log("hit");
+                return true;
+            }
+        }
+        return false;
     }
 }

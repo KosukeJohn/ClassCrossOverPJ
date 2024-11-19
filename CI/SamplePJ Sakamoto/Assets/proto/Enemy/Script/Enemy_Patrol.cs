@@ -102,7 +102,8 @@ public class Enemy_Patrol : MonoBehaviour
         //ˆÚ“®
         {
             float move = 3.0f;
-            Enemy.transform.position = Vector3.MoveTowards(Enemy.transform.position, pos, move * Time.deltaTime);
+            Enemy.transform.position =
+                Vector3.MoveTowards(Enemy.transform.position, pos, move * Time.deltaTime);
         }
 
         return false;
