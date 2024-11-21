@@ -6,19 +6,19 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("ˆÚ“®İ’è")]
-    public float moveSpeed = 5f; // ˆÚ“®‘¬“x
-    public float jumpForce = 5f; // ƒWƒƒƒ“ƒv—Í
-    public float rotationSpeed = 10f;  // ‰ñ“]‘¬“x
-    [SerializeField] private Transform groundCheck; // Ú’n”»’è‚Ég‚¤‹ó‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg
-    [SerializeField] private LayerMask groundLayer; // Ú’n”»’è‚Ég‚¤ƒŒƒCƒ„[
-    [SerializeField] private float groundCheckRadius = 0.2f; // Ú’n”»’è‚Ì”¼Œa
+    [Header("ç§»å‹•è¨­å®š")]
+    public float moveSpeed = 5f; // ç§»å‹•é€Ÿåº¦
+    public float jumpForce = 5f; // ã‚¸ãƒ£ãƒ³ãƒ—åŠ›
+    public float rotationSpeed = 10f;  // å›è»¢é€Ÿåº¦
+    [SerializeField] private Transform groundCheck; // æ¥åœ°åˆ¤å®šã«ä½¿ã†ç©ºã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    [SerializeField] private LayerMask groundLayer; // æ¥åœ°åˆ¤å®šã«ä½¿ã†ãƒ¬ã‚¤ãƒ¤ãƒ¼
+    [SerializeField] private float groundCheckRadius = 0.2f; // æ¥åœ°åˆ¤å®šã®åŠå¾„
 
-    private Rigidbody rb; // ƒvƒŒƒCƒ„[‚ÌRigidbody
-    private Vector2 moveInput; // ƒvƒŒƒCƒ„[‚ÌˆÚ“®•ûŒü
-    private Vector3 moveDirection; // ƒLƒƒƒ‰ƒNƒ^[‚ÌˆÚ“®•ûŒü
-    private bool isJumping; // ƒWƒƒƒ“ƒv’†
-    private bool isGrounded; // Ú’n’†
+    private Rigidbody rb; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®Rigidbody
+    private Vector2 moveInput; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•æ–¹å‘
+    private Vector3 moveDirection; // ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ç§»å‹•æ–¹å‘
+    private bool isJumping; // ã‚¸ãƒ£ãƒ³ãƒ—ä¸­
+    private bool isGrounded; // æ¥åœ°ä¸­
  
     // Start is called before the first frame update
     void Start()
@@ -28,71 +28,70 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        // Ú’n”»’è
+        // æ¥åœ°åˆ¤å®š
         CheckGrounded();
     }
 
     private void FixedUpdate()
     {
-        // ˆÚ“®ˆ—
-        MovePlayer();
+        // ç§»å‹•å‡¦ç†
+        HandleMovement();
 
-        // ‰ñ“]ˆ—
-        if (moveDirection.magnitude > 0.1f) // “ü—Í‚ª‚ ‚éê‡
-        {
-            RotatePlayer();
-        }
-
-        // ƒWƒƒƒ“ƒvˆ—
-        if (isGrounded && isJumping) //Ú’n’†‚©‚ÂƒWƒƒƒ“ƒv“ü—Í‚ª¬Œ÷‚µ‚Ä‚¢‚éê‡
+        // ã‚¸ãƒ£ãƒ³ãƒ—å‡¦ç†
+        if (isGrounded && isJumping) // æ¥åœ°ä¸­ã‹ã¤ã‚¸ãƒ£ãƒ³ãƒ—å…¥åŠ›ãŒæˆåŠŸã—ã¦ã„ã‚‹å ´åˆ
         {
             JumpPlayer();
         }
     }
 
-    // ˆÚ“®ˆ—
-    private void MovePlayer()
+    // ç§»å‹•å‡¦ç†
+    private void HandleMovement()
     {
-        Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y); // “ü—Í‚ÉŠî‚Ã‚¢‚ÄˆÚ“®•ûŒü‚ğİ’è
+        moveDirection = new Vector3(moveInput.x, 0f, moveInput.y); // å…¥åŠ›ã«åŸºã¥ã„ã¦ç§»å‹•æ–¹å‘ã‚’è¨­å®š
         rb.velocity = new Vector3(moveDirection.x * moveSpeed, rb.velocity.y, moveDirection.z * moveSpeed);
+
+        if (moveDirection.magnitude > 0.1f) // 0.1fä»¥ä¸Šã®å…¥åŠ›ãŒã‚ã‚‹å ´åˆå›è»¢å‡¦ç†ã‚’è¡Œã†
+        {
+            RotatePlayer(moveDirection);
+        }
     }
 
-    // ‰ñ“]ˆ—
-    private void RotatePlayer()
+    // å›è»¢å‡¦ç†
+    private void RotatePlayer(Vector3 direction)
     { 
-        Quaternion targetRotation = Quaternion.LookRotation(moveDirection, Vector3.up); // ƒXƒeƒBƒbƒN‚Ì“ü—Í•ûŒü‚ğŒü‚­
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime); // ƒXƒ€[ƒY‚É‰ñ“]
+        Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up); // ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®å…¥åŠ›æ–¹å‘ã‚’å‘ã
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime); // ã‚¹ãƒ ãƒ¼ã‚ºã«å›è»¢
     }
 
-    //ƒWƒƒƒ“ƒvˆ—
+    // ã‚¸ãƒ£ãƒ³ãƒ—å‡¦ç†
     private void JumpPlayer()
     {
-        rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z); // ƒWƒƒƒ“ƒv—Í‚ğY•ûŒü‚É‰Á‚¦‚é
-        isJumping = false; // ƒWƒƒƒ“ƒv’†‚ğ‰ğœ
+        rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z); // ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’Yæ–¹å‘ã«åŠ ãˆã‚‹
+        isJumping = false; // ã‚¸ãƒ£ãƒ³ãƒ—ä¸­ã‚’è§£é™¤
         Debug.Log("Jump");
     }
 
-    //Ú’n”»’è
+    // æ¥åœ°åˆ¤å®š
     private void CheckGrounded()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer); //‘«Œ³‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ªgroundLayer‚ÉÚ‚µ‚Ä‚¢‚é‚©”»’è‚·‚é
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer); // è¶³å…ƒã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒgroundLayerã«æ¥ã—ã¦ã„ã‚‹ã‹åˆ¤å®šã™ã‚‹
     }
 
 
-    // “ü—ÍƒCƒxƒ“ƒgFˆÚ“®
+    // å…¥åŠ›ã‚¤ãƒ™ãƒ³ãƒˆï¼šç§»å‹•
     private void OnMove(InputAction.CallbackContext context)
     {
-        moveInput = context.ReadValue<Vector2>(); // “ü—Í‚³‚ê‚½ˆÚ“®ƒxƒNƒgƒ‹‚ğæ“¾
-        moveDirection = new Vector3(moveInput.x, 0f, moveInput.y); // ˆÚ“®ƒxƒNƒgƒ‹‚ğ3D•ûŒü‚É•ÏŠ·
+        moveInput = context.ReadValue<Vector2>(); // å…¥åŠ›ã•ã‚ŒãŸç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã‚’å–å¾—
+        moveDirection = new Vector3(moveInput.x, 0f, moveInput.y); // ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã‚’3Dæ–¹å‘ã«å¤‰æ›
         Debug.Log("Move Input: " + moveInput + " Direction:" + moveDirection);
     }
 
-    // “ü—ÍƒCƒxƒ“ƒgFƒWƒƒƒ“ƒv
+    // å…¥åŠ›ã‚¤ãƒ™ãƒ³ãƒˆï¼šã‚¸ãƒ£ãƒ³ãƒ—
     private void OnJump(InputAction.CallbackContext context)
     {
-        if (context.started && isGrounded) // ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½uŠÔ‚ÉÚ’n’†‚Å‚ ‚ê‚ÎƒWƒƒƒ“ƒv“ü—Í¬Œ÷
+        if (context.started && isGrounded) // ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸç¬é–“ã«æ¥åœ°ä¸­ã§ã‚ã‚Œã°ã‚¸ãƒ£ãƒ³ãƒ—å…¥åŠ›æˆåŠŸ
         {
-            isJumping = true; // ƒWƒƒƒ“ƒv’†‚É‚·‚é
+            isJumping = true; // ã‚¸ãƒ£ãƒ³ãƒ—ä¸­ã«ã™ã‚‹
             Debug.Log("Input:Jump");
         }
     }
