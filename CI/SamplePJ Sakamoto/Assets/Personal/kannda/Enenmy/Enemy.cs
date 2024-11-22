@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Enemy_1 : Enemy
-{ 
-    private float life = 10;
+public class Enemy_1 : Enemy 
+{
+    //private float life = 10;
+    public Enemy_1(float life) : base(life + 10)
+    {
+
+    }
     protected override void EnemyUpDate()
     {
         Debug.Log("ê¨å˜1");
         
-        SetLife(life);
+        //SetLife(life);
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            float temp = GetLife();
+            float temp = GetLife(); 
             temp -= 10;
             SetLife(temp);
         }
@@ -22,7 +26,7 @@ public class Enemy_1 : Enemy
         if(GetLife() <= 0)
         {
             Debug.Log("éÄñS");
-            EnemyDestroy(this.gameObject);
+            //EnemyDestroy(this.gameObject);
         }
     }
 }

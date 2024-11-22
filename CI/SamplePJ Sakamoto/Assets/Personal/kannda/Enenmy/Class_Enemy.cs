@@ -5,16 +5,20 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    //private Enemy mEnemy;
+    private Enemy mEnemy;
     private GameObject enemy;
     private float Life;
     private float Attack;
     private float Cnt;
 
-    //public Enemy(float life)
-    //{
-    //    this.Life = life;
-    //}
+    public Enemy(float life)
+    {
+        this.Life = life;
+    }
+    private void Start()
+    {
+        mEnemy = new Enemy(Life);
+    }
     private void FixedUpdate()
     {
         EnemyUpDate();

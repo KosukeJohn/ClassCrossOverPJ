@@ -5,13 +5,17 @@ using UnityEngine;
 public class Enemy_2 : Enemy
 {
     private float life = 5;
+    Enemy_2(float life) : base(life)
+    {
+        this.life = life;
+    }
     //private float target = 10;
     protected override void EnemyUpDate()
     {
         Debug.Log("ê¨å˜2");
 
         SetLife(life);
-        SetObject(this.gameObject);
+        //SetObject(this.gameObject);
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
