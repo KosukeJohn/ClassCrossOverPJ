@@ -10,7 +10,7 @@ public class Enemy_2_Idle : MonoBehaviour
     private Vector3 Pos1;//プレイヤの位置を覚えるため
     private Vector3 Pos2;//次の位置を覚える
     private float TimeCnt = 0;//カウント
-    private float FindDir = 300.0f;//PlayerFindの指定範囲
+    private float FindDir = 5.0f;//PlayerFindの指定範囲
     private float EnemyHight = 10.0f;//高さは固定
 
     private void Start()
