@@ -20,79 +20,120 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool canHide; // 「隠れる」可能
     [SerializeField] private bool isHiding; // 「隠れる」中
 
+    //----------------------------------------------
     // スクリプトの処理用
+    //----------------------------------------------
+
     private Rigidbody playerRigidbody; // プレイヤーのRigidbody
     private Vector2 moveInput; // コントローラーの入力方向
     private bool jumpInProgress; // ジャンプ処理中
 
+    //----------------------------------------------
     // 変数のプロパティ
+    //----------------------------------------------
+
     public float MoveSpeed
     {
-        get => moveSpeed; // moveSpeedを参照する
+        // moveSpeedの参照
+        get => moveSpeed;
 
+        // moveSpeedの変更
         private set
         { 
-            moveSpeed = value; // moveSpeedを変更する
+            moveSpeed = value; 
         }
     }
     public float JumpForce
     {
-        get => jumpForce; // jumpForceを参照する
+        // jumpForceの参照
+        get => jumpForce;
 
+        // jumpForceの変更
         private set
         {
-            jumpForce = value; // jumpForceを変更する
+            jumpForce = value; 
         }
     }
     public bool IsHiding
     {
-        get => isHiding; // isHidingを参照する
+        // isHidingの参照
+        get => isHiding;
 
+        // isHidingの変更
         private set
         {
-            isHiding = value; // isHidingを変更する
+            isHiding = value; 
 
             // 状態遷移時の処理
             HandleHidingStateChanged();
         }
     }
 
-    // Start is called before the first frame update
+    //----------------------------------------------
+    // イベント関数
+    //----------------------------------------------
+
+    // オブジェクトがアクティブになった後、最初のフレームで一度だけ呼ばれる
     private void Start()
     {
+        // PlayerのRigidBodyを取得
         playerRigidbody = GetComponent<Rigidbody>();
 
-        GroundCheck = GameObject.Find("GroundCheck").transform; // GroundCheckを取得
+        // GroundCheckを取得
+        GroundCheck = GameObject.Find("GroundCheck").transform;
 
-        GroundLayer = LayerMask.GetMask("Ground"); // Groundレイヤーを取得
+        // Groundレイヤーを取得
+        GroundLayer = LayerMask.GetMask("Ground"); 
     }
 
-    // Update is called once per frame
+    // 一定間隔で呼ばれる更新処理
     private void FixedUpdate()
     {
         //----------------------------------------------
-        // 隠れている間も行われる処理
+        // プレイヤーが隠れている間も行われる処理
         //----------------------------------------------
 
         // 接地判定
-        CheckGrounded();
+        isGrounded = CheckGrounded();
 
+        // プレイヤーが隠れている間の処理をここまでにする
         if (IsHiding)
         {
             return;
         }
 
         //----------------------------------------------
-        // 隠れている間は行われない処理
+        // プレイヤーが隠れている間は行われない処理
         //----------------------------------------------
 
         // 移動処理
         HandleMovement();
 
         // ジャンプ処理
-        if (isGrounded && jumpInProgress) // 接地中かつジャンプ入力が成功している場合
+        // 接地中かつジャンプ入力が成功している場合
+        if (isGrounded && jumpInProgress) 
         {
             JumpPlayer();
+        }
+    }
+
+    // オブジェクトが別の物理コライダーと接触した際に一度だけ呼ばれる
+    private void OnTriggerEnter(Collider other)
+    {
+        // 隠れる可能オブジェクトと接触した場合は「隠れる」可能状態にする
+        if (checkHideable(other))
+        {
+            canHide = true;
+        }
+    }
+
+    // オブジェクトが他のコライダーとの接触を終了した際に一度だけ呼ばれる
+    private void OnTriggerExit(Collider other)
+    {
+        // 隠れる可能オブジェクトと接触を終了した場合は「隠れる」可能状態を終了する
+        if (checkHideable(other))
+        {
+            canHide = false;
         }
     }
 
@@ -103,7 +144,8 @@ public class PlayerController : MonoBehaviour
     // 移動処理
     private void HandleMovement()
     {
-        playerRigidbody.velocity = new Vector3(moveDirection.x * moveSpeed, playerRigidbody.velocity.y, moveDirection.z * moveSpeed); // 移動速度を現在速度に加える
+        // 移動速度を現在速度に加える
+        playerRigidbody.velocity = new Vector3(moveDirection.x * moveSpeed, playerRigidbody.velocity.y, moveDirection.z * moveSpeed); 
 
         // 0.1f以上の入力がある場合回転処理を行う
         if (moveDirection.magnitude > 0.1f)
@@ -147,28 +189,18 @@ public class PlayerController : MonoBehaviour
     //----------------------------------------------
 
     // 接地判定
-    private void CheckGrounded()
+    private bool CheckGrounded()
     {
         // 足元のゲームオブジェクトがGroundLayerに接しているか判定する
-        isGrounded = Physics.CheckSphere(GroundCheck.position, GroundCheckRadius, GroundLayer);
+        return (Physics.CheckSphere(GroundCheck.position, GroundCheckRadius, GroundLayer));
     }
 
-    //「隠れる」可能オブジェクトの範囲内判定
-    private void OnTriggerEnter(Collider other)
+    //「隠れる」可能オブジェクトか判定
+    private bool checkHideable(Collider other)
     {
-        if (other.CompareTag("Hideable"))
-        {
-            canHide = true;
-        }
+        return (other.CompareTag("Hideable"));
     }
-    //「隠れる」可能オブジェクトの範囲外判定
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Hideable"))
-        {
-            canHide = false;
-        }
-    }
+    
 
     //----------------------------------------------
     // 入力イベント
