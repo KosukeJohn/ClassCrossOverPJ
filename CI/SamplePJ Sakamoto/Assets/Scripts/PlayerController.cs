@@ -191,13 +191,14 @@ public class PlayerController : MonoBehaviour
     // 接地判定
     private bool CheckGrounded()
     {
-        // 足元のゲームオブジェクトがGroundLayerに接しているか判定する
+        // 接地判定用オブジェクトがGroundLayerに接しているかで判定する
         return (Physics.CheckSphere(GroundCheck.position, GroundCheckRadius, GroundLayer));
     }
 
     //「隠れる」可能オブジェクトか判定
     private bool checkHideable(Collider other)
     {
+        // オブジェクトが「Hideable」タグを持っているかで判定する
         return (other.CompareTag("Hideable"));
     }
     
@@ -221,9 +222,9 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Input:Jump");
 
+        // ジャンプができる条件を満たしていない場合処理を止める
         if (IsHiding || !isGrounded)
         {
-            // ジャンプができる条件を満たしてないので処理を行わない
             return;
         }
 
