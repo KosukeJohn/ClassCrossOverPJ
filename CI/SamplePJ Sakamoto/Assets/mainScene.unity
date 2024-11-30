@@ -2487,7 +2487,7 @@ MonoBehaviour:
   moveSpeed: 5
   jumpForce: 5
   rotationSpeed: 10
-  GroundCheck: {fileID: 0}
+  GroundCheck: {fileID: 1468388795}
   GroundLayer:
     serializedVersion: 2
     m_Bits: 0
@@ -5458,7 +5458,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1468388795}
   m_Layer: 0
-  m_Name: groundCheck
+  m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7507,6 +7507,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 3a6dc90e-b9a2-4291-b5d7-6203f8378ca7
     m_ActionName: Player/Jump[/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: dfb05d9f-cbe2-4ddd-a6fc-6adfa7bcec3c
+    m_ActionName: Player/Hide[/XInputControllerWindows/buttonSouth,/Keyboard/x]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
