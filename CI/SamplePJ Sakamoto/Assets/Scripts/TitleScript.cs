@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; // シーンをロードするために必要
 
 public class TitleScript : MonoBehaviour
 {
@@ -104,5 +105,8 @@ public class TitleScript : MonoBehaviour
         image.color = targetColor;
 
         Debug.Log("フェードイン完了！");
+
+        // フェードイン完了後にシーンをロード
+        SceneManager.LoadScene("mainScene"); // "MainScene" の名前は実際のシーン名に置き換える
     }
 }
