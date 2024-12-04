@@ -13,15 +13,26 @@ public class Marionettea_move : MonoBehaviour
     {
         player = GameObject.Find("Player");
         enemy = this.gameObject;
-        CntMax = 3.0f;
+        CntMax = 300.0f;
     }
 
     private void FixedUpdate()
     {
-        if(Enemy_MoveToPlayer(Player_GetPosition()))
+        bool flag = enemy.GetComponentInChildren<Collider_Controller>().playerfind;
+
+        if (flag)
         {
-            //Destroy(enemy);
+            if (Enemy_MoveToPlayer(Player_GetPosition()))
+            {
+                //Destroy(enemy);
+            }
         }
+        else
+        {
+            //回転させる
+            transform.Rotate(0f,3.0f * enemy.GetComponentInChildren<Collider_Controller>().num,0f);
+        }
+        
     }
     private bool Enemy_MoveToPlayer(Vector3 pos)
     {
@@ -42,31 +53,12 @@ public class Marionettea_move : MonoBehaviour
 
         return false;
     }
-    private bool Enemy_MoveToPrePos(Vector3 pos)
-    {
-        if (Enemy_GetPosition().x >= pos.x - 0.01 && Enemy_GetPosition().x <= pos.x + 0.01)
-            if (Enemy_GetPosition().z >= pos.z - 0.01 && Enemy_GetPosition().z <= pos.z + 0.01)
-            {
-                //浮動小数点数対策
-                enemy.transform.position = pos;
-
-                //ついたらtrue
-                Debug.Log("Pos = true");
-                return true;
-            }
-
-        //移動
-        {
-            float move = 3.0f;
-            enemy.transform.position = Vector3.MoveTowards(enemy.transform.position, pos, move * Time.deltaTime);
-        }
-
-        return false;
-    }
     private Vector3 Enemy_GetPosition()
     {
         //Enemyの位置を取得
-        return this.enemy.transform.position;
+        Vector3 pos = 
+            new Vector3(this.enemy.transform.position.x, this.enemy.transform.position.y + 0.5f, this.enemy.transform.position.z);
+        return pos;
     }
     private Vector3 Player_GetPosition()
     {
@@ -75,23 +67,5 @@ public class Marionettea_move : MonoBehaviour
             new Vector3(player.transform.position.x, enemy.transform.position.y, player.transform.position.z);
         return pos;
     }
-    private bool Player_FindRay()
-    {
-        //Rayの生成
-        Ray ray = new Ray(Enemy_GetPosition(), Player_GetPosition() - Enemy_GetPosition());
-        Debug.DrawRay(ray.origin, ray.direction * 900, Color.blue, 5.0f);
-        RaycastHit hit;
 
-        //プレイヤーとrayが接触したか判断
-        if (Physics.Raycast(ray, out hit))
-        {
-            //プレイヤーかタグで判断
-            if (hit.collider.CompareTag("Player"))
-            {
-                Debug.Log("hit");
-                return true;
-            }
-        }
-        return false;
-    }
 }
