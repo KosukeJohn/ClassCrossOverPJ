@@ -4,21 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-<<<<<<< HEAD
-  - enabled: 0
-    path: Assets/Personal/Sakamoto/Title Scene.unity
-    guid: 3493934758442c14588cd97467d05448
-=======
-  - enabled: 1
-    path: Assets/Title Scene.unity
-    guid: 70aeed3674354694da89c515f4607792
->>>>>>> ecf1f8eaa9c08250d9d43bd5e233d0e86f9cea83
-  - enabled: 1
-    path: Assets/mainScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
-    path: Assets/Title Scene.unity
-    guid: 70aeed3674354694da89c515f4607792
-  m_configObjects:
-    com.unity.input.settings: {fileID: 11400000, guid: 5a8b94077a75fb94c81b1eb7684cdd16, type: 2}
+  m_Scenes: []
+  m_configObjects: {}
