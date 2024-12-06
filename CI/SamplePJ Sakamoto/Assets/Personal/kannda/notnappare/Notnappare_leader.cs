@@ -40,6 +40,7 @@ public class Notnappare_leader : MonoBehaviour
         if(playerfind)
         {
             SetState(State.Find);
+            return true;
         }
 
         SetState(State.Idle);
@@ -47,9 +48,24 @@ public class Notnappare_leader : MonoBehaviour
     }
     private bool PatrolMove()
     {
+        if(PlayerFind())
+        {
+            return true;
+        }
+
+
 
         return false;
     } 
 
+    private Vector3 NextPosition(int next)
+    {
+        Vector3 pos;
+
+
+        pos = firstpos;
+
+        return pos;
+    }
 
 }
