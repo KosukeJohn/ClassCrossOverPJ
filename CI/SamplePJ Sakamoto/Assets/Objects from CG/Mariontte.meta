@@ -1,7 +1,12 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:CI/SamplePJ Sakamoto/Assets/Personal/kannda/Enemy/Marionettea_walk_sample Prefab.prefab.meta
+guid: cee1317fb471f4047ba1d2075f842e91
+PrefabImporter:
+========
 guid: 3036f101af788ab4da3146b4c170fc9b
 folderAsset: yes
 DefaultImporter:
+>>>>>>>> ecf1f8eaa9c08250d9d43bd5e233d0e86f9cea83:CI/SamplePJ Sakamoto/Assets/Objects from CG/Mariontte.meta
   externalObjects: {}
   userData: 
   assetBundleName: 
