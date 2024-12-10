@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Collider_Controller : MonoBehaviour
 {
-    private Collider _collider;
-    public bool playerfind;
+    private Collider coll;
+    private bool playerfind;
     private GameObject obj;
     private float angle;
-    public int num;
+    private int direction;
     private void Start()
     {
         obj = this.gameObject;
-        _collider = obj.GetComponent<Collider>();
+        coll = obj.GetComponent<Collider>();
         playerfind = false;
         angle = 10.0f;
     }
@@ -45,14 +45,23 @@ public class Collider_Controller : MonoBehaviour
                 float right_angle = Vector3.Angle(this.transform.right, posDelta);
                 if (right_angle < 90f)
                 {
-                    num = 1;
+                    direction = 1;
                 }
                 else
                 {
-                    num = -1;
+                    direction = -1;
                 }
                 playerfind = false;
             }
         }
+    }
+
+    public bool GetFindFlag()
+    {
+        return this.playerfind;
+    }
+    public int GetDirection()
+    {
+        return this.direction;
     }
 }

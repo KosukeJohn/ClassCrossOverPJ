@@ -87,7 +87,7 @@ public class Marionettea_move : MonoBehaviour
             return true;
         }
         //ƒvƒŒƒCƒ„[‚ªî‚Ì”ÍˆÍ‚É‚¢‚é‚©”»’f
-        bool find = enemy.GetComponentInChildren<Collider_Controller>().playerfind;
+        bool find = enemy.GetComponentInChildren<Collider_Controller>().GetFindFlag();
         if (find)
         {
             //ˆÚ“®
@@ -99,7 +99,7 @@ public class Marionettea_move : MonoBehaviour
         {
             //‰ñ“]‚³‚¹‚é
             enemy.transform.Rotate
-                (0f, 3.0f * enemy.GetComponentInChildren<Collider_Controller>().num, 0f);
+                (0f, 3.0f * enemy.GetComponentInChildren<Collider_Controller>().GetDirection(), 0f);
         }
         return false;
     }
