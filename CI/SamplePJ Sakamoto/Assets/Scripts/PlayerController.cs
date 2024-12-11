@@ -98,8 +98,7 @@ public class PlayerController : MonoBehaviour
         //----------------------------------------------
 
         // 接地判定
-        //isGrounded = CheckGrounded();
-        isGrounded = true;
+        isGrounded = CheckGrounded();
 
         // プレイヤーが隠れている間の処理をここまでにする
         if (IsHiding)
