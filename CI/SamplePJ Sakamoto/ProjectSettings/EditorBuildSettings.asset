@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Personal/Sakamoto/Title Scene.unity
+    guid: 3493934758442c14588cd97467d05448
+  - enabled: 1
+    path: Assets/mainScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Personal/Sakamoto/EndingScene.unity
+    guid: fa760d94bfa35154299dc147bc3840af
   m_configObjects: {}
