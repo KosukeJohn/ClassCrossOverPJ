@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
+
 
 public class Notnappare_leader : MonoBehaviour
 {
@@ -127,10 +127,25 @@ public class Notnappare_leader : MonoBehaviour
     private bool EnemyTurn(int seed)
     {
         float anglespeed = 3.0f;
+        int nextangle = seed % 8;
 
-        if (leader.transform.localEulerAngles.y >= 90 * (seed % 8))
+        if (leader.transform.localEulerAngles.y >= 90 * ((nextangle / 2)))
         {
             return true; 
+        }
+        switch(nextangle / 2)
+        {
+            case 0:
+
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                break;
         }
 
         transform.Rotate(0, anglespeed, 0);

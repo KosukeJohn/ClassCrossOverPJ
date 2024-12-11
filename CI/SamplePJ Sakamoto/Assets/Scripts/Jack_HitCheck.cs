@@ -47,8 +47,9 @@ public class Jack_HitCheck : MonoBehaviour
             hitflag = false;
         }
 
+        //•xmŒ©ƒoƒOtodo
         //“–‚½‚è”»’è‚ğŠÇ—Ò‚É‘—‚é
-        playerhitcheck.GetComponent<PlayerHitCheck>().SetPlayerHitCheck(hitflag);
+        //playerhitcheck.GetComponent<PlayerHitCheck>().SetPlayerHitCheck(hitflag);
     }
 
     private void ColliderPosUpdate(int state)
@@ -78,13 +79,16 @@ public class Jack_HitCheck : MonoBehaviour
                 break;
         }
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         //”ÍˆÍ‚ÉN“ü‚µ‚½‚çtrue‚ğ•Ô‚·
         if(other.tag == "Player")
         {
             Debug.Log("jack->Hit");
             hitflag = true;
+
+            //“–‚½‚è”»’è‚ğŠÇ—Ò‚É‘—‚é
+            playerhitcheck.GetComponent<PlayerHitCheck>().SetPlayerHitCheck(hitflag);
         }
     }
 }

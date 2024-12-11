@@ -8,12 +8,12 @@ public class PlayerHitCheck : MonoBehaviour
     //インスペクター参照不可
     //---------------------------------------------
     private bool hit;//各方面からhitを検索する
-    private bool hitFlag;//hitしたらtrueを返す、こっちのみを参照する！！
     private GameObject player;//プレイヤー
     //---------------------------------------------
     //インスペクター参照可
     //---------------------------------------------
-    private bool playerhide;
+    [SerializeField] private bool playerhide;
+    [SerializeField] private bool hitFlag;//hitしたらtrueを返す、こっちのみを参照する！！
 
     private void Start()
     {
