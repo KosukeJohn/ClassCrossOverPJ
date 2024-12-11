@@ -5,16 +5,16 @@ using UnityEngine;
 public class Collider_cont_notnappare : MonoBehaviour
 {
     private Collider coll;
-    public bool playerfind;
+    private bool playerfind;
     private GameObject obj;
     private float angle;
-    public int num;
+
     private void Start()
     {
         obj = this.gameObject;
         coll = obj.GetComponent<Collider>();
         playerfind = false;
-        angle = 10.0f;
+        angle = 40.0f;
     }
     private void OnTriggerStay(Collider other)
     {
@@ -43,5 +43,10 @@ public class Collider_cont_notnappare : MonoBehaviour
                 playerfind = false;
             }
         }
+    }
+
+    public bool GetPlayerFind()
+    {
+        return this.playerfind;
     }
 }
