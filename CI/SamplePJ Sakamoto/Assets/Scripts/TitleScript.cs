@@ -1,13 +1,19 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement; // シーンをロードするために必要
+using UnityEngine.InputSystem;
 
 public class TitleScript : MonoBehaviour
 {
-    GameObject targetObject;
-    GameObject blackSheet; // 対象のオブジェクト
+    GameObject targetObject; // 回転する対象オブジェクト
+    GameObject blackSheet;   // フェードインに使用する黒い画像
+    GameObject dialogueObject; // ダイアログ用のUIオブジェクト
+    Text dialogueText; // ダイアログのTextコンポーネントをキャッシュ
+
+    // 表示する文章（順番に設定）
+    string[] dialogues = { "お母さん「部屋片づけておきなさいよー」", "主人公「はーい」", "主人公「うーん、めんどくさいなー」", "「ポイっ」" };
+    int currentDialogueIndex = 0; // 現在の文章のインデックス
 
     // Start is called before the first frame update
     void Start()
@@ -18,65 +24,109 @@ public class TitleScript : MonoBehaviour
         // シーン内で名前が "BlackSheet" のオブジェクトを探す
         blackSheet = GameObject.Find("BlackSheet");
 
-        // イメージコンポーネントを有効化（チェックを入れる）
-        Image image = blackSheet.GetComponent<Image>();
-        if (image != null)
+        // シーン内で名前が "Dialogue" のオブジェクトを探す
+        dialogueObject = GameObject.Find("Dialogue");
+
+        // ブラックシートの初期設定
+        Image blacksheetimage = blackSheet.GetComponent<Image>();
+        if (blacksheetimage != null)
         {
-            image.enabled = true; // Imageコンポーネントを有効にする
-            image.color = new Color(image.color.r, image.color.g, image.color.b, 0); // 初期状態は透明
+            blacksheetimage.enabled = true; // Imageコンポーネントを有効にする
+            blacksheetimage.color = new Color(0, 0, 0, 0); // 初期は透明
         }
         else
         {
             Debug.LogError("BlackSheetにImageコンポーネントがアタッチされていません。");
         }
+
+        // ダイアログのTextコンポーネントを取得して初期設定
+        dialogueText = dialogueObject.GetComponent<Text>();
+        if (dialogueText != null)
+        {
+            dialogueText.enabled = false; // 最初は非表示
+        }
+        else
+        {
+            Debug.LogError("DialogueにTextコンポーネントがアタッチされていません。");
+        }
     }
 
+    // ボタンが押された際の処理
     public void OnEnter()
     {
         Debug.Log("Aボタンが押されました！");
 
-        // オブジェクトが見つかった場合
-        if (targetObject != null)
+        // ダイアログが既に有効なら次の文章を表示
+        if (dialogueText != null && dialogueText.enabled)
         {
-            // 2秒かけて回転を変更するコルーチンを開始
-            StartCoroutine(RotateAndFadeIn(targetObject, 150, 2f)); // 2秒で回転してからフェードイン
+            ShowNextDialogue();
         }
         else
         {
-            Debug.LogError("Wooden_Box_Top オブジェクトが見つかりませんでした。");
+            // フェードインの後にダイアログを表示
+            StartCoroutine(StartSequence());
         }
     }
 
+    // 次の文章を表示する
+    void ShowNextDialogue()
+    {
+        if (currentDialogueIndex < dialogues.Length)
+        {
+            // 配列から次の文章を取得
+            dialogueText.text = dialogues[currentDialogueIndex];
+            currentDialogueIndex++;
+        }
+        else
+        {
+            Debug.Log("全ての文章が表示されました。");
+            // フェードイン完了後にシーンをロード
+            SceneManager.LoadScene("mainScene");
+        }
+    }
+
+    // 回転とフェードインを順番に処理するコルーチン
+    IEnumerator StartSequence()
+    {
+        if (targetObject != null)
+        {
+            // 回転処理
+            yield return RotateAndFadeIn(targetObject, 150, 2f);
+        }
+        // フェードイン処理
+        yield return FadeInCoroutine(blackSheet, 1f);
+
+        // ダイアログの初期文章を表示
+        if (dialogueText != null)
+        {
+            dialogueText.enabled = true;
+            ShowNextDialogue();
+        }
+    }
+
+    // 対象オブジェクトを指定の角度まで回転させるコルーチン
     IEnumerator RotateAndFadeIn(GameObject obj, float targetXRotation, float duration)
     {
-        // 現在の回転角度
+        // 現在の回転角度を取得
         Vector3 startRotation = obj.transform.eulerAngles;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
         {
-            // 経過時間の割合を計算
+            // 経過時間を計算
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / duration;
 
-            // 補間して回転を計算
-            float newXRotation = Mathf.Lerp(startRotation.x, targetXRotation, t);
-
-            // 現在の回転を更新
-            obj.transform.eulerAngles = new Vector3(newXRotation, startRotation.y, startRotation.z);
-
-            yield return null; // 次のフレームまで待機
+            // 回転を補間して設定
+            obj.transform.eulerAngles = new Vector3(Mathf.Lerp(startRotation.x, targetXRotation, t), startRotation.y, startRotation.z);
+            yield return null;
         }
 
-        // 最終的に正確な角度を設定
+        // 回転の最終角度を設定
         obj.transform.eulerAngles = new Vector3(targetXRotation, startRotation.y, startRotation.z);
-
-        Debug.Log("回転完了しました！");
-
-        // 回転が完了したらフェードインを開始
-        yield return StartCoroutine(FadeInCoroutine(blackSheet, 1f));
     }
 
+    // 黒いシートをフェードインさせるコルーチン
     IEnumerator FadeInCoroutine(GameObject obj, float duration)
     {
         Image image = obj.GetComponent<Image>();
@@ -87,26 +137,19 @@ public class TitleScript : MonoBehaviour
         }
 
         float elapsedTime = 0f;
-        Color startColor = image.color;
-        Color targetColor = new Color(startColor.r, startColor.g, startColor.b, 1); // アルファ値を1に
-
         while (elapsedTime < duration)
         {
+            // 経過時間を計算
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / duration;
 
             // アルファ値を補間
-            image.color = Color.Lerp(startColor, targetColor, t);
-
-            yield return null; // 次のフレームまで待機
+            image.color = new Color(image.color.r, image.color.g, image.color.b, Mathf.Lerp(0, 1, t));
+            yield return null;
         }
 
-        // 最終的に完全な不透明に設定
-        image.color = targetColor;
-
-        Debug.Log("フェードイン完了！");
-
-        // フェードイン完了後にシーンをロード
-        SceneManager.LoadScene("mainScene"); // "MainScene" の名前は実際のシーン名に置き換える
+        // 完全な不透明に設定
+        image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
     }
 }
+

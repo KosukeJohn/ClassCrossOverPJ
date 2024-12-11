@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isGrounded; // 接地中
     [SerializeField] private bool canHide; // 「隠れる」可能
     [SerializeField] private bool isHiding; // 「隠れる」中
+    [SerializeField] private bool hasKeyItem=false; // クリアに必要なアイテムを持っているか
+
+    public GameObject bossPrefab; // ボスのプレハブ
 
     //----------------------------------------------
     // スクリプトの処理用
@@ -115,6 +119,8 @@ public class PlayerController : MonoBehaviour
         {
             JumpPlayer();
         }
+
+
     }
 
     // オブジェクトが別の物理コライダーと接触した際に一度だけ呼ばれる
@@ -136,6 +142,27 @@ public class PlayerController : MonoBehaviour
             canHide = false;
         }
     }
+
+    // オブジェクトが別の物理コライダーと接触した際に一度だけ呼ばれる
+    private void OnCollisionEnter(Collision collision)
+    {
+        // 衝突したオブジェクトの名前をチェック
+        if (collision.gameObject.name == "keyItem")
+        {
+            Debug.Log("keyItem と衝突しました！");
+            Destroy(collision.gameObject); // 衝突したオブジェクトを削除
+            Instantiate(bossPrefab, new Vector3(162, 20, 5), Quaternion.Euler(0, 270, 0)); // ボスを生成
+            hasKeyItem = true;
+        }
+
+        if (collision.gameObject.name == "Goal" && hasKeyItem == true)
+        {
+
+            SceneManager.LoadScene("EndingScene");
+        }
+    }
+
+
 
     //----------------------------------------------
     // 各種処理
@@ -201,11 +228,20 @@ public class PlayerController : MonoBehaviour
         // オブジェクトが「Hideable」タグを持っているかで判定する
         return (other.CompareTag("Hideable"));
     }
-    
+
 
     //----------------------------------------------
     // 入力イベント
     //----------------------------------------------
+
+    //// 入力イベント：決定
+    //public void OnEnter(InputAction.CallbackContext context)
+    //{
+    //    if (context.started)
+    //    {
+    //        Debug.Log("Aボタンが押されました！");
+    //    }
+    //}
 
     // 入力イベント：移動
     public void OnMove(InputAction.CallbackContext context)
