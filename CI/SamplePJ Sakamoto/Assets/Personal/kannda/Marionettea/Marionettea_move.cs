@@ -5,17 +5,26 @@ using UnityEngine;
 
 public class Marionettea_move : MonoBehaviour
 {
+    //---------------------------------------------
+    //インスペクター参照不可
+    //---------------------------------------------
     private GameObject player;//プレイヤーオブジェクト
     private GameObject enemy;//敵のオブジェクト
-    private Animation anim;//アニメーション
+    private Animator anim;//アニメーション
     private float ChaseCnt;//追いかける時間
     private float ChaseCntMax;//あきらめるまでの時間
     private float DestroyCnt;//死ぬ時間
     private float DestroyCntMax;//死ぬまでの時間
-    private State state;//ステータス
+    private float animCnt;//アニメーションの時間
+    //---------------------------------------------
+    //インスペクター参照可
+    //---------------------------------------------
+    [SerializeField] private State state;//ステータス
+    //---------------------------------------------
     //stateの定義
+    //---------------------------------------------
     private enum State {
-        Non,Born,Idle,Chase
+        Non,Born, Chase, Idle
     };
 
     private void Start()
@@ -29,43 +38,24 @@ public class Marionettea_move : MonoBehaviour
             DestroyCnt = 0;
             DestroyCntMax = 5.0f;
             state = State.Chase;
+            anim = GetComponent<Animator>();
         }
-        //未実装
-#if false
-        anim = GetComponent<Animation>();
-#endif
     }
 
     private void FixedUpdate()
     {
-        //プレイヤーが隠れているか判断
-        //bool playerhide = player.GetComponent<PlayerController>().isHiding;<-Not public
-
-        
-#if false
-
-    if(!playerhide)
-    {
-        if (state == State.Chase)
-        {
-            if(Enemy_MoveToPlayer(Player_GetPosition()))
-            {
-                state = State.Idle;
-            }
-        }
-    }
-#else
+     
         if (state == State.Chase)//ステータスが追いかける(Chase)の時
         {
-            if(Enemy_MoveToPlayer(Player_GetPosition()))//プレイヤーに向かっていく
+            if (Enemy_MoveToPlayer(Player_GetPosition()))//プレイヤーに向かっていく
             {
                 //あきらめたら待機状態にする
                 state = State.Idle;
+                ChangeStateAnim(state);
             }
         }
-#endif
 
-        if(state == State.Idle)//ステータスが待機(Idle)の時
+        if (state == State.Idle)//ステータスが待機(Idle)の時
         {
             if(Enemy_DestroyCnt())//カウントする
             {
@@ -129,21 +119,25 @@ public class Marionettea_move : MonoBehaviour
         return pos;
     }
     //アニメーション未実装
-    private void Animation(State state)
+    private bool AnimCnt(float cntMax)
     {
-        switch(state)
+        //カウントさせる
+        animCnt += 1.0f * Time.deltaTime;
+
+        //引数をもとに指定の時間がたつとカウント終了
+        if (animCnt >= cntMax)
         {
-            case State.Idle:
-
-                break;
-            case State.Born:
-
-                break;
-            case State.Chase:
-
-                break;
-            default:
-                break;
+            animCnt = 0;
+            return true;
         }
+
+        return false;
+    }
+    private void ChangeStateAnim(State state)
+    {
+        //引数をもとにアニメーションを変更
+        this.state = state;
+        int Anim = (int)this.state;
+        anim.SetInteger("Marionnett_anim", Anim);
     }
 }
