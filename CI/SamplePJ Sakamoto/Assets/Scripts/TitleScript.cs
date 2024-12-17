@@ -65,6 +65,7 @@ public class TitleScript : MonoBehaviour
         {
             // フェードインの後にダイアログを表示
             StartCoroutine(StartSequence());
+
         }
     }
 
@@ -96,12 +97,16 @@ public class TitleScript : MonoBehaviour
         // フェードイン処理
         yield return FadeInCoroutine(blackSheet, 1f);
 
-        // ダイアログの初期文章を表示
-        if (dialogueText != null)
-        {
-            dialogueText.enabled = true;
-            ShowNextDialogue();
-        }
+
+        // フェードイン完了後にシーンをロード
+        SceneManager.LoadScene("mainScene");
+
+        //// ダイアログの初期文章を表示
+        //if (dialogueText != null)
+        //{
+        //    dialogueText.enabled = true;
+        //    ShowNextDialogue();
+        //}
     }
 
     // 対象オブジェクトを指定の角度まで回転させるコルーチン
