@@ -76,7 +76,7 @@ public class Marionettea_move : MonoBehaviour
         {
             return true;
         }
-        //プレイヤーが扇の範囲にいるか判断
+        //プレイヤーが索敵範囲にいるか判断
         bool find = enemy.GetComponentInChildren<Collider_Controller>().GetFindFlag();
         if (find)
         {

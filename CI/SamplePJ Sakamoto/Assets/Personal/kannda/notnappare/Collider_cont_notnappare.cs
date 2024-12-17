@@ -5,17 +5,19 @@ using UnityEngine;
 public class Collider_cont_notnappare : MonoBehaviour
 {
     private Collider coll;
-    private bool playerfind;
     private GameObject obj;
     private float angle;
+
+    [SerializeField] private bool playerfind;
 
     private void Start()
     {
         obj = this.gameObject;
         coll = obj.GetComponent<Collider>();
         playerfind = false;
-        angle = 40.0f;
+        angle = 10.0f;
     }
+
     private void OnTriggerStay(Collider other)
     {
         //”ÍˆÍ‚É“ü‚Á‚Ä‚¢‚é‚Ì‚ªƒvƒŒƒCƒ„[‚©
@@ -38,15 +40,16 @@ public class Collider_cont_notnappare : MonoBehaviour
                     }
                 }
             }
-            else
-            {
-                playerfind = false;
-            }
         }
     }
 
     public bool GetPlayerFind()
     {
         return this.playerfind;
+    }
+
+    public void SetPlayerFind(bool flag)
+    {
+        this.playerfind = flag;
     }
 }
