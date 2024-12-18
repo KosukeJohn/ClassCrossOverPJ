@@ -11,6 +11,7 @@ public class Marionettea_move : MonoBehaviour
     private GameObject player;//プレイヤーオブジェクト
     private GameObject enemy;//敵のオブジェクト
     private Animator anim;//アニメーション
+    private float BornCnt;
     private float ChaseCnt;//追いかける時間
     private float ChaseCntMax;//あきらめるまでの時間
     private float DestroyCnt;//死ぬ時間
@@ -20,11 +21,12 @@ public class Marionettea_move : MonoBehaviour
     //インスペクター参照可
     //---------------------------------------------
     [SerializeField] private State state;//ステータス
+    [SerializeField] private Vector3 pos;
     //---------------------------------------------
     //stateの定義
     //---------------------------------------------
     private enum State {
-        Non,Born, Chase, Idle
+        Non, Born, Chase, Idle
     };
 
     private void Start()
@@ -33,25 +35,44 @@ public class Marionettea_move : MonoBehaviour
         {
             player = GameObject.Find("Player");
             enemy = this.gameObject;
+            BornCnt = 0.3f;
             ChaseCnt = 0;
             ChaseCntMax = 5.0f;
             DestroyCnt = 0;
             DestroyCntMax = 5.0f;
-            state = State.Chase;
+            state = State.Non;
             anim = GetComponent<Animator>();
         }
     }
 
     private void FixedUpdate()
     {
+        if(state == State.Non)
+        {
+            //箱未実装
+            {
+                //bool openbox = false;
+            }
+
+            ChangeStateAnim(State.Born);
+        }
+
+        if(state == State.Born)
+        {
+            //
+            if(AnimCnt(BornCnt))
+            {
+                pos = transform.position;
+                ChangeStateAnim(State.Chase);
+            }
+        }
      
         if (state == State.Chase)//ステータスが追いかける(Chase)の時
         {
             if (Enemy_MoveToPlayer(Player_GetPosition()))//プレイヤーに向かっていく
             {
                 //あきらめたら待機状態にする
-                state = State.Idle;
-                ChangeStateAnim(state);
+                ChangeStateAnim(State.Idle);
             }
         }
 
@@ -60,7 +81,7 @@ public class Marionettea_move : MonoBehaviour
             if(Enemy_DestroyCnt())//カウントする
             {
                 //破壊
-                Destroy(enemy);
+                //Destroy(enemy);
             }
         }
     }
@@ -133,10 +154,10 @@ public class Marionettea_move : MonoBehaviour
 
         return false;
     }
-    private void ChangeStateAnim(State state)
+    private void ChangeStateAnim(State state_)
     {
         //引数をもとにアニメーションを変更
-        this.state = state;
+        this.state = state_;
         int Anim = (int)this.state;
         anim.SetInteger("Marionnett_anim", Anim);
     }
