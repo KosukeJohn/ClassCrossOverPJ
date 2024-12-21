@@ -3,25 +3,26 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
-public class Marionettea_move : MonoBehaviour
+public class Marionettea1_move : MonoBehaviour
 {
     //---------------------------------------------
     //インスペクター参照不可
     //---------------------------------------------
     private GameObject player;//プレイヤーオブジェクト
-    private GameObject enemy;//敵のオブジェクト
+    private GameObject enemy;//敵のオブジェクト   
     private Animator anim;//アニメーション
-    private float BornCnt;
+    private float BornCnt;//動くまでの時間
     private float ChaseCnt;//追いかける時間
     private float ChaseCntMax;//あきらめるまでの時間
     private float DestroyCnt;//死ぬ時間
     private float DestroyCntMax;//死ぬまでの時間
     private float animCnt;//アニメーションの時間
+    private bool destroyFlag;//破壊フラグ
     //---------------------------------------------
     //インスペクター参照可
     //---------------------------------------------
     [SerializeField] private State state;//ステータス
-    [SerializeField] private Vector3 pos;
+    [SerializeField] private Vector3 pos;//マリオネットの位置
     //---------------------------------------------
     //stateの定義
     //---------------------------------------------
@@ -35,35 +36,49 @@ public class Marionettea_move : MonoBehaviour
         {
             player = GameObject.Find("Player");
             enemy = this.gameObject;
-            BornCnt = 0.3f;
+            BornCnt = 2.0f;
             ChaseCnt = 0;
-            ChaseCntMax = 5.0f;
+            ChaseCntMax = 15.0f;
             DestroyCnt = 0;
-            DestroyCntMax = 5.0f;
-            state = State.Non;
+            DestroyCntMax = 1.0f;
+            state = State.Born;
+            animCnt = 0;
             anim = GetComponent<Animator>();
+            destroyFlag = false;
         }
     }
 
     private void FixedUpdate()
     {
-        if(state == State.Non)
-        {
-            //箱未実装
-            {
-                //bool openbox = false;
-            }
-
-            ChangeStateAnim(State.Born);
-        }
 
         if(state == State.Born)
         {
-            //
+            //カウントさせる
             if(AnimCnt(BornCnt))
             {
-                pos = transform.position;
-                ChangeStateAnim(State.Chase);
+                if (destroyFlag)//2回目の処理
+                {
+                    //カウントさせなくする
+                    animCnt = BornCnt;
+
+                    //移動
+                    float move = 10.0f;
+                    enemy.transform.position =
+                        Vector3.MoveTowards(enemy.transform.position, pos, move * Time.deltaTime);
+
+                    //プレイヤーと離れたら破壊
+                    if (player.transform.position.x - enemy.transform.position.x >= 20.0f)
+                    {
+                        //破壊
+                        Destroy(enemy);
+                    }
+                }
+                else//1回目の処理
+                {
+                    pos = transform.position;//帰る位置を定義
+                    ChangeStateAnim(State.Chase);//ステータスの変更
+                    destroyFlag = true;//処理を変更させるためのフラグ
+                }
             }
         }
      
@@ -80,8 +95,8 @@ public class Marionettea_move : MonoBehaviour
         {
             if(Enemy_DestroyCnt())//カウントする
             {
-                //破壊
-                //Destroy(enemy);
+                //戻る
+                ChangeStateAnim(State.Born);
             }
         }
     }
@@ -102,7 +117,7 @@ public class Marionettea_move : MonoBehaviour
         if (find)
         {
             //移動
-            float move = 3.0f;
+            float move = 5.0f;
             enemy.transform.position =
                 Vector3.MoveTowards(enemy.transform.position, pos, move * Time.deltaTime);
         }
@@ -139,7 +154,6 @@ public class Marionettea_move : MonoBehaviour
             new Vector3(player.transform.position.x, enemy.transform.position.y, player.transform.position.z);
         return pos;
     }
-    //アニメーション未実装
     private bool AnimCnt(float cntMax)
     {
         //カウントさせる
