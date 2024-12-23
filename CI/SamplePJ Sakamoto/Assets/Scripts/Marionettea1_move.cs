@@ -40,7 +40,7 @@ public class Marionettea1_move : MonoBehaviour
             ChaseCnt = 0;
             ChaseCntMax = 15.0f;
             DestroyCnt = 0;
-            DestroyCntMax = 1.0f;
+            DestroyCntMax = 0.7f;
             state = State.Born;
             animCnt = 0;
             anim = GetComponent<Animator>();
