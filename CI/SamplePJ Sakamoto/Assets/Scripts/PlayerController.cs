@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool canHide; // 「隠れる」可能
     [SerializeField] private bool isHiding; // 「隠れる」中
     [SerializeField] private bool hasKeyItem=false; // クリアに必要なアイテムを持っているか
+    [SerializeField] private Vector3 respawnPosition = new Vector3(0,0,0); // respawnする場所を格納
+    [SerializeField] private bool inSafeArea; // 時間内に目標の場所に入っているか
+    [SerializeField] private float timeRemaining = 8f; // 目標の場所に入るまでの時間
 
     public GameObject bossPrefab; // ボスのプレハブ
 
@@ -155,12 +158,52 @@ public class PlayerController : MonoBehaviour
             hasKeyItem = true;
         }
 
-        if (collision.gameObject.name == "Goal" && hasKeyItem == true)
+        if (collision.gameObject.name == "StageCheckPoint") 
         {
+            respawnPosition=collision.transform.position;
+            Destroy(collision.gameObject);
+        }
 
-            SceneManager.LoadScene("EndingScene");
+        if (collision.gameObject.name == "Gameover Area") 
+        {
+            transform.position = respawnPosition;
+        }
+
+        if (collision.gameObject.name == "Start")
+        {
+            inSafeArea = false;
+            Destroy(collision.gameObject);
+            StartCoroutine(GoToSafeArea(timeRemaining,inSafeArea,respawnPosition));
+
+        }
+
+        if (collision.gameObject.name == "Goal")
+        {
+            inSafeArea = true;
+            Destroy(collision.gameObject);
+            
+
         }
     }
+
+    IEnumerator GoToSafeArea(float timeRemaining, bool inSafeArea, Vector3 respawnPosition)
+    {
+        // 指定した時間だけ待機
+        yield return new WaitForSeconds(timeRemaining);
+
+        // セーフエリア外ならリスポーン位置に移動
+        if (inSafeArea)
+        {
+            // ゲームオーバー処理
+            transform.position = respawnPosition;
+            Debug.Log("ゲームオーバー: リスポーン位置に移動");
+        }
+        else 
+        {
+            Debug.Log("クリア");
+        }
+    }
+
 
 
 
