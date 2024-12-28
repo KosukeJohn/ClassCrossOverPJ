@@ -13,21 +13,24 @@ public class Marionettea1_move : MonoBehaviour
     private Animator anim;//アニメーション
     private float BornCnt;//動くまでの時間
     private float ChaseCnt;//追いかける時間
-    private float ChaseCntMax;//あきらめるまでの時間
-    private float DestroyCnt;//死ぬ時間
-    private float DestroyCntMax;//死ぬまでの時間
     private float animCnt;//アニメーションの時間
     private bool destroyFlag;//破壊フラグ
+    private float StageEnd_X1 = 63.66f;//ステージ１の終わり
     //---------------------------------------------
     //インスペクター参照可
     //---------------------------------------------
     [SerializeField] private State state;//ステータス
     [SerializeField] private Vector3 pos;//マリオネットの位置
     //---------------------------------------------
+    //バランス調整
+    //---------------------------------------------
+    private float ChaseCntMax = 5.0f;//あきらめるまでの時間
+    private float ChaseSpeed = 8.0f;//追いかけるスピード
+    //---------------------------------------------
     //stateの定義
     //---------------------------------------------
     private enum State {
-        Non, Born, Chase, Idle
+        Non, Born, Chase, Idle, Attack ,Death
     };
 
     private void Start()
@@ -36,11 +39,8 @@ public class Marionettea1_move : MonoBehaviour
         {
             player = GameObject.Find("Player");
             enemy = this.gameObject;
-            BornCnt = 2.0f;
+            BornCnt = 1.5f;
             ChaseCnt = 0;
-            ChaseCntMax = 15.0f;
-            DestroyCnt = 0;
-            DestroyCntMax = 0.7f;
             state = State.Born;
             animCnt = 0;
             anim = GetComponent<Animator>();
@@ -50,53 +50,67 @@ public class Marionettea1_move : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //ステージ１の終了地点を超えたか
+        if(enemy.transform.position.x >= StageEnd_X1)
+        {
+            //マリオネットを破壊する
+            state = State.Death;
+        }
 
+        //生まれた時の処理
         if(state == State.Born)
         {
             //カウントさせる
             if(AnimCnt(BornCnt))
             {
-                if (destroyFlag)//2回目の処理
-                {
-                    //カウントさせなくする
-                    animCnt = BornCnt;
-
-                    //移動
-                    float move = 10.0f;
-                    enemy.transform.position =
-                        Vector3.MoveTowards(enemy.transform.position, pos, move * Time.deltaTime);
-
-                    //プレイヤーと離れたら破壊
-                    if (player.transform.position.x - enemy.transform.position.x >= 20.0f)
-                    {
-                        //破壊
-                        Destroy(enemy);
-                    }
-                }
-                else//1回目の処理
-                {
-                    pos = transform.position;//帰る位置を定義
-                    ChangeStateAnim(State.Chase);//ステータスの変更
-                    destroyFlag = true;//処理を変更させるためのフラグ
-                }
+                pos = transform.position;//帰る位置を定義
+                ChangeState(State.Chase);//ステータスの変更
+                ChangeAnim(State.Chase);//ステータスの変更
+                destroyFlag = true;//処理を変更させるためのフラグ
             }
         }
-     
+
+        //攻撃時の処理
+        if (state == State.Attack)
+        {
+            //驚かすアニメーションにする
+            ChangeAnim(State.Born);
+
+            if (AnimCnt(BornCnt))
+            {
+                //アニメーションが終わったら追跡に戻る
+                ChangeState(State.Chase);//ステータスの変更
+                ChangeAnim(State.Chase);//ステータスの変更
+            }
+        }
+
+        //追跡時の処理
         if (state == State.Chase)//ステータスが追いかける(Chase)の時
         {
             if (Enemy_MoveToPlayer(Player_GetPosition()))//プレイヤーに向かっていく
             {
                 //あきらめたら待機状態にする
-                ChangeStateAnim(State.Idle);
+                ChangeState(State.Attack);
+                ChangeAnim(State.Idle);
             }
         }
 
-        if (state == State.Idle)//ステータスが待機(Idle)の時
+        //死亡時の処理
+        if (state == State.Death)
         {
-            if(Enemy_DestroyCnt())//カウントする
+            //移動
+            float move = 10.0f;
+            enemy.transform.position =
+                Vector3.MoveTowards(enemy.transform.position, pos, move * Time.deltaTime);
+
+            //回転させる
+            enemy.transform.Rotate(0f, 30.0f , 0f);
+
+            //プレイヤーと離れたら破壊
+            if (player.transform.position.x - enemy.transform.position.x >= 20.0f)
             {
-                //戻る
-                ChangeStateAnim(State.Born);
+                //破壊
+                Destroy(enemy);
             }
         }
     }
@@ -110,6 +124,7 @@ public class Marionettea1_move : MonoBehaviour
         //CntMaxになったら追いかけるのをやめる
         if (ChaseCnt >= ChaseCntMax)
         {
+            ChaseCnt = 0;
             return true;
         }
         //プレイヤーが索敵範囲にいるか判断
@@ -117,9 +132,8 @@ public class Marionettea1_move : MonoBehaviour
         if (find)
         {
             //移動
-            float move = 5.0f;
             enemy.transform.position =
-                Vector3.MoveTowards(enemy.transform.position, pos, move * Time.deltaTime);
+                Vector3.MoveTowards(enemy.transform.position, pos, ChaseSpeed * Time.deltaTime);
         }
         else
         {
@@ -128,24 +142,6 @@ public class Marionettea1_move : MonoBehaviour
                 (0f, 3.0f * enemy.GetComponentInChildren<Collider_Controller>().GetDirection(), 0f);
         }
         return false;
-    }
-    private bool Enemy_DestroyCnt()
-    {
-        //タイマーを動かす
-        DestroyCnt += 1.0f * Time.deltaTime;
-
-        if(DestroyCnt > DestroyCntMax)//時間になった
-        {
-            return true;
-        }
-        return false;
-    }
-    private Vector3 Enemy_GetPosition()
-    {
-        //Enemyの位置を取得
-        Vector3 pos = 
-            new Vector3(this.enemy.transform.position.x, this.enemy.transform.position.y + 0.5f, this.enemy.transform.position.z);
-        return pos;
     }
     private Vector3 Player_GetPosition()
     {
@@ -168,11 +164,23 @@ public class Marionettea1_move : MonoBehaviour
 
         return false;
     }
-    private void ChangeStateAnim(State state_)
+    private void ChangeAnim(State state_)
     {
+        if (state_ == State.Non) { return; }
+        if (state_ == State.Death) { return; }
+        if (state_ == State.Attack) { return; }
+
         //引数をもとにアニメーションを変更
-        this.state = state_;
-        int Anim = (int)this.state;
+        int Anim = (int)state_;
         anim.SetInteger("Marionnett_anim", Anim);
+    }
+    private void ChangeState(State state_)
+    {
+        //Nonは受け取らない
+        if (state_ == State.Non) { return; }
+
+        //引数をもとにステータスを変更
+        this.state = state_;
+
     }
 }
