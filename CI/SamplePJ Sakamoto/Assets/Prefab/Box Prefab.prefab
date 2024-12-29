@@ -66,7 +66,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: df9156b018939c94db66ee6e0c49ded9, type: 3}
       propertyPath: m_Name
-      value: box Variant
+      value: Box Prefab
       objectReference: {fileID: 0}
     - target: {fileID: 7558212921328841597, guid: df9156b018939c94db66ee6e0c49ded9, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -121,4 +121,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9205b1bc291e92458b8360c4d80167a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 3843514766888889369, guid: 2b603795171585342bd5a1701fc54158, type: 3}
+  prefab: {fileID: 7527212372610105820, guid: 646f0e072eaaac04d825e779d1f569d2, type: 3}

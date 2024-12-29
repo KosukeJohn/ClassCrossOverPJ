@@ -25,7 +25,7 @@ public class Marionettea1_move : MonoBehaviour
     //バランス調整
     //---------------------------------------------
     private float ChaseCntMax = 5.0f;//あきらめるまでの時間
-    private float ChaseSpeed = 8.0f;//追いかけるスピード
+    private float ChaseSpeed = 6.5f;//追いかけるスピード
     //---------------------------------------------
     //stateの定義
     //---------------------------------------------
@@ -182,5 +182,16 @@ public class Marionettea1_move : MonoBehaviour
         //引数をもとにステータスを変更
         this.state = state_;
 
+    }
+    public bool GetAttackFlag()
+    {
+        bool attackFlag = false;
+
+        if(state == State.Attack)
+        {
+            attackFlag = true;
+        }
+
+        return attackFlag;
     }
 }
