@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:CI/SamplePJ Sakamoto/Assets/Kuraoka_proto.meta
+guid: 8987386b766ff174c84675f065fedd67
+========
 guid: 916e24aa7e558c746b577086c053b763
+>>>>>>>> 355662bf05b16c6904870894eecb7f8e91a339b0:CI/SamplePJ Sakamoto/Assets/Objects from CG/Player.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

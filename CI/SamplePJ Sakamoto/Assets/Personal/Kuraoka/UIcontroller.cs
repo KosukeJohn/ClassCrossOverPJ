@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIcontroller : MonoBehaviour
 {
     //インスペクターから設定するか、初期化時にGetComponentして、TextMeshProUGUIへの参照を取得しておく。
     [SerializeField]
-    TextMeshProUGUI tmp;
+    Image img;
 
     [Header("1ループの長さ(秒単位)")]
     [SerializeField]
@@ -29,13 +30,13 @@ public class UIcontroller : MonoBehaviour
     //インスペクターから設定した場合は、GetComponentする必要がなくなる為、Awakeを削除しても良い。
     void Awake()
     {
-        if (tmp == null)
-            tmp = GetComponent<TextMeshProUGUI>();
+        if (img == null)
+            img = GetComponent<Image>();
     }
 
     void Update()
     {
-        tmp.color = Color.Lerp(startColor, endColor, Mathf.PingPong(Time.time / duration, 1.0f));
+        img.color = Color.Lerp(startColor, endColor, Mathf.PingPong(Time.time / duration, 1.0f));
     }
 }
 
