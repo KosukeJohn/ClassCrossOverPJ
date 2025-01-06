@@ -1,43 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class Marionnett1_HitBox : MonoBehaviour
 {
     private Collider coll;
-    private Transform enemyTrans;
-    private bool hitFlag;
-    private bool attackFlag;
+    private GameObject hitcheck;
     private Vector3 attackPos;
-
+    private bool hitFlag;
+    private float timeCnt;
+    private float maxCnt;
 
     private void Start()
     {
         coll = GetComponent<Collider>();
-        //coll.enabled = false;
+        hitcheck = GameObject.Find("HitCheck");
         hitFlag = false;
+        timeCnt = 0;
+        maxCnt = 0.8f;
     }
     private void Update()
     {
-        attackFlag = GetComponentInParent<Marionettea1_move>().GetAttackFlag();
-        enemyTrans = GetComponentInParent<Transform>();
-        this.transform.rotation = enemyTrans.transform.rotation;
-
-        if (attackFlag)
+        timeCnt += Time.deltaTime;
+        if (timeCnt >= maxCnt)
         {
-            //
-            attackPos = new(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z + 0.427f);
-            float move = 3.0f;
-            transform.localPosition =
-                Vector3.MoveTowards(transform.localPosition, attackPos, move * Time.deltaTime);
+            Destroy(this.gameObject);
         }
-        else { transform.position = new(0, transform.localPosition.y, 0); }
 
-        if(hitFlag)
+        this.transform.localPosition += this.attackPos / 10;
+
+        hitcheck.GetComponent<PlayerHitCheck>().SetPlayerHitCheck(hitFlag);
+
+        if (hitFlag) 
         {
             hitFlag = false;
         }
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -46,8 +44,9 @@ public class Marionnett1_HitBox : MonoBehaviour
             hitFlag = true;
         }
     }
-    //public bool GetHitFlag()
-    //{
-    //    return this.hitFlag;
-    //}
+
+    public void SetAttackPosition(Vector3 pos)
+    {
+        this.attackPos = pos;
+    }
 }
