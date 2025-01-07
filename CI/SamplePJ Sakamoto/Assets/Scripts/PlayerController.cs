@@ -22,8 +22,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isHiding; // 「隠れる」中
     [SerializeField] private bool hasKeyItem=false; // クリアに必要なアイテムを持っているか
     [SerializeField] private Vector3 respawnPosition = new Vector3(0,0,0); // respawnする場所を格納
-    [SerializeField] private bool inSafeArea; // 時間内に目標の場所に入っているか
-    [SerializeField] private float timeRemaining = 8f; // 目標の場所に入るまでの時間
+    [SerializeField] private bool inSafeArea = false; // 時間内に目標の場所に入っているか
+    [SerializeField] private float timeRemaining = 2f; // 目標の場所に入るまでの時間
 
     public GameObject bossPrefab; // ボスのプレハブ
 
@@ -169,7 +169,7 @@ public class PlayerController : MonoBehaviour
             transform.position = respawnPosition;
         }
 
-        if (collision.gameObject.name == "Start")
+        if (collision.gameObject.name == "Stage2StartPoint")
         {
             inSafeArea = false;
             Destroy(collision.gameObject);
@@ -177,12 +177,18 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if (collision.gameObject.name == "Goal")
+        if (collision.gameObject.name == "Stage2GoalPoint")
         {
             inSafeArea = true;
             Destroy(collision.gameObject);
             
 
+        }
+
+        if (collision.gameObject.name == "EndingScene")
+        {
+            // エンディングシーンをロード
+            SceneManager.LoadScene("EndingScene");
         }
     }
 
@@ -192,7 +198,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(timeRemaining);
 
         // セーフエリア外ならリスポーン位置に移動
-        if (inSafeArea)
+        if (!inSafeArea)
         {
             // ゲームオーバー処理
             transform.position = respawnPosition;

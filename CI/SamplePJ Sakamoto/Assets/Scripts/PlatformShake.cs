@@ -3,16 +3,20 @@ using System.Collections;
 
 public class PlatformShake : MonoBehaviour
 {
-    public float shakeAmount = 0.05f;  // —h‚ê‚Ì‹­‚³
-    public float shakeDuration = 2.0f;  // —h‚ê‚éŠÔ
-    Rigidbody rb;
+    public float shakeAmount = 2.0f;
+    public float shakeDuration = 1.0f;
+    private Rigidbody rb;
     private Vector3 originalPosition;
+    private bool isShaking = false;
+    private bool hasShaken = false;  // —h‚ê‚½‚©‚Ç‚¤‚©‚ğ‹L˜^‚·‚é•Ï”‚ğ’Ç‰Á
 
     void Start()
     {
         originalPosition = transform.position;
         rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;  // ‰ñ“]‚ğ–h‚®
+        rb.freezeRotation = true;
+        rb.useGravity = false;
+        rb.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
     }
 
     void Update()
@@ -22,12 +26,18 @@ public class PlatformShake : MonoBehaviour
 
     public void EnableGravity()
     {
-        rb.useGravity = true;
+        if (rb != null)
+        {
+            rb.useGravity = true;
+            rb.constraints = RigidbodyConstraints.FreezePositionX |
+                           RigidbodyConstraints.FreezePositionZ |
+                           RigidbodyConstraints.FreezeRotation;
+        }
     }
 
     public void DestroyWhenOutOfStage()
     {
-        if (transform.position.y < 4f)
+        if (transform.position.y < -4f)
         {
             Destroy(gameObject);
         }
@@ -35,27 +45,32 @@ public class PlatformShake : MonoBehaviour
 
     public void StartShake()
     {
-        StartCoroutine(Shake());
+        // —h‚ê‚½‚±‚Æ‚ª‚È‚­AŒ»İ—h‚ê‚Ä‚¢‚È‚¢ê‡‚Ì‚İÀs
+        if (!hasShaken && !isShaking)
+        {
+            isShaking = true;
+            hasShaken = true;  // —h‚ê‚½‚±‚Æ‚ğ‹L˜^
+            StartCoroutine(Shake());
+        }
     }
 
     IEnumerator Shake()
     {
         float elapsed = 0.0f;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
 
         while (elapsed < shakeDuration)
         {
             float x = Random.Range(-1f, 1f) * shakeAmount;
             float y = Random.Range(-1f, 1f) * shakeAmount;
-
-            // Rigidbody‚ğg‚Á‚Ä•¨—“I‚É—h‚ç‚·
-            Vector3 newPosition = originalPosition + new Vector3(x, y, 0);
-            rb.MovePosition(newPosition);  // •¨—“I‚ÉˆÊ’u‚ğ“®‚©‚·
-
+            rb.velocity = new Vector3(x, y, 0);
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        // —h‚ê‚ªI‚í‚Á‚½‚çd—Í‚ğ—LŒø‰»
+        rb.velocity = Vector3.zero;
+        transform.position = originalPosition;
+        isShaking = false;
         EnableGravity();
     }
 
@@ -66,5 +81,9 @@ public class PlatformShake : MonoBehaviour
             StartShake();
         }
 
+        if (collision.gameObject.name == "Gameover Area") 
+        {
+            Destroy(gameObject);
+        }
     }
 }
