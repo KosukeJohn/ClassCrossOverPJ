@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class Scene : MonoBehaviour
 {
     public GameObject hitCheck;
-    public GameObject endCheck;
+    //public GameObject endCheck;
     private bool hitFlag;
     private bool clearFlag;
 
@@ -18,16 +18,16 @@ public class Scene : MonoBehaviour
     private void Update()
     {
         hitFlag = hitCheck.GetComponent<PlayerHitCheck>().GetPlayerHitCheck();
-        clearFlag = endCheck.GetComponent<GOl>().GetEndFlag();
+        //clearFlag = endCheck.GetComponent<GOl>().GetEndFlag();
 
         if (hitFlag)
         {
             SceneManager.LoadScene("GameOverScene");
         }
 
-        if (clearFlag)
-        {
-            SceneManager.LoadScene("EndingScene");
-        }
+        //if (clearFlag)
+        //{
+        //    SceneManager.LoadScene("EndingScene");
+        //}
     }
 }

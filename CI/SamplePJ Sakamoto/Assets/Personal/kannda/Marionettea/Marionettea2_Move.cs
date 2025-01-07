@@ -23,7 +23,7 @@ public class Marionettea2_Move : MonoBehaviour
     //インスペクター参照可
     //---------------------------------------------
     public float speedX;
-    private float speedY = 9.8f;
+    [SerializeField] private float speedY = 0;
     public float chasePos = 50.0f;
     [SerializeField] private State state;
     //---------------------------------------------
@@ -93,40 +93,74 @@ public class Marionettea2_Move : MonoBehaviour
 #else
         if (state == State.Normal)
         {
-            enemy.transform.Translate(speedX, 0, 0);
-
-            if(enemy.transform.position.y <= 9.3f)
+            speedY -= 9.8f * Time.deltaTime;
+            
+            if(speedY < 0)
             {
-                enemy.transform.position =
-                    new(enemy.transform.position.x, 9.3f, enemy.transform.position.z);
+                speedY = 0;
+            }
+
+            enemy.transform.Translate(speedX, speedY, 0);
+
+            if(enemy.transform.position.x >= 198f)
+            {
+                if(jumpFlag == 0)
+                {
+                    state = State.Attack;
+                    jumpFlag++;
+                }
             }
 
             if (enemy.transform.position.x >= 207f)
             {
-                if (jumpFlag == 0)
+                if (jumpFlag == 1)
                 {
-                    speedY = 3f;
+                    state = State.Attack;
+                    speedY = 50f * Time.deltaTime;
+                    speedX = -8f * Time.deltaTime;
+                    jumpFlag++;
+                }              
+            }
+
+            if (enemy.transform.position.x >= 215f)
+            {
+                if (jumpFlag == 2)
+                {
+                    enemy.transform.position =
+                    new(enemy.transform.position.x, 9.5f, enemy.transform.position.z);
+
+                    state = State.Attack;
+                    speedY = 50f * Time.deltaTime;
                     speedX = -8f * Time.deltaTime;
                     jumpFlag++;
                 }
-                else if (jumpFlag == 1) 
-                {
-                    speedY -= 9.8f * Time.deltaTime;
-                    enemy.transform.Translate(0, speedY, 0);
-                }               
             }
 
-            if (enemy.transform.position.x >= 212f)
+            if(enemy.transform.position.x >= 223f)
             {
-                if (jumpFlag == 1)
+                if(jumpFlag == 3)
                 {
-                    //speedY = Mathf.Sqrt(117.6f);
                     jumpFlag++;
+                    speedX = -4f * Time.deltaTime;
+                    speedY = 0;
+                }
+
+                enemy.transform.position =
+                    new(enemy.transform.position.x, 14.5f, enemy.transform.position.z);
+
+            }
+
+            if (enemy.transform.position.x >= 225f)
+            {
+                if (jumpFlag == 4)
+                {
+                    jumpFlag++;
+                    state = State.Attack;
                 }
             }
 
             if (enemy.transform.position.x >= 226.68f)
-            {
+            {                
                 state = State.Death;
             }
         }
@@ -134,12 +168,13 @@ public class Marionettea2_Move : MonoBehaviour
 #endif
         if (state == State.Attack)
         {
+            hitFlag = true;
             anim.SetBool("Find", true);
 
             if (TimeCnt(2.0f))
             {
+                hitFlag = false;
                 anim.SetBool("Find", false);
-                //jumpFlag = true;
                 state = State.Normal;
             }
         }
@@ -151,7 +186,7 @@ public class Marionettea2_Move : MonoBehaviour
                 enemy.AddComponent<Rigidbody>();
             }
             
-            if(enemy.transform.position.y<=-20)
+            if(enemy.transform.position.y <= -20)
             {
                 Destroy(enemy);
             }
@@ -169,5 +204,10 @@ public class Marionettea2_Move : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool GetHitFlag()
+    {
+        return this.hitFlag;
     }
 }

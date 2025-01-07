@@ -5,36 +5,41 @@ using UnityEngine;
 public class Stage2HitCheck : MonoBehaviour
 {
     private GameObject enemy;
-    private float timeCnt;
-    private float attackTime;
-    private bool attackFlag;
+    private GameObject hitcheck;
+    private Collider coll;
+    [SerializeField] private bool attackFlag;
+    [SerializeField] private bool hitFlag;
     
     void Start()
     {
         enemy = this.gameObject;
-        timeCnt = 0;
+        hitcheck = GameObject.Find("HitCheck");
+        coll = GetComponent<Collider>();
         attackFlag = false;
+        hitFlag = false;
     }
 
     void Update()
     {
-        if (timeCnt == 0)
+        attackFlag = enemy.GetComponent<Marionettea2_Move>().GetHitFlag();
+        hitcheck.GetComponent<PlayerHitCheck>().SetPlayerHitCheck(hitFlag);
+
+        if (hitFlag)
         {
-            attackTime = Random.Range(1, 6);
-            attackFlag = false;
-        }
-
-        timeCnt += Time.deltaTime * 1.0f;
-
-        if (timeCnt >= attackTime)
-        { 
-            attackFlag = true;
-            timeCnt = 0;
+            hitFlag = false;
         }
     }
-    public bool GetAttackFlag()
+
+    private void OnTriggerStay(Collider other)
     {
-        return attackFlag;
+        if (attackFlag) 
+        {
+            if(other.tag == "Player")
+            {
+                hitFlag = true;
+            }
+        }
     }
-    
+
+
 }
