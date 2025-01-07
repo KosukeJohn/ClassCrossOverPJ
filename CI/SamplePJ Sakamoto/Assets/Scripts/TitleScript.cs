@@ -11,6 +11,8 @@ public class TitleScript : MonoBehaviour
     GameObject dialogueObject; // ダイアログ用のUIオブジェクト
     Text dialogueText; // ダイアログのTextコンポーネントをキャッシュ
 
+    private GameObject player;//プレイヤーの初期位置をリセットさせる
+
     // 表示する文章（順番に設定）
     string[] dialogues = { "お母さん「部屋片づけておきなさいよー」", "主人公「はーい」", "主人公「うーん、めんどくさいなー」", "「ポイっ」" };
     int currentDialogueIndex = 0; // 現在の文章のインデックス
@@ -49,6 +51,11 @@ public class TitleScript : MonoBehaviour
         {
             Debug.LogError("DialogueにTextコンポーネントがアタッチされていません。");
         }
+
+        //1/7追加
+        player = GameObject.Find("Player");
+        Vector3 pos = new(0, 0, 0);
+        player.GetComponent<PlayerFirstPos>().SetFirstPos(pos);
     }
 
     // ボタンが押された際の処理

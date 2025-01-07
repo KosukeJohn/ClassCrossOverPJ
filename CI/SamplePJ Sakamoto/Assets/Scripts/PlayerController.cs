@@ -35,6 +35,9 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput; // コントローラーの入力方向
     private bool jumpInProgress; // ジャンプ処理中
 
+    //1/7に追加したもの
+    private GameObject hitcheck;
+
     //----------------------------------------------
     // 変数のプロパティ
     //----------------------------------------------
@@ -90,7 +93,11 @@ public class PlayerController : MonoBehaviour
         GroundCheck = GameObject.Find("GroundCheck").transform;
 
         // Groundレイヤーを取得
-        GroundLayer = LayerMask.GetMask("Ground"); 
+        GroundLayer = LayerMask.GetMask("Ground");
+
+        //1/7に追加したもの
+        hitcheck = GameObject.Find("HitCheck");
+        this.transform.position = GetComponent<PlayerFirstPos>().GetFirstPos();
     }
 
     // 一定間隔で呼ばれる更新処理
@@ -166,7 +173,9 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.name == "Gameover Area") 
         {
-            transform.position = respawnPosition;
+            //1/7に変更、作ってもらったのにすみません
+            //transform.position = respawnPosition;
+            hitcheck.GetComponent<PlayerHitCheck>().SetPlayerHitCheck(true);
         }
 
         if (collision.gameObject.name == "Stage2StartPoint")
@@ -188,7 +197,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.name == "EndingScene")
         {
             // エンディングシーンをロード
-            SceneManager.LoadScene("EndingScene");
+            SceneManager.LoadScene("EndingScene Movie");//1/7名称の変更
         }
     }
 

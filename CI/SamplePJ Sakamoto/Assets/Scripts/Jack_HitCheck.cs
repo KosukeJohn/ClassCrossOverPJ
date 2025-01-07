@@ -26,7 +26,7 @@ public class Jack_HitCheck : MonoBehaviour
         {
             hitcheck = this.gameObject;
             jack = transform.parent.gameObject;
-            playerhitcheck = GameObject.Find("PlayerHitCheck");
+            playerhitcheck = GameObject.Find("HitCheck");
             coll = hitcheck.GetComponent<Collider>();
             hitflag = false;
             firstpos = this.transform.position;

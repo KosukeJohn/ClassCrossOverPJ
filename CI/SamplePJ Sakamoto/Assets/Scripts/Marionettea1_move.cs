@@ -14,7 +14,7 @@ public class Marionettea1_move : MonoBehaviour
     private float BornCnt;//動くまでの時間
     private float ChaseCnt;//追いかける時間
     private float animCnt;//アニメーションの時間
-    private bool destroyFlag;//破壊フラグ
+    //private bool destroyFlag;//破壊フラグ
     private float StageEnd_X1 = 63.66f;//ステージ１の終わり
     //---------------------------------------------
     //インスペクター参照可
@@ -44,7 +44,7 @@ public class Marionettea1_move : MonoBehaviour
             state = State.Born;
             animCnt = 0;
             anim = GetComponent<Animator>();
-            destroyFlag = false;
+            //destroyFlag = false;
         }
     }
 
@@ -66,7 +66,6 @@ public class Marionettea1_move : MonoBehaviour
                 pos = transform.position;//帰る位置を定義
                 ChangeState(State.Chase);//ステータスの変更
                 ChangeAnim(State.Chase);//ステータスの変更
-                destroyFlag = true;//処理を変更させるためのフラグ
             }
         }
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 966250304231678684}
   - component: {fileID: 5062539063420509627}
   m_Layer: 0
-  m_Name: HitCheck
+  m_Name: HitCheck_jack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 84a3a296421b858468994e26b445361b, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 84a3a296421b858468994e26b445361b, type: 3}
       propertyPath: m_LocalScale.x
