@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
+//using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class Marionettea2_Move : MonoBehaviour
@@ -9,7 +9,6 @@ public class Marionettea2_Move : MonoBehaviour
     //インスペクター参照不可
     //---------------------------------------------
     private GameObject enemy;
-    private GameObject hitCheck;
     private Animator anim;
     private bool hitFlag;
     private float jumpCnt;
@@ -52,7 +51,6 @@ public class Marionettea2_Move : MonoBehaviour
 
         if (state == State.Born)
         {
-
             enemy.transform.Translate(speed * 8, 0, 0);
 
             jumpCnt += Time.deltaTime * 1.0f;
@@ -67,7 +65,7 @@ public class Marionettea2_Move : MonoBehaviour
             }
         }
 
-#if true
+#if false
         if(state == State.Normal)
         {
             enemy.transform.Translate(speed, 0, 0);
@@ -80,28 +78,34 @@ public class Marionettea2_Move : MonoBehaviour
                 timeCnt = 0;
             }
 
-            if (enemy.transform.position.x >= prePos.x + chasePos)
+            if (enemy.transform.position.x >= 226.68f)
             {
                 state = State.Death;
             }
         }
-        
+
 #else
         //被弾タイマーを取得
-        //hitFlag = hitCheck.GetComponent<>();
+        hitFlag = enemy.GetComponent<Stage2HitCheck>().GetAttackFlag();
 
-        //if (state == State.Normal) 
-        //{
-        //    if (hitFlag)
-        //    {
-        //        anim.SetBool("Find", true);
-        //    }
-        //    else
-        //    {
-        //        anim.SetBool("Find", false);
-        //        enemy.transform.Translate(speed, 0, 0);
-        //    }
-        //}
+        if (state == State.Normal)
+        {
+            if (hitFlag)
+            {
+                anim.SetBool("Find", true);
+            }
+            else
+            {
+                anim.SetBool("Find", false);
+                enemy.transform.Translate(speed, 0, 0);
+            }
+
+            if (enemy.transform.position.x >= 226.68f)
+            {
+                state = State.Death;
+                state = State.Death;
+            }
+        }
 #endif
 
         if (state == State.Death)

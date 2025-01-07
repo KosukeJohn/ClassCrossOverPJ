@@ -12,7 +12,6 @@ public class PlayerHitCheck : MonoBehaviour
     //---------------------------------------------
     //インスペクター参照可
     //---------------------------------------------
-    [SerializeField] private bool playerhide;
     [SerializeField] private bool hitFlag;//hitしたらtrueを返す、こっちのみを参照する！！
 
     private void Start()
@@ -29,21 +28,12 @@ public class PlayerHitCheck : MonoBehaviour
     {
         if (hit)
         {
-            //まだ当たっただけ
-            //playerが隠れているか参照する
-            playerhide = player.GetComponent<PlayerController>().IsHiding;
-
-            //隠れていなければ当たったことにする
-            if (!playerhide)
-            {
-                hitFlag = true;
-            }
-        }
-
-        if (hitFlag)
-        {
             //当たった処理が可能になる
             Debug.Log("PlayerHit");
+
+            hitFlag = hit;
+
+            hit = false;
         }
     }
 
@@ -52,6 +42,8 @@ public class PlayerHitCheck : MonoBehaviour
     //---------------------------------------------
     public void SetPlayerHitCheck(bool flag)
     {
+        if (flag == false) { return; }
+
         //hitしたか判断する時に使う
         this.hit = flag;
     }
