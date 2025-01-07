@@ -52,7 +52,7 @@ public class TitleScript : MonoBehaviour
     }
 
     // ボタンが押された際の処理
-    public void OnEnter()
+    public void OnJump()/*1/7にEnter->Jumpに変更 */
     {
         Debug.Log("Aボタンが押されました！");
 

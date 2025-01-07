@@ -18,10 +18,12 @@ public class Marionettea2_Move : MonoBehaviour
     private Vector3 prePos;
     private float timeCnt;
     private float maxCnt;
+    private int jumpFlag;
     //---------------------------------------------
     //インスペクター参照可
     //---------------------------------------------
-    public float speed;
+    public float speedX;
+    private float speedY = 9.8f;
     public float chasePos = 50.0f;
     [SerializeField] private State state;
     //---------------------------------------------
@@ -29,7 +31,7 @@ public class Marionettea2_Move : MonoBehaviour
     //---------------------------------------------
     private enum State
     {
-        Non,Born,Normal, Death
+        Non,Born,Normal,Attack, Death
     };
 
     private void Start()
@@ -37,21 +39,22 @@ public class Marionettea2_Move : MonoBehaviour
         enemy = this.gameObject;
         anim = GetComponent<Animator>();
         hitFlag = false;
-        speed /= -100;
+        speedX /= -100;
         timeCnt = 0;
         maxCnt = 5;
         state = State.Born;
         jumpCnt = 0;
         prePos = enemy.transform.position;
+        jumpFlag = 0;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (state == State.Non) { return; }
 
         if (state == State.Born)
         {
-            enemy.transform.Translate(speed * 8, 0, 0);
+            enemy.transform.Translate(speedX * 8, 0, 0);
 
             jumpCnt += Time.deltaTime * 1.0f;
             float speedY = jumpSpeed + (-9.8f * jumpCnt);
@@ -64,18 +67,21 @@ public class Marionettea2_Move : MonoBehaviour
                 state = State.Normal;
             }
         }
-
 #if false
-        if(state == State.Normal)
-        {
-            enemy.transform.Translate(speed, 0, 0);
-            anim.SetBool("Find", false);
-            timeCnt += Time.deltaTime;
 
-            if (timeCnt >= maxCnt)
+        if (state == State.Normal)
+        {
+            //被弾タイマーを取得
+            hitFlag = enemy.GetComponent<Stage2HitCheck>().GetAttackFlag();
+
+            if (hitFlag)
             {
-                anim.SetBool("Find", true);
-                timeCnt = 0;
+                state = State.Attack;
+            }
+            else
+            {
+                anim.SetBool("Find", false);
+                enemy.transform.Translate(speedX, 0, 0);
             }
 
             if (enemy.transform.position.x >= 226.68f)
@@ -85,28 +91,58 @@ public class Marionettea2_Move : MonoBehaviour
         }
 
 #else
-        //被弾タイマーを取得
-        hitFlag = enemy.GetComponent<Stage2HitCheck>().GetAttackFlag();
-
         if (state == State.Normal)
         {
-            if (hitFlag)
+            enemy.transform.Translate(speedX, 0, 0);
+
+            if(enemy.transform.position.y <= 9.3f)
             {
-                anim.SetBool("Find", true);
+                enemy.transform.position =
+                    new(enemy.transform.position.x, 9.3f, enemy.transform.position.z);
             }
-            else
+
+            if (enemy.transform.position.x >= 207f)
             {
-                anim.SetBool("Find", false);
-                enemy.transform.Translate(speed, 0, 0);
+                if (jumpFlag == 0)
+                {
+                    speedY = 3f;
+                    speedX = -8f * Time.deltaTime;
+                    jumpFlag++;
+                }
+                else if (jumpFlag == 1) 
+                {
+                    speedY -= 9.8f * Time.deltaTime;
+                    enemy.transform.Translate(0, speedY, 0);
+                }               
+            }
+
+            if (enemy.transform.position.x >= 212f)
+            {
+                if (jumpFlag == 1)
+                {
+                    //speedY = Mathf.Sqrt(117.6f);
+                    jumpFlag++;
+                }
             }
 
             if (enemy.transform.position.x >= 226.68f)
             {
                 state = State.Death;
-                state = State.Death;
             }
         }
+
 #endif
+        if (state == State.Attack)
+        {
+            anim.SetBool("Find", true);
+
+            if (TimeCnt(2.0f))
+            {
+                anim.SetBool("Find", false);
+                //jumpFlag = true;
+                state = State.Normal;
+            }
+        }
 
         if (state == State.Death)
         {
@@ -120,5 +156,18 @@ public class Marionettea2_Move : MonoBehaviour
                 Destroy(enemy);
             }
         }
+    }
+
+    private bool TimeCnt(float max)
+    {
+        timeCnt += Time.deltaTime;
+
+        if (timeCnt > max)
+        {
+            timeCnt = 0;
+            return true;
+        }
+
+        return false;
     }
 }

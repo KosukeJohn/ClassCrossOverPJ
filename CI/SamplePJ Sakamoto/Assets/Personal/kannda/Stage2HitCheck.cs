@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Stage2HitCheck : MonoBehaviour
 {
-    private GameObject player;
+    private GameObject enemy;
     private float timeCnt;
     private float attackTime;
     private bool attackFlag;
     
     void Start()
     {
-        player = GameObject.Find("Player");
+        enemy = this.gameObject;
         timeCnt = 0;
         attackFlag = false;
     }

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class Stage2GameDirector : MonoBehaviour
@@ -12,22 +11,18 @@ public class Stage2GameDirector : MonoBehaviour
     private void Start()
     {
         player = GameObject.Find("Player");
-        InstanceFlag = false;
+        InstanceFlag = true;
     }
     private void Update()
     {
-        if (!InstanceFlag)
-        {
-            if(player.transform.position.x >= this.transform.position.x)
-            {
-                InstanceFlag = true;
-            }
-        }
-
         if(InstanceFlag)
         {
-            enemy = Instantiate(prefab);
-            enemy.transform.position = this.transform.position;
+            if (player.transform.position.x >= this.transform.position.x)
+            {
+                InstanceFlag = false;
+                enemy = Instantiate(prefab);
+                enemy.transform.position = this.transform.position;
+            }
         }
     }
 }
