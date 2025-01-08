@@ -26,7 +26,7 @@ public class GameUIController : MonoBehaviour
             UI.SetActive(true);
         }
         //プレイヤーとUIの距離が一定上ならUIを表示
-        if (dis>12.0)
+        if (dis>20.0f)
         {
             UI.SetActive(false);
         }
