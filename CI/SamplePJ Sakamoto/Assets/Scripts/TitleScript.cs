@@ -99,7 +99,7 @@ public class TitleScript : MonoBehaviour
         if (targetObject != null)
         {
             // 回転処理
-            yield return RotateAndFadeIn(targetObject, 150, 2f);
+            yield return RotateAndFadeIn(targetObject, -150, 2f);
         }
         // フェードイン処理
         yield return FadeInCoroutine(blackSheet, 1f);
