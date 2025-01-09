@@ -50,7 +50,7 @@ public class jack_controller : MonoBehaviour
         {
             if (PlayerFind())
             {
-                Vector3 pos = new(transform.position.x, transform.position.y, 5);
+                Vector3 pos = new(transform.position.x, transform.position.y, transform.position.z - 4);
                 player.GetComponent<PlayerFirstPos>().SetFirstPos(pos);
                 ChangeStateAnim(State.Find);
             }
