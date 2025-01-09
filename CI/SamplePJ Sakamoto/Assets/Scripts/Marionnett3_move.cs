@@ -10,8 +10,8 @@ public class Marionnett3_move : MonoBehaviour
     private bool moveFlag = true;
     private bool attackFlag = false;
     private bool destroyFlag = false;
-    private float speedY;
     private float timeCnt;
+    public float speedY;   
     public float hightPos;
     [SerializeReference] private State state;
     private enum State
@@ -25,7 +25,7 @@ public class Marionnett3_move : MonoBehaviour
         enemy.transform.position =
             new(this.transform.position.x, -40, this.transform.position.z);
         anim = GetComponent<Animator>();
-        speedY = 15 * Time.deltaTime;
+        //speedY = 15 * Time.deltaTime;
         if (state == State.ryoute) { hand = "ryoute"; }
         else { hand= "katate";}
     }
@@ -37,7 +37,7 @@ public class Marionnett3_move : MonoBehaviour
         {
             if (enemy.transform.position.y < hightPos)
             {
-                enemy.transform.Translate(0, speedY, 0);
+                enemy.transform.Translate(0, speedY * Time.deltaTime, 0);
             }
             else
             {

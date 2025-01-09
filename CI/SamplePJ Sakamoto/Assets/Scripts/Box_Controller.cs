@@ -8,10 +8,13 @@ public class Box_Controller : MonoBehaviour
     //インスペクター参照不可
     //---------------------------------------------
     private GameObject enemy;
+    private GameObject spotLight;
     private GameObject box;
     private GameObject player;
     private Animator anim;
+    private Light redlight;
     private bool instanceFlag;
+    private float timeCnt;
     //---------------------------------------------
     //インスペクター参照可
     //---------------------------------------------
@@ -23,6 +26,10 @@ public class Box_Controller : MonoBehaviour
         box = this.gameObject;
         anim = box.GetComponent<Animator>();
         instanceFlag = true;
+        spotLight = transform.GetChild(0).gameObject;
+        redlight = spotLight.GetComponent<Light>();
+        redlight.enabled = false;
+        timeCnt = 0;
     }
     private void FixedUpdate()
     {
@@ -42,6 +49,19 @@ public class Box_Controller : MonoBehaviour
 
                 //1回だけ生成させるためのフラグ
                 instanceFlag = false;
+
+                redlight.enabled = true;
+            }
+
+            if (redlight.enabled) {
+
+                timeCnt += Time.deltaTime;
+
+                if(timeCnt >= 1.0f)
+                {
+                    timeCnt = 0;
+                    redlight.enabled = false;
+                }
             }
         }
     }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class fallFlag : MonoBehaviour
 {
     private Collider coll;
+    private Light greenLihgt;
     private bool enemymove;
     private bool fall;
     private void Start()
@@ -12,11 +13,16 @@ public class fallFlag : MonoBehaviour
         coll = GetComponent<Collider>();
         enemymove = false;
         fall= false;
+        greenLihgt = transform.GetChild(0).GetComponent<Light>();
+        greenLihgt.enabled = true;
     }
 
     private void Update()
     {
-        
+        if (enemymove)
+        {
+            greenLihgt.enabled = false;
+        }
     }
     private void OnTriggerEnter(Collider other)
     {

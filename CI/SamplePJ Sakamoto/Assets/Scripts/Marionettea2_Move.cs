@@ -9,6 +9,8 @@ public class Marionettea2_Move : MonoBehaviour
     //インスペクター参照不可
     //---------------------------------------------
     private GameObject enemy;
+    private Light redLight;
+    private Light blueLight;
     private Animator anim;
     private bool hitFlag;
     private float jumpCnt;
@@ -46,6 +48,10 @@ public class Marionettea2_Move : MonoBehaviour
         jumpCnt = 0;
         prePos = enemy.transform.position;
         jumpFlag = 0;
+        blueLight = transform.GetChild(0).GetComponent<Light>();
+        redLight = transform.GetChild(1).GetComponent<Light>();
+        blueLight.enabled = true;
+        redLight.enabled = false;
     }
 
     private void FixedUpdate()
@@ -108,6 +114,7 @@ public class Marionettea2_Move : MonoBehaviour
                 if (jumpFlag == 0)
                 {
                     state = State.Attack;
+                    //speedX = -15f * Time.deltaTime;
                     jumpFlag++;
                 }
             }
@@ -117,6 +124,7 @@ public class Marionettea2_Move : MonoBehaviour
                 if (jumpFlag == 1)
                 {
                     state = State.Attack;
+                    speedX = -20f * Time.deltaTime;
                     jumpFlag++;
                 }
             }
@@ -127,7 +135,7 @@ public class Marionettea2_Move : MonoBehaviour
                 {
                     state = State.Attack;
                     speedY = 50f * Time.deltaTime;
-                    speedX = -10f * Time.deltaTime;
+                    speedX = -25f * Time.deltaTime;
                     jumpFlag++;
                 }
             }
@@ -141,7 +149,7 @@ public class Marionettea2_Move : MonoBehaviour
 
                     state = State.Attack;
                     speedY = 50f * Time.deltaTime;
-                    speedX = -13f * Time.deltaTime;
+                    speedX = -30f * Time.deltaTime;
                     jumpFlag++;
                 }
             }
@@ -151,7 +159,7 @@ public class Marionettea2_Move : MonoBehaviour
                 if (jumpFlag == 4)
                 {
                     jumpFlag++;
-                    speedX = -15f * Time.deltaTime;
+                    speedX = -35f * Time.deltaTime;
                     speedY = 0;
                 }
 
@@ -165,6 +173,7 @@ public class Marionettea2_Move : MonoBehaviour
                 if (jumpFlag == 5)
                 {
                     jumpFlag++;
+                    speedX = -5f * Time.deltaTime;
                     state = State.Attack;
                 }
             }
@@ -180,6 +189,7 @@ public class Marionettea2_Move : MonoBehaviour
         {
             anim.SetBool("Find", true);
             timeCnt += Time.deltaTime;
+            ChangeLightColor(true);
 
             if (timeCnt > 0.5f)
             {
@@ -189,6 +199,7 @@ public class Marionettea2_Move : MonoBehaviour
             if (timeCnt > 1.5f)
             {
                 hitFlag = false;
+                ChangeLightColor(false);
             }
 
             if (timeCnt >= 2.0f)
@@ -208,6 +219,8 @@ public class Marionettea2_Move : MonoBehaviour
 
             if (enemy.transform.position.y <= -20)
             {
+                redLight.enabled = false;
+                blueLight.enabled = false;
                 Destroy(enemy);
             }
         }
@@ -215,5 +228,19 @@ public class Marionettea2_Move : MonoBehaviour
     public bool GetHitFlag()
     {
         return this.hitFlag;
+    }
+
+    private void ChangeLightColor(bool onLight)
+    {
+        if (onLight)
+        {
+            redLight.enabled = true;
+            blueLight.enabled = false;
+        }
+        else
+        {
+            redLight.enabled = false;
+            blueLight.enabled = true;
+        }
     }
 }

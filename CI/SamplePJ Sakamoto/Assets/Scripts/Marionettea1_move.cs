@@ -50,12 +50,12 @@ public class Marionettea1_move : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //ステージ１の終了地点を超えたか
-        if(enemy.transform.position.x >= StageEnd_X1)
-        {
-            //マリオネットを破壊する
-            state = State.Death;
-        }
+        ////ステージ１の終了地点を超えたか
+        //if(enemy.transform.position.x >= StageEnd_X1)
+        //{
+        //    //マリオネットを破壊する
+        //    state = State.Death;
+        //}
 
         //生まれた時の処理
         if(state == State.Born)
@@ -77,8 +77,11 @@ public class Marionettea1_move : MonoBehaviour
 
             if (AnimCnt(BornCnt))
             {
-                //アニメーションが終わったら追跡に戻る
-                ChangeState(State.Chase);//ステータスの変更
+                ////アニメーションが終わったら追跡に戻る
+                //ChangeState(State.Chase);//ステータスの変更
+                //ChangeAnim(State.Chase);//ステータスの変更
+
+                ChangeState(State.Death);//ステータスの変更
                 ChangeAnim(State.Chase);//ステータスの変更
             }
         }
@@ -117,15 +120,23 @@ public class Marionettea1_move : MonoBehaviour
     {
         //プレイヤーに向かって進む
 
-        //タイマーを動かす
-        ChaseCnt += 1.0f * Time.deltaTime;
-
-        //CntMaxになったら追いかけるのをやめる
-        if (ChaseCnt >= ChaseCntMax)
+        //ステージ１の終了地点を超えたか
+        if (enemy.transform.position.x >= StageEnd_X1)
         {
-            ChaseCnt = 0;
+            //マリオネットを破壊する
             return true;
         }
+
+        ////タイマーを動かす
+        //ChaseCnt += 1.0f * Time.deltaTime;
+
+        ////CntMaxになったら追いかけるのをやめる
+        //if (ChaseCnt >= ChaseCntMax)
+        //{
+        //    ChaseCnt = 0;
+        //    return true;
+        //}
+
         //プレイヤーが索敵範囲にいるか判断
         bool find = enemy.GetComponentInChildren<Collider_Controller>().GetFindFlag();
         if (find)
@@ -140,6 +151,7 @@ public class Marionettea1_move : MonoBehaviour
             enemy.transform.Rotate
                 (0f, 3.0f * enemy.GetComponentInChildren<Collider_Controller>().GetDirection(), 0f);
         }
+
         return false;
     }
     private Vector3 Player_GetPosition()

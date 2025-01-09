@@ -6,6 +6,7 @@ public class PlatformShake_copy : MonoBehaviour
     public float shakeAmount = 2.0f;
     public float shakeDuration = 1.0f;
     private Rigidbody rb;
+    private Light redLight;
     private Vector3 originalPosition;
     private bool isShaking = false;
     private bool hasShaken = false;  // —h‚ê‚½‚©‚Ç‚¤‚©‚ğ‹L˜^‚·‚é•Ï”‚ğ’Ç‰Á
@@ -19,10 +20,17 @@ public class PlatformShake_copy : MonoBehaviour
         rb.useGravity = false;
         rb.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
         fall = transform.parent.gameObject;
+        redLight = transform.GetChild(0).GetComponent<Light>();
+        redLight.enabled = false;
     }
 
     void Update()
     {
+        if (fall.GetComponent<fallFlag>().GetEnemyMoveFlag())
+        {
+            redLight.enabled = true;
+        }
+
         if (fall.GetComponent<fallFlag>().GetFallFlag())
         {
             StartShake();
