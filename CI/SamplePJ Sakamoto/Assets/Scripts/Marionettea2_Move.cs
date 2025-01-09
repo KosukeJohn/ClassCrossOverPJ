@@ -25,7 +25,7 @@ public class Marionettea2_Move : MonoBehaviour
     //インスペクター参照可
     //---------------------------------------------
     public float speedX;
-    [SerializeField] private float speedY = 0;
+    [SerializeField] private float speedY;
     public float chasePos = 50.0f;
     [SerializeField] private State state;
     //---------------------------------------------
@@ -42,6 +42,7 @@ public class Marionettea2_Move : MonoBehaviour
         anim = GetComponent<Animator>();
         hitFlag = false;
         speedX /= -100;
+        speedY = 5.0f;
         timeCnt = 0;
         //maxCnt = 5;
         state = State.Born;
@@ -60,16 +61,14 @@ public class Marionettea2_Move : MonoBehaviour
 
         if (state == State.Born)
         {
-            enemy.transform.Translate(speedX * 8, 0, 0);
-
-            jumpCnt += Time.deltaTime * 1.0f;
-            float speedY = jumpSpeed + (-9.8f * jumpCnt);
-            enemy.transform.Translate(0, speedY, 0);
+            enemy.transform.Translate(speedX, speedY, 0);
+            speedY -= 9.8f * Time.deltaTime;
 
             if (enemy.transform.position.x >= prePos.x + 8.0f)
             {
                 enemy.transform.position =
                     new Vector3(prePos.x + 8.0f, hight, prePos.z);
+                speedY = 0;
                 state = State.Normal;
             }
         }
