@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("移動設定")]
     [SerializeField] private float moveSpeed = 5f; // 移動速度
-    [SerializeField] private float jumpForce = 3000f; // ジャンプ力
+    [SerializeField] private float jumpForce = 600f; // ジャンプ力
     [SerializeField] private float rotationSpeed = 10f;  // 回転速度
     [SerializeField] private Transform GroundCheck; // 接地判定に使う空のゲームオブジェクト
     [SerializeField] private LayerMask GroundLayer; // 接地判定に使うレイヤー
@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool inSafeArea = false; // 時間内に目標の場所に入っているか
     [SerializeField] private float timeRemaining = 2f; // 目標の場所に入るまでの時間
 
-    //不使用
+    // 不使用
     [SerializeField] private bool canHide; // 「隠れる」可能
     [SerializeField] private bool isHiding; // 「隠れる」中
 
