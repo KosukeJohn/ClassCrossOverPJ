@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("移動設定")]
     [SerializeField] private float moveSpeed = 5f; // 移動速度
-    [SerializeField] private float jumpForce = 5f; // ジャンプ力
+    [SerializeField] private float jumpForce = 3000f; // ジャンプ力
     [SerializeField] private float rotationSpeed = 10f;  // 回転速度
     [SerializeField] private Transform GroundCheck; // 接地判定に使う空のゲームオブジェクト
     [SerializeField] private LayerMask GroundLayer; // 接地判定に使うレイヤー
@@ -18,12 +18,14 @@ public class PlayerController : MonoBehaviour
     [Header("プレイヤーの状態")]
     [SerializeField] private Vector3 moveDirection; // プレイヤーの移動方向
     [SerializeField] private bool isGrounded; // 接地中
-    [SerializeField] private bool canHide; // 「隠れる」可能
-    [SerializeField] private bool isHiding; // 「隠れる」中
     [SerializeField] private bool hasKeyItem=false; // クリアに必要なアイテムを持っているか
     [SerializeField] private Vector3 respawnPosition = new Vector3(0,0,0); // respawnする場所を格納
     [SerializeField] private bool inSafeArea = false; // 時間内に目標の場所に入っているか
     [SerializeField] private float timeRemaining = 2f; // 目標の場所に入るまでの時間
+
+    //不使用
+    [SerializeField] private bool canHide; // 「隠れる」可能
+    [SerializeField] private bool isHiding; // 「隠れる」中
 
     public GameObject bossPrefab; // ボスのプレハブ
 
@@ -33,6 +35,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody playerRigidbody; // プレイヤーのRigidbody
     private Vector2 moveInput; // コントローラーの入力方向
+    private Animator playerAnimator; // プレイヤーのAnimator
     private bool jumpInProgress; // ジャンプ処理中
 
     //1/7に追加したもの
@@ -89,6 +92,9 @@ public class PlayerController : MonoBehaviour
         // PlayerのRigidBodyを取得
         playerRigidbody = GetComponent<Rigidbody>();
 
+        // PlayerのAnimatorを取得
+        playerAnimator = GetComponent<Animator>();
+
         // GroundCheckを取得
         GroundCheck = GameObject.Find("GroundCheck").transform;
 
@@ -129,8 +135,6 @@ public class PlayerController : MonoBehaviour
         {
             JumpPlayer();
         }
-
-
     }
 
     // オブジェクトが別の物理コライダーと接触した際に一度だけ呼ばれる
@@ -232,10 +236,18 @@ public class PlayerController : MonoBehaviour
         // 移動速度を現在速度に加える
         playerRigidbody.velocity = new Vector3(moveDirection.x * moveSpeed, playerRigidbody.velocity.y, moveDirection.z * moveSpeed); 
 
-        // 0.1f以上の入力がある場合回転処理を行う
+        // 0.1f以上の入力がある場合アニメーションと回転処理を行う
         if (moveDirection.magnitude > 0.1f)
         {
+            // 回転
             RotatePlayer(moveDirection);
+
+            // 移動のアニメーション
+            playerAnimator.SetBool("isRunning", true);
+        }
+        else
+        {
+            playerAnimator.SetBool("isRunning", false);
         }
     }
 
@@ -252,11 +264,14 @@ public class PlayerController : MonoBehaviour
     // ジャンプ処理
     private void JumpPlayer()
     {
-        // ジャンプ力をY方向速度に入れる
-        playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x, jumpForce, playerRigidbody.velocity.z);
+        // ジャンプ力をY方向速度に加える
+        playerRigidbody.AddForce(0, jumpForce, 0);
 
         // ジャンプ処理中を解除
         jumpInProgress = false;
+
+        // ジャンプのアニメーション
+        playerAnimator.SetTrigger("Jump");
 
         Debug.Log("Jump");
     }
