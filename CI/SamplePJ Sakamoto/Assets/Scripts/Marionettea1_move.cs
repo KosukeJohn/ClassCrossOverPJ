@@ -9,7 +9,8 @@ public class Marionettea1_move : MonoBehaviour
     //インスペクター参照不可
     //---------------------------------------------
     private GameObject player;//プレイヤーオブジェクト
-    private GameObject enemy;//敵のオブジェクト   
+    private GameObject enemy;//敵のオブジェクト
+    private Light redLight;
     private Animator anim;//アニメーション
     private float BornCnt;//動くまでの時間
     private float ChaseCnt;//追いかける時間
@@ -25,7 +26,7 @@ public class Marionettea1_move : MonoBehaviour
     //バランス調整
     //---------------------------------------------
     private float ChaseCntMax = 5.0f;//あきらめるまでの時間
-    private float ChaseSpeed = 6.5f;//追いかけるスピード
+    private float ChaseSpeed = 6.0f;//追いかけるスピード
     //---------------------------------------------
     //stateの定義
     //---------------------------------------------
@@ -45,6 +46,8 @@ public class Marionettea1_move : MonoBehaviour
             animCnt = 0;
             anim = GetComponent<Animator>();
             //destroyFlag = false;
+            redLight = transform.GetChild(0).GetComponent<Light>();
+            redLight.enabled = false;
         }
     }
 
@@ -66,6 +69,7 @@ public class Marionettea1_move : MonoBehaviour
                 pos = transform.position;//帰る位置を定義
                 ChangeState(State.Chase);//ステータスの変更
                 ChangeAnim(State.Chase);//ステータスの変更
+                redLight.enabled = true;
             }
         }
 

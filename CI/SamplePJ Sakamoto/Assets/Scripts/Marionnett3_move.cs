@@ -62,6 +62,12 @@ public class Marionnett3_move : MonoBehaviour
 
         if(destroyFlag)
         {
+            if(GetComponent<Collider>())
+            {
+                Collider coll = GetComponent<Collider>();
+                Destroy(coll);
+            }
+           
             if (!enemy.GetComponent<Rigidbody>())
             {
                 enemy.AddComponent<Rigidbody>();
