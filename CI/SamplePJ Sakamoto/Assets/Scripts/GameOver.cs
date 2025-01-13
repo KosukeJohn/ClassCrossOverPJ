@@ -9,12 +9,12 @@ public class GameOver : MonoBehaviour
     {
         Application.targetFrameRate = 60;
     }
-    public void OnContinue()
+    public void OnJump()
     {
         SceneManager.LoadScene("mainScene");
     }
 
-    public void OnReturnTitle()
+    public void OnHide()
     {
         SceneManager.LoadScene("Title Scene");
     }
