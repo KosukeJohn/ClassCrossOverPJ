@@ -9825,10 +9825,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 042573ae197225245a7e4011f7d82142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  source: {fileID: 6178283407355217030}
-  clip: {fileID: 8300000, guid: 0d0ffd2d000c66d488fd31acdc46fab6, type: 3}
   state: 0
   pos: {x: 0, y: 0, z: 0}
+  source: {fileID: 6178283407355217030}
+  attack: {fileID: 8300000, guid: e85e76b18c6b45d4cad9dde1326a46c0, type: 3}
 --- !u!114 &8998618059506217123
 MonoBehaviour:
   m_ObjectHideFlags: 0

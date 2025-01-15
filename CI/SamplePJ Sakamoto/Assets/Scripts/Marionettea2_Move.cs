@@ -28,6 +28,9 @@ public class Marionettea2_Move : MonoBehaviour
     [SerializeField] private float speedY;
     public float chasePos = 50.0f;
     [SerializeField] private State state;
+
+    [SerializeField] AudioSource source;
+    [SerializeField] AudioClip atk;
     //---------------------------------------------
     //ステータスの定義
     //---------------------------------------------
@@ -114,6 +117,8 @@ public class Marionettea2_Move : MonoBehaviour
                 {
                     state = State.Attack;
                     //speedX = -15f * Time.deltaTime;
+                    source.clip = atk;
+                    source.Play();
                     jumpFlag++;
                 }
             }
@@ -123,6 +128,8 @@ public class Marionettea2_Move : MonoBehaviour
                 if (jumpFlag == 1)
                 {
                     state = State.Attack;
+                    source.clip = atk;
+                    source.Play();
                     speedX = -20f * Time.deltaTime;
                     jumpFlag++;
                 }
@@ -133,6 +140,8 @@ public class Marionettea2_Move : MonoBehaviour
                 if (jumpFlag == 2)
                 {
                     state = State.Attack;
+                    source.clip = atk;
+                    source.Play();
                     speedY = 50f * Time.deltaTime;
                     speedX = -25f * Time.deltaTime;
                     jumpFlag++;
@@ -147,6 +156,8 @@ public class Marionettea2_Move : MonoBehaviour
                     new(enemy.transform.position.x, 9.5f, enemy.transform.position.z);
 
                     state = State.Attack;
+                    source.clip = atk;
+                    source.Play();
                     speedY = 50f * Time.deltaTime;
                     speedX = -30f * Time.deltaTime;
                     jumpFlag++;
@@ -158,6 +169,8 @@ public class Marionettea2_Move : MonoBehaviour
                 if (jumpFlag == 4)
                 {
                     jumpFlag++;
+                    source.clip = atk;
+                    source.Play();
                     speedX = -35f * Time.deltaTime;
                     speedY = 0;
                 }
@@ -172,6 +185,8 @@ public class Marionettea2_Move : MonoBehaviour
                 if (jumpFlag == 5)
                 {
                     jumpFlag++;
+                    source.clip = atk;
+                    source.Play();
                     speedX = -5f * Time.deltaTime;
                     state = State.Attack;
                 }

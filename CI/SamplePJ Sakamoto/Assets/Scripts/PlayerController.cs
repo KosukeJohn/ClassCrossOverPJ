@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -26,7 +27,9 @@ public class PlayerController : MonoBehaviour
 
 
     [SerializeField] AudioSource source;
+   
     [SerializeField]AudioClip clip;
+    
     // 不使用
     [SerializeField] private bool canHide; // 「隠れる」可能
     [SerializeField] private bool isHiding; // 「隠れる」中
@@ -35,6 +38,12 @@ public class PlayerController : MonoBehaviour
 
     private float time;
     bool flag;
+    bool goal;
+    GameObject Fade;
+    float alfa;
+    Image end;
+    bool playedSE = false;
+    float fadespeed;
     //----------------------------------------------
     // スクリプトの処理用
     //----------------------------------------------
@@ -110,12 +119,18 @@ public class PlayerController : MonoBehaviour
         //1/7に追加したもの
         hitcheck = GameObject.Find("HitCheck");
         this.transform.position = GetComponent<PlayerFirstPos>().GetFirstPos();
+        Fade = GameObject.Find("EndFade");
+         end=Fade.GetComponent<Image>();
+
 
         //タイマー初期化
         time = 0.0f;
         source.clip = clip;
         flag = false;
-
+        goal= false;
+        
+        fadespeed = 0.005f;
+        alfa = end.color.a;
     }
 
     // 一定間隔で呼ばれる更新処理
@@ -167,6 +182,29 @@ public class PlayerController : MonoBehaviour
         {
             source.Stop();
             flag = true;
+        }
+
+        if (goal == true)
+        {
+            
+            Debug.Log("End");
+            alfa += fadespeed;
+            end.color = new Color(255, 255, 255, alfa);
+
+            // 音再生
+            if (!playedSE)
+            {
+                playedSE = true;
+                GameObject GoalSE = GameObject.Find("GoalSE");
+                GoalSE.GetComponent<GoalSEPlayer>().PlaySound();
+            }
+
+            time += Time.deltaTime;
+            if(time>4.0f)
+            {
+                // エンディングシーンをロード
+                SceneManager.LoadScene("EndingScene Movie");//1/7名称の変更
+            }
         }
     }
 
@@ -231,22 +269,12 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if (collision.gameObject.name == "EndingScene")
+        if (collision.gameObject.name == "EndingScene" && !goal)
         {
-
-
-
-
-         
-           
-                // エンディングシーンをロード
-                SceneManager.LoadScene("EndingScene Movie");//1/7名称の変更
-            
-               
-            
-            
+            goal = true;
         }
     }
+
 
     IEnumerator GoToSafeArea(float timeRemaining, bool inSafeArea, Vector3 respawnPosition)
     {
