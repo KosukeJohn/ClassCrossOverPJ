@@ -54,6 +54,9 @@ public class Marionnett3_move : MonoBehaviour
         {
             anim.SetBool(hand, true);
             fall.GetComponent<fallFlag>().SetFallFlag(true);
+            source.clip = atk;
+            source.Play();
+            Debug.Log("break");
 
             if (!playedAtkSE)
             {
