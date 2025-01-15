@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,12 +24,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool inSafeArea = false; // 時間内に目標の場所に入っているか
     [SerializeField] private float timeRemaining = 2f; // 目標の場所に入るまでの時間
 
+
+    [SerializeField] AudioSource source;
+    [SerializeField]AudioClip clip;
     // 不使用
     [SerializeField] private bool canHide; // 「隠れる」可能
     [SerializeField] private bool isHiding; // 「隠れる」中
 
     public GameObject bossPrefab; // ボスのプレハブ
 
+    private float time;
+    bool flag;
     //----------------------------------------------
     // スクリプトの処理用
     //----------------------------------------------
@@ -37,10 +43,10 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput; // コントローラーの入力方向
     private Animator playerAnimator; // プレイヤーのAnimator
     private bool jumpInProgress; // ジャンプ処理中
-
+    
     //1/7に追加したもの
     private GameObject hitcheck;
-
+    
     //----------------------------------------------
     // 変数のプロパティ
     //----------------------------------------------
@@ -104,6 +110,12 @@ public class PlayerController : MonoBehaviour
         //1/7に追加したもの
         hitcheck = GameObject.Find("HitCheck");
         this.transform.position = GetComponent<PlayerFirstPos>().GetFirstPos();
+
+        //タイマー初期化
+        time = 0.0f;
+        source.clip = clip;
+        flag = false;
+
     }
 
     // 一定間隔で呼ばれる更新処理
@@ -134,6 +146,27 @@ public class PlayerController : MonoBehaviour
         if (isGrounded && jumpInProgress) 
         {
             JumpPlayer();
+           
+        }
+        //足音管理
+        if (moveDirection.x == 0 && moveDirection.z == 0)
+        {
+            source.Stop();
+            flag = true;
+        }
+        else
+        {
+            if (flag)
+            {
+                Debug.Log("play");
+                source.Play();
+                flag = false;
+            }
+        }
+        if (!isGrounded)
+        {
+            source.Stop();
+            flag = true;
         }
     }
 
@@ -200,8 +233,18 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.name == "EndingScene")
         {
-            // エンディングシーンをロード
-            SceneManager.LoadScene("EndingScene Movie");//1/7名称の変更
+
+
+
+
+         
+           
+                // エンディングシーンをロード
+                SceneManager.LoadScene("EndingScene Movie");//1/7名称の変更
+            
+               
+            
+            
         }
     }
 
@@ -244,11 +287,26 @@ public class PlayerController : MonoBehaviour
 
             // 移動のアニメーション
             playerAnimator.SetBool("isRunning", true);
+        
+
         }
         else
         {
             playerAnimator.SetBool("isRunning", false);
+           
+            
         }
+        
+        //if(moveDirection.x * moveDirection.z==0)
+        //{
+        //    source.Stop();
+        //}
+        //else
+        //{
+        //    Debug.Log("play");
+        //    source.Play();
+        //}
+        
     }
 
     // 回転処理
@@ -272,6 +330,8 @@ public class PlayerController : MonoBehaviour
 
         // ジャンプのアニメーション
         playerAnimator.SetTrigger("Jump");
+
+       
 
         Debug.Log("Jump");
     }

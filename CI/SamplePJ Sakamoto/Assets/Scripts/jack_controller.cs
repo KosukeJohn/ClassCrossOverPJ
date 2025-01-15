@@ -18,6 +18,8 @@ public class jack_controller : MonoBehaviour
     private float JackMax;
     private float BackMax;
     //---------------------------------------------
+    [SerializeField] private AudioSource source;
+    [SerializeField] private AudioClip clip;
     //インスペクター参照可
     //---------------------------------------------
     [SerializeField] private State state;
@@ -53,6 +55,8 @@ public class jack_controller : MonoBehaviour
                 Vector3 pos = new(transform.position.x, transform.position.y, transform.position.z - 4);
                 player.GetComponent<PlayerFirstPos>().SetFirstPos(pos);
                 ChangeStateAnim(State.Find);
+                source.clip = clip; ;
+                source.Play();
             }
         }
         

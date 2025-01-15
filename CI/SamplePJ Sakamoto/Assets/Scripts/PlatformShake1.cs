@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting.Dependencies.Sqlite;
 
 public class PlatformShake_copy : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class PlatformShake_copy : MonoBehaviour
     private bool isShaking = false;
     private bool hasShaken = false;  // óhÇÍÇΩÇ©Ç«Ç§Ç©ÇãLò^Ç∑ÇÈïœêîÇí«â¡
     private GameObject fall;
+    [SerializeField] private AudioSource source;
+    [SerializeField] private AudioClip clip;
 
     void Start()
     {
@@ -47,6 +50,8 @@ public class PlatformShake_copy : MonoBehaviour
             rb.constraints = RigidbodyConstraints.FreezePositionX |
                            RigidbodyConstraints.FreezePositionZ |
                            RigidbodyConstraints.FreezeRotation;
+            source.clip = clip;
+            source.Play();
         }
     }
 

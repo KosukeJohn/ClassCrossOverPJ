@@ -17,6 +17,7 @@ public class Marionettea1_move : MonoBehaviour
     private float animCnt;//アニメーションの時間
     //private bool destroyFlag;//破壊フラグ
     private float StageEnd_X1 = 63.66f;//ステージ１の終わり
+    
     //---------------------------------------------
     //インスペクター参照可
     //---------------------------------------------
@@ -63,6 +64,7 @@ public class Marionettea1_move : MonoBehaviour
         //生まれた時の処理
         if(state == State.Born)
         {
+           
             //カウントさせる
             if(AnimCnt(BornCnt))
             {
