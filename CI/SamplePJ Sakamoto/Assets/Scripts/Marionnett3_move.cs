@@ -14,6 +14,8 @@ public class Marionnett3_move : MonoBehaviour
     public float speedY;   
     public float hightPos;
     [SerializeReference] private State state;
+    [SerializeField] AudioSource source;
+    [SerializeField] AudioClip atk;
     private enum State
     { ryoute,katate}
     private string hand;
@@ -51,9 +53,13 @@ public class Marionnett3_move : MonoBehaviour
         {
             anim.SetBool(hand, true);
             fall.GetComponent<fallFlag>().SetFallFlag(true);
+            source.clip = atk;
+            source.Play();
+            Debug.Log("break");
 
             if (TimeCnt(2.0f))
             {
+               
                 attackFlag = false;
                 destroyFlag = true;
                 speedY = 0;

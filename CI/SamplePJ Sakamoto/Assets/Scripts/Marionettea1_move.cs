@@ -23,6 +23,8 @@ public class Marionettea1_move : MonoBehaviour
     //---------------------------------------------
     [SerializeField] private State state;//ステータス
     [SerializeField] private Vector3 pos;//マリオネットの位置
+    [SerializeField] AudioSource source;//オーディオソース
+    [SerializeField] AudioClip attack;
     //---------------------------------------------
     //バランス調整
     //---------------------------------------------
@@ -78,9 +80,10 @@ public class Marionettea1_move : MonoBehaviour
         //攻撃時の処理
         if (state == State.Attack)
         {
+           
             //驚かすアニメーションにする
             ChangeAnim(State.Born);
-
+            
             if (AnimCnt(BornCnt))
             {
                 ////アニメーションが終わったら追跡に戻る
@@ -129,6 +132,8 @@ public class Marionettea1_move : MonoBehaviour
         //ステージ１の終了地点を超えたか
         if (enemy.transform.position.x >= StageEnd_X1)
         {
+            source.clip = attack;
+            source.Play();
             //マリオネットを破壊する
             return true;
         }
