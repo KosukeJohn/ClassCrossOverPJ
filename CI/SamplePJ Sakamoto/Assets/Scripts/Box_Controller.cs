@@ -15,6 +15,8 @@ public class Box_Controller : MonoBehaviour
     private Light redlight;
     private bool instanceFlag;
     private float timeCnt;
+    [SerializeField] private AudioSource source;
+    [SerializeField] private AudioClip clip;
     //---------------------------------------------
     //インスペクター参照可
     //---------------------------------------------
@@ -37,7 +39,7 @@ public class Box_Controller : MonoBehaviour
         {
             //アニメーションを再生
             anim.SetBool("open", true);
-
+          
             if(instanceFlag)
             {
                 //アタッチした敵を生成
@@ -46,6 +48,10 @@ public class Box_Controller : MonoBehaviour
                 //箱の中心かつ地面の上に生成
                 Vector3 pos = box.transform.position;
                 enemy.transform.position = new Vector3(pos.x, 0, pos.z);
+
+                source.clip = clip;
+                source.Play();
+
 
                 //1回だけ生成させるためのフラグ
                 instanceFlag = false;

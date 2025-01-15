@@ -13,6 +13,9 @@ public class TitleScript : MonoBehaviour
 
     private GameObject player;//プレイヤーの初期位置をリセットさせる
 
+    [SerializeField] private AudioSource source;//オーディオ
+    [SerializeField] private AudioClip clip;//音源
+
     // 表示する文章（順番に設定）
     string[] dialogues = { "お母さん「部屋片づけておきなさいよー」", "主人公「はーい」", "主人公「うーん、めんどくさいなー」", "「ポイっ」" };
     int currentDialogueIndex = 0; // 現在の文章のインデックス
@@ -62,6 +65,9 @@ public class TitleScript : MonoBehaviour
     public void OnJump()/*1/7にEnter->Jumpに変更 */
     {
         Debug.Log("Aボタンが押されました！");
+
+        source.clip = clip;
+        source.Play();
 
         // ダイアログが既に有効なら次の文章を表示
         if (dialogueText != null && dialogueText.enabled)
