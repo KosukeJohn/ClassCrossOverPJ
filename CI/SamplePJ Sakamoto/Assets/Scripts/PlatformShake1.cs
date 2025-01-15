@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using Unity.VisualScripting.Dependencies.Sqlite;
 
 public class PlatformShake_copy : MonoBehaviour
 {
