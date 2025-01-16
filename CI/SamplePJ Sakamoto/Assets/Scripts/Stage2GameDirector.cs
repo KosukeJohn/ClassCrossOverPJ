@@ -23,6 +23,13 @@ public class Stage2GameDirector : MonoBehaviour
                 enemy = Instantiate(prefab);
                 enemy.transform.position = this.transform.position;
             }
+            if (enemy)
+            {
+                if (player.transform.position.x >= 236.3461f)
+                {
+                    Destroy(enemy);
+                }
+            }
         }
     }
 }
