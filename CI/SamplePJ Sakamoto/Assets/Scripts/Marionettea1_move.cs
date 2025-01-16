@@ -29,7 +29,7 @@ public class Marionettea1_move : MonoBehaviour
     //バランス調整
     //---------------------------------------------
     private float ChaseCntMax = 5.0f;//あきらめるまでの時間
-    private float ChaseSpeed = 6.0f;//追いかけるスピード
+    private float ChaseSpeed = 4.0f;//追いかけるスピード
     //---------------------------------------------
     //stateの定義
     //---------------------------------------------
