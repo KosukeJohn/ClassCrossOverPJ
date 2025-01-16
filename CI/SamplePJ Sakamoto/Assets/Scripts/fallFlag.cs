@@ -8,6 +8,7 @@ public class fallFlag : MonoBehaviour
     private Light greenLihgt;
     private bool enemymove;
     private bool fall;
+    bool AtkSEPlayed = false;
     private void Start()
     {
         coll = GetComponent<Collider>();
@@ -22,6 +23,9 @@ public class fallFlag : MonoBehaviour
         if (enemymove)
         {
             greenLihgt.enabled = false;
+        }
+        if (fall) {
+           
         }
     }
     private void OnTriggerEnter(Collider other)

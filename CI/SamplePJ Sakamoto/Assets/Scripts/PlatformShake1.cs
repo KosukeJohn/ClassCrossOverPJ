@@ -11,6 +11,7 @@ public class PlatformShake_copy : MonoBehaviour
     private Vector3 originalPosition;
     private bool isShaking = false;
     private bool hasShaken = false;  // óhÇÍÇΩÇ©Ç«Ç§Ç©ÇãLò^Ç∑ÇÈïœêîÇí«â¡
+    bool AtkSEPlayed = false;
     private GameObject fall;
     [SerializeField] private AudioSource source;
     [SerializeField] private AudioClip clip;
@@ -36,6 +37,13 @@ public class PlatformShake_copy : MonoBehaviour
 
         if (fall.GetComponent<fallFlag>().GetFallFlag())
         {
+            //if (!AtkSEPlayed)
+            //{
+            //    AtkSEPlayed = true;
+            //    GameObject atkSE = GameObject.Find("atkSE");
+            //    atkSE.GetComponent<AtkSEPlayer>().AtkSEPlay();
+            //    Debug.Log("atkSEplay");
+            //}
             StartShake();
         }
 

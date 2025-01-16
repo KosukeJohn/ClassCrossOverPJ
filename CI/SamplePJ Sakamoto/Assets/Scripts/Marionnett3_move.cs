@@ -14,9 +14,10 @@ public class Marionnett3_move : MonoBehaviour
     public float speedY;   
     public float hightPos;
     private bool playedAtkSE = false;
+    bool AtkSEPlayed=false;
+    float time;
     [SerializeReference] private State state;
-    [SerializeField] AudioSource source;
-    [SerializeField] AudioClip atk;
+   
     private enum State
     { ryoute,katate}
     private string hand;
@@ -29,6 +30,7 @@ public class Marionnett3_move : MonoBehaviour
             new(this.transform.position.x, -40, this.transform.position.z);
         anim = GetComponent<Animator>();
         //speedY = 15 * Time.deltaTime;
+        time = 0.0f;
         if (state == State.ryoute) { hand = "ryoute"; }
         else { hand= "katate";}
     }
@@ -46,6 +48,20 @@ public class Marionnett3_move : MonoBehaviour
             {
                 enemy.transform.position =
                      new(this.transform.position.x, hightPos, this.transform.position.z);
+
+                AttackSE();
+
+                //if (!AtkSEPlayed)
+                //{
+                //    AtkSEPlayed = true;
+                 
+                    
+                //        GameObject atkSE = GameObject.Find("atkSE");
+                //        atkSE.GetComponent<AtkSEPlayer>().AtkSEPlay();
+                //        Debug.Log("atkSEplay");
+                    
+                   
+                //}
                 attackFlag = true;
             }
         }
@@ -54,17 +70,8 @@ public class Marionnett3_move : MonoBehaviour
         {
             anim.SetBool(hand, true);
             fall.GetComponent<fallFlag>().SetFallFlag(true);
-            source.clip = atk;
-            source.Play();
-            Debug.Log("break");
+            
 
-            if (!playedAtkSE)
-            {
-                source.clip = atk;
-                source.Play();
-                playedAtkSE = true;
-                Debug.Log("break");
-            }
 
             if (TimeCnt(2.0f))
             {
@@ -104,5 +111,23 @@ public class Marionnett3_move : MonoBehaviour
             return true;
         }
         return false;
+    }
+    private void AttackSE()
+    {
+        time += Time.deltaTime;
+        if(time >= 0.7f)
+        {
+            if (!AtkSEPlayed)
+            {
+                AtkSEPlayed = true;
+
+
+                GameObject atkSE = GameObject.Find("atkSE");
+                atkSE.GetComponent<AtkSEPlayer>().AtkSEPlay();
+                Debug.Log("atkSEplay");
+
+
+            }
+        }
     }
 }
