@@ -15,12 +15,22 @@ public class Box_Controller : MonoBehaviour
     private Light redlight;
     private bool instanceFlag;
     private float timeCnt;
+    private State state;
+    private State prestate;
     [SerializeField] private AudioSource source;
     [SerializeField] private AudioClip clip;
     //---------------------------------------------
     //インスペクター参照可
     //---------------------------------------------
     public GameObject prefab;//ここに召喚したい敵をアタッチする
+    //---------------------------------------------
+    //ステータスに定義
+    //---------------------------------------------
+    private enum State
+    {
+        Non,Idle ,Find, Instance
+    }
+
     private void Start()
     {
         //初期化
@@ -32,15 +42,36 @@ public class Box_Controller : MonoBehaviour
         redlight = spotLight.GetComponent<Light>();
         redlight.enabled = false;
         timeCnt = 0;
+        state = State.Idle;
     }
     private void FixedUpdate()
     {
-        if(PlayerFind())//プレイヤーが近づいたら
+        if(state == State.Idle)
+        {
+            if(PlayerFind())
+            {
+                state = State.Find;
+            }
+        }
+
+        if(state == State.Find)
+        {
+            timeCnt += Time.deltaTime;
+
+            AnimStart("Idle");
+
+            if(timeCnt >= 0.7f)
+            {
+                state = State.Instance;
+                timeCnt = 0;
+            }
+        }
+        if(state == State.Instance)//プレイヤーが近づいたら
         {
             //アニメーションを再生
-            anim.SetBool("open", true);
-          
-            if(instanceFlag)
+            AnimStart("Open");
+
+            if (instanceFlag)
             {
                 //アタッチした敵を生成
                 enemy = Instantiate(prefab);
@@ -70,6 +101,7 @@ public class Box_Controller : MonoBehaviour
                 }
             }
         }
+        prestate = state;
     }
 
     private bool PlayerFind()
@@ -81,5 +113,12 @@ public class Box_Controller : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void AnimStart(string name)
+    {
+        if (prestate == state) { return; }
+
+        anim.Play(name, 0, 0);
     }
 }
