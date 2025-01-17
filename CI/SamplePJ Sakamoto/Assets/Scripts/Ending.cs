@@ -16,6 +16,7 @@ public class Ending : MonoBehaviour
 
         // “®‰æ€”õ
         videoPlayer = GameObject.Find("videoPlayer").GetComponent<VideoPlayer>();
+        videoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, "ToyBox_Endimg.mp4");
         videoPlayer.Prepare();
 
         // “®‰æ‚Ì€”õŠ®—¹‚ÌƒCƒxƒ“ƒg‚ğ“o˜^
