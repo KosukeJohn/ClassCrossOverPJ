@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     Image end;
     bool playedSE = false;
     float fadespeed;
+    private bool isMoveCheck = false;
     //----------------------------------------------
     // スクリプトの処理用
     //----------------------------------------------
@@ -407,6 +408,13 @@ public class PlayerController : MonoBehaviour
     // 入力イベント：移動
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (goal) {
+            //ゴールした時移動制限用
+            moveDirection = new Vector3(0, 0f, 0);
+            return;
+        
+        }
+
         // 入力された移動ベクトルを取得
         moveInput = context.ReadValue<Vector2>();
 
