@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4209345282280876042}
   - component: {fileID: 3971769717340410224}
+  - component: {fileID: 5100444746092060425}
   m_Layer: 0
   m_Name: SaveCollider
   m_TagString: Untagged
@@ -25,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5101311468136013591}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
-  m_LocalPosition: {x: 0.0010000011, y: 0.02722759, z: 0.0619}
+  m_LocalPosition: {x: 0.0010000011, y: 0, z: 0.056}
   m_LocalScale: {x: 0.033333335, y: 0.033333335, z: 0.033333335}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -47,12 +48,24 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 5.5607476, z: 6.907803}
   m_Center: {x: 0, y: 2.2803738, z: -2.9539015}
+--- !u!114 &5100444746092060425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5101311468136013591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b24f115bbf119274ba7dd431a583d777, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7797518574981242609
 GameObject:
   m_ObjectHideFlags: 0
