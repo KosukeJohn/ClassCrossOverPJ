@@ -58,6 +58,8 @@ public class Marionettea2_Move : MonoBehaviour
         redLight = transform.GetChild(1).GetComponent<Light>();
         blueLight.enabled = true;
         redLight.enabled = false;
+        // SEê›íË
+        source.clip = atk;
     }
 
     private void FixedUpdate()
@@ -109,8 +111,8 @@ public class Marionettea2_Move : MonoBehaviour
                     if (enemy.transform.position.x <= 225f)
                     { return; }
 
-                source.clip = atk;
-                source.Play();
+                // éûä‘Çí≤êÆÇµÇƒSEçƒê∂
+                Invoke("AtkSoundPlay", 1.0f);
 
                 state = State.Attack;
             }
@@ -278,5 +280,10 @@ public class Marionettea2_Move : MonoBehaviour
             redLight.enabled = false;
             blueLight.enabled = true;
         }
+    }
+
+    private void AtkSoundPlay()
+    {
+        source.Play();
     }
 }
