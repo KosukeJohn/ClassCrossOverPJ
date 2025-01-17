@@ -9,6 +9,7 @@ public class Marionettea2_Move : MonoBehaviour
     //インスペクター参照不可
     //---------------------------------------------
     private GameObject enemy;
+    private GameObject player;
     private Light redLight;
     private Light blueLight;
     private Animator anim;
@@ -43,9 +44,10 @@ public class Marionettea2_Move : MonoBehaviour
     {
         enemy = this.gameObject;
         anim = GetComponent<Animator>();
+        player = GameObject.Find("Player");
         hitFlag = false;
         speedX /= -100;
-        speedY = 5.0f;
+        speedY = 1.5f;
         timeCnt = 0;
         //maxCnt = 5;
         state = State.Born;
@@ -64,32 +66,37 @@ public class Marionettea2_Move : MonoBehaviour
 
         if (state == State.Born)
         {
-            enemy.transform.Translate(speedX, speedY, 0);
-            speedY -= 9.8f * Time.deltaTime;
+            enemy.transform.Translate(0, speedY, 0);
 
-            if (enemy.transform.position.x >= prePos.x + 8.0f)
+            if (enemy.transform.position.y >= hight) 
             {
                 enemy.transform.position =
-                    new Vector3(prePos.x + 8.0f, hight, prePos.z);
+                    new Vector3(enemy.transform.position.x, hight, enemy.transform.position.z);
                 speedY = 0;
                 state = State.Normal;
             }
         }
-#if false
+#if true
 
         if (state == State.Normal)
         {
-            //被弾タイマーを取得
-            hitFlag = enemy.GetComponent<Stage2HitCheck>().GetAttackFlag();
+            hitFlag = false;
 
-            if (hitFlag)
+            speedY -= 9.8f * Time.deltaTime;
+            if (speedY < 0) { speedY = 0; }
+
+            if (enemy.transform.position.x <= player.transform.position.x)
             {
-                state = State.Attack;
+                enemy.transform.Translate(speedX, speedY, 0);
             }
             else
             {
-                anim.SetBool("Find", false);
-                enemy.transform.Translate(speedX, 0, 0);
+                state = State.Attack;
+            }
+
+            if (enemy.transform.position.x >= 207f)
+            {
+                speedY = 12f * Time.deltaTime;
             }
 
             if (enemy.transform.position.x >= 226.68f)
@@ -200,13 +207,13 @@ public class Marionettea2_Move : MonoBehaviour
 
 #endif
         if (state == State.Attack)
-        {
-            anim.SetBool("Find", true);
+        {            
             timeCnt += Time.deltaTime;
             ChangeLightColor(true);
 
-            if (timeCnt > 0.5f)
+            if (timeCnt > 1.0f)
             {
+                anim.SetBool("Find", true);
                 hitFlag = true;
             }
 
@@ -216,10 +223,10 @@ public class Marionettea2_Move : MonoBehaviour
                 ChangeLightColor(false);
             }
 
-            if (timeCnt >= 2.0f)
+            if (timeCnt >= 3.0f)
             {
                 anim.SetBool("Find", false);
-                timeCnt = 0;
+                timeCnt = 0;                
                 state = State.Normal;
             }
         }
