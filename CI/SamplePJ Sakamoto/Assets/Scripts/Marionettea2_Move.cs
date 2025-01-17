@@ -85,23 +85,31 @@ public class Marionettea2_Move : MonoBehaviour
             speedY -= 9.8f * Time.deltaTime;
             if (speedY < 0) { speedY = 0; }
 
-            if (enemy.transform.position.x <= player.transform.position.x)
-            {
-                enemy.transform.Translate(speedX, speedY, 0);
-            }
-            else
-            {
-                state = State.Attack;
-            }
-
-            if (enemy.transform.position.x >= 207f)
-            {
-                speedY = 12f * Time.deltaTime;
-            }
-
             if (enemy.transform.position.x >= 226.68f)
             {
                 state = State.Death;
+            }
+
+            if (enemy.transform.position.x <= player.transform.position.x)
+            {
+                enemy.transform.Translate(speedX, speedY, 0);
+
+                if (enemy.transform.position.x >= 207f)
+                {
+                    speedY = 12f * Time.deltaTime;
+                }
+            }
+            else
+            {
+                if (enemy.transform.position.x >= 193.5f)
+                    if(enemy.transform.position.x <= 196.5f)
+                    { return; }
+
+                if (enemy.transform.position.x >= 220.5f)
+                    if (enemy.transform.position.x <= 223f)
+                    { return; }
+
+                state = State.Attack;
             }
         }
 
@@ -214,18 +222,21 @@ public class Marionettea2_Move : MonoBehaviour
             if (timeCnt > 1.0f)
             {
                 anim.SetBool("Find", true);
-                hitFlag = true;
             }
 
             if (timeCnt > 1.5f)
             {
+                hitFlag = true;             
+            }
+
+            if (timeCnt > 2.5f)
+            {
                 hitFlag = false;
                 ChangeLightColor(false);
             }
-
             if (timeCnt >= 3.0f)
             {
-                anim.SetBool("Find", false);
+                anim.SetBool("Find", false);            
                 timeCnt = 0;                
                 state = State.Normal;
             }

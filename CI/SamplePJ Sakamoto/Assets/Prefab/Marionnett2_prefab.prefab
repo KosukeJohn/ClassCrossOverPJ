@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cbea6d232b786347b5255229550e701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedX: 15
+  speedX: 13
   speedY: 0
   chasePos: 50
   state: 0
