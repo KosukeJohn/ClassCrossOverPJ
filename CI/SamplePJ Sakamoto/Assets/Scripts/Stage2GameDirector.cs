@@ -22,6 +22,7 @@ public class Stage2GameDirector : MonoBehaviour
                 InstanceFlag = false;
                 enemy = Instantiate(prefab);
                 enemy.transform.position = this.transform.position;
+                    //new(transform.position.x, transform.position.y, transform.position.z - 1.93f);
             }
             if (enemy)
             {

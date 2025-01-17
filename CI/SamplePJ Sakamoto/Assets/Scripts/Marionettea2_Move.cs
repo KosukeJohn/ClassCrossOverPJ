@@ -90,7 +90,7 @@ public class Marionettea2_Move : MonoBehaviour
                 state = State.Death;
             }
 
-            if (enemy.transform.position.x <= player.transform.position.x)
+            if (enemy.transform.position.x <= player.transform.position.x + 0.5f)
             {
                 enemy.transform.Translate(speedX, speedY, 0);
 
@@ -101,13 +101,16 @@ public class Marionettea2_Move : MonoBehaviour
             }
             else
             {
-                if (enemy.transform.position.x >= 193.5f)
-                    if(enemy.transform.position.x <= 196.5f)
+                if (enemy.transform.position.x >= 193f)
+                    if(enemy.transform.position.x <= 198f)
                     { return; }
 
                 if (enemy.transform.position.x >= 220.5f)
-                    if (enemy.transform.position.x <= 223f)
+                    if (enemy.transform.position.x <= 225f)
                     { return; }
+
+                source.clip = atk;
+                source.Play();
 
                 state = State.Attack;
             }
@@ -226,7 +229,7 @@ public class Marionettea2_Move : MonoBehaviour
 
             if (timeCnt > 1.5f)
             {
-                hitFlag = true;             
+                hitFlag = true;
             }
 
             if (timeCnt > 2.5f)
@@ -234,6 +237,7 @@ public class Marionettea2_Move : MonoBehaviour
                 hitFlag = false;
                 ChangeLightColor(false);
             }
+
             if (timeCnt >= 3.0f)
             {
                 anim.SetBool("Find", false);            
