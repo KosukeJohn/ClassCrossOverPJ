@@ -15,6 +15,7 @@ public class TitleScript : MonoBehaviour
 
     [SerializeField] private AudioSource source;//オーディオ
     [SerializeField] private AudioClip clip;//音源
+    private bool seplay = false;
 
     // 表示する文章（順番に設定）
     string[] dialogues = { "お母さん「部屋片づけておきなさいよー」", "主人公「はーい」", "主人公「うーん、めんどくさいなー」", "「ポイっ」" };
@@ -66,8 +67,13 @@ public class TitleScript : MonoBehaviour
     {
         Debug.Log("Aボタンが押されました！");
 
-        source.clip = clip;
-        source.Play();
+        if (!seplay)
+        {
+            seplay = true;
+            source.clip = clip;
+            source.Play();
+        }
+      
 
         // ダイアログが既に有効なら次の文章を表示
         if (dialogueText != null && dialogueText.enabled)
