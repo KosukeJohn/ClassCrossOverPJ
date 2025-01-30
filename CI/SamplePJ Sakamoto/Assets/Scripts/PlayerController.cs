@@ -414,7 +414,7 @@ public class PlayerController : MonoBehaviour
             return;
         
         }
-
+        DebugLog("OnMove");
         // 入力された移動ベクトルを取得
         moveInput = context.ReadValue<Vector2>();
 
@@ -454,9 +454,14 @@ public class PlayerController : MonoBehaviour
         {
             // 隠れる
             IsHiding = true;
-
+            
             // 移動を停止
             playerRigidbody.velocity = Vector3.zero;
         }
+    }
+
+    private void DebugLog(string code)
+    {
+        Debug.Log(code);
     }
 }
