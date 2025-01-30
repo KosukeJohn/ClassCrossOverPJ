@@ -11,13 +11,13 @@ public class PlayerController : MonoBehaviour
     [Header("移動設定")]
     [SerializeField] private float moveSpeed = 5f; // 移動速度
     [SerializeField] private float jumpForce = 5f; // 初期ジャンプ力
-    [SerializeField] private float maxJumpTime = 0.5f; // ジャンプボタンを押せる最大時間
-    [SerializeField] private float jumpBoostForce = 20f;  // ボタン押下中の追加ジャンプ力
-    [SerializeField] private float rotationSpeed = 5f; // 回転速度
+    [SerializeField] private float maxJumpTime = 0.4f; // ジャンプ力を加え続ける最大時間
+    [SerializeField] private float jumpBoostForce = 25f;  // ボタン押下中の追加ジャンプ力
+    [SerializeField] private float rotationSpeed = 4f; // 回転速度
     [SerializeField] private Transform GroundCheck; // 接地判定に使う空のゲームオブジェクト
     [SerializeField] private LayerMask GroundLayer; // 接地判定に使うレイヤー
-    [SerializeField] private float GroundCheckRadius = 0.4f; // 接地判定の半径
-    [SerializeField] private float coyoteTime = 0.05f; // 「コヨーテタイム」の許容時間
+    [SerializeField] private float GroundCheckRadius = 0.3f; // 接地判定の半径
+    [SerializeField] private float coyoteTime = 0.03f; // 「コヨーテタイム」の許容時間
 
     [Header("プレイヤーの状態 (インスペクターでの変更非推奨)")]
     [SerializeField] private Vector3 moveDirection; // プレイヤーの移動方向
@@ -143,28 +143,44 @@ public class PlayerController : MonoBehaviour
         // 接地判定
         isGrounded = CheckGrounded();
 
-        // コヨーテタイムの更新
         if (isGrounded)
         {
-            groundTimer = coyoteTime; // 接地中ならタイマーをリセット
+            // コヨーテタイムのカウントをリセット
+            groundTimer = coyoteTime;
+
+            if(!isJumping)
+            {
+                // 接地中のアニメーションへ移行
+                playerAnimator.SetBool("isGrounded", true);
+            }
         }
         else
         {
-            groundTimer -= Time.deltaTime; // タイマーを減少
+            // コヨーテタイムのカウント
+            groundTimer -= Time.deltaTime;
+
+            // 接地中のアニメーションから移行
+            playerAnimator.SetBool("isGrounded", false);
         }
 
         // その他追加で必要な処理はここへ
-        // pass
-
-        // プレイヤーが隠れている間の処理をここまでにする
-        if (IsHiding)
+        // ゴール後
+        if (goal)
         {
+            //ゴールした時移動制限用
+            moveDirection = new Vector3(0, 0f, 0);
             return;
         }
 
         //----------------------------------------------
         // プレイヤーが隠れている間は行われない処理
         //----------------------------------------------
+
+        // プレイヤーが隠れている間の処理をここまでにする
+        if (IsHiding)
+        {
+            return;
+        }
 
         // 移動処理
         HandleMovement();
@@ -329,7 +345,6 @@ public class PlayerController : MonoBehaviour
 
             // 移動のアニメーション
             playerAnimator.SetBool("isRunning", true);
-
         }
         else
         {
@@ -428,14 +443,6 @@ public class PlayerController : MonoBehaviour
     // 入力イベント：移動
     public void OnMove(InputAction.CallbackContext context)
     {
-        // 追加した処理
-        if (goal) {
-            //ゴールした時移動制限用
-            moveDirection = new Vector3(0, 0f, 0);
-            return;
-        
-        }
-
         // 入力された移動ベクトルを取得
         moveInput = context.ReadValue<Vector2>();
 
