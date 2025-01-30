@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,31 +10,32 @@ public class PlayerController : MonoBehaviour
 {
     [Header("移動設定")]
     [SerializeField] private float moveSpeed = 5f; // 移動速度
-    [SerializeField] private float jumpForce = 600f; // ジャンプ力
-    [SerializeField] private float rotationSpeed = 10f;  // 回転速度
+    [SerializeField] private float jumpForce = 5f; // 初期ジャンプ力
+    [SerializeField] private float maxJumpTime = 0.5f; // ジャンプボタンを押せる最大時間
+    [SerializeField] private float jumpBoostForce = 20f;  // ボタン押下中の追加ジャンプ力
+    [SerializeField] private float rotationSpeed = 5f; // 回転速度
     [SerializeField] private Transform GroundCheck; // 接地判定に使う空のゲームオブジェクト
     [SerializeField] private LayerMask GroundLayer; // 接地判定に使うレイヤー
-    [SerializeField] private float GroundCheckRadius = 0.2f; // 接地判定の半径
+    [SerializeField] private float GroundCheckRadius = 0.4f; // 接地判定の半径
+    [SerializeField] private float coyoteTime = 0.05f; // 「コヨーテタイム」の許容時間
 
-    [Header("プレイヤーの状態")]
+    [Header("プレイヤーの状態 (インスペクターでの変更非推奨)")]
     [SerializeField] private Vector3 moveDirection; // プレイヤーの移動方向
-    [SerializeField] private bool isGrounded; // 接地中
-    [SerializeField] private bool hasKeyItem=false; // クリアに必要なアイテムを持っているか
-    [SerializeField] private Vector3 respawnPosition = new Vector3(0,0,0); // respawnする場所を格納
-    [SerializeField] private bool inSafeArea = false; // 時間内に目標の場所に入っているか
-    [SerializeField] private float timeRemaining = 2f; // 目標の場所に入るまでの時間
-
-
-    [SerializeField] AudioSource source;
-   
-    [SerializeField]AudioClip clip;
-    
-    // 不使用
+    [SerializeField] private bool isGrounded; // 接地中か
+    [SerializeField] private float groundTimer; // 接地状態を補正するタイマー
     [SerializeField] private bool canHide; // 「隠れる」可能
     [SerializeField] private bool isHiding; // 「隠れる」中
+    [SerializeField] private bool jumpHeld; // ジャンプボタン押下中
+    [SerializeField] private float jumpTimer; // ジャンプ中の長さをカウント
 
+    // その他追加変数が必要ならここへ
+    [SerializeField] private bool hasKeyItem = false; // クリアに必要なアイテムを持っているか
+    [SerializeField] private Vector3 respawnPosition = new Vector3(0, 0, 0); // respawnする場所を格納
+    [SerializeField] private bool inSafeArea = false; // 時間内に目標の場所に入っているか
+    [SerializeField] private float timeRemaining = 2f; // 目標の場所に入るまでの時間
+    [SerializeField] AudioSource source;
+    [SerializeField]AudioClip clip;
     public GameObject bossPrefab; // ボスのプレハブ
-
     private float time;
     bool flag;
     bool goal;
@@ -45,6 +45,8 @@ public class PlayerController : MonoBehaviour
     bool playedSE = false;
     float fadespeed;
     private bool isMoveCheck = false;
+    private GameObject hitcheck;
+
     //----------------------------------------------
     // スクリプトの処理用
     //----------------------------------------------
@@ -52,10 +54,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody playerRigidbody; // プレイヤーのRigidbody
     private Vector2 moveInput; // コントローラーの入力方向
     private Animator playerAnimator; // プレイヤーのAnimator
-    private bool jumpInProgress; // ジャンプ処理中
-    
-    //1/7に追加したもの
-    private GameObject hitcheck;
+    private bool isJumping; // ジャンプ処理中
     
     //----------------------------------------------
     // 変数のプロパティ
@@ -117,19 +116,19 @@ public class PlayerController : MonoBehaviour
         // Groundレイヤーを取得
         GroundLayer = LayerMask.GetMask("Ground");
 
+        // その他追加で必要な処理はここへ
         //1/7に追加したもの
         hitcheck = GameObject.Find("HitCheck");
         this.transform.position = GetComponent<PlayerFirstPos>().GetFirstPos();
         Fade = GameObject.Find("EndFade");
          end=Fade.GetComponent<Image>();
-
-
+        // 25/1/30 地代所追加
+        source = gameObject.GetComponent<AudioSource>();
         //タイマー初期化
         time = 0.0f;
         source.clip = clip;
         flag = false;
         goal= false;
-        
         fadespeed = 0.005f;
         alfa = end.color.a;
     }
@@ -144,6 +143,19 @@ public class PlayerController : MonoBehaviour
         // 接地判定
         isGrounded = CheckGrounded();
 
+        // コヨーテタイムの更新
+        if (isGrounded)
+        {
+            groundTimer = coyoteTime; // 接地中ならタイマーをリセット
+        }
+        else
+        {
+            groundTimer -= Time.deltaTime; // タイマーを減少
+        }
+
+        // その他追加で必要な処理はここへ
+        // pass
+
         // プレイヤーが隠れている間の処理をここまでにする
         if (IsHiding)
         {
@@ -157,13 +169,13 @@ public class PlayerController : MonoBehaviour
         // 移動処理
         HandleMovement();
 
-        // ジャンプ処理
-        // 接地中かつジャンプ入力が成功している場合
-        if (isGrounded && jumpInProgress) 
+        // ジャンプボタンを押し続けている場合の処理
+        if (jumpHeld && isJumping)
         {
             JumpPlayer();
-           
         }
+
+        // その他追加で必要な処理はここへ
         //足音管理
         if (moveDirection.x == 0 && moveDirection.z == 0)
         {
@@ -229,6 +241,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // 追加したイベント関数
     // オブジェクトが別の物理コライダーと接触した際に一度だけ呼ばれる
     private void OnCollisionEnter(Collision collision)
     {
@@ -276,7 +289,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    // その他追加したメソッドはここへ
     IEnumerator GoToSafeArea(float timeRemaining, bool inSafeArea, Vector3 respawnPosition)
     {
         // 指定した時間だけ待機
@@ -316,26 +329,12 @@ public class PlayerController : MonoBehaviour
 
             // 移動のアニメーション
             playerAnimator.SetBool("isRunning", true);
-        
 
         }
         else
         {
             playerAnimator.SetBool("isRunning", false);
-           
-            
-        }
-        
-        //if(moveDirection.x * moveDirection.z==0)
-        //{
-        //    source.Stop();
-        //}
-        //else
-        //{
-        //    Debug.Log("play");
-        //    source.Play();
-        //}
-        
+        }       
     }
 
     // 回転処理
@@ -351,18 +350,39 @@ public class PlayerController : MonoBehaviour
     // ジャンプ処理
     private void JumpPlayer()
     {
-        // ジャンプ力をY方向速度に加える
-        playerRigidbody.AddForce(0, jumpForce, 0);
+        // 初動の場合
+        if (!isJumping)
+        {
+            // ジャンプ開始時の初速
+            isJumping = true;
+            jumpHeld = true;
+            jumpTimer = 0f;
+            playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x, 0f, playerRigidbody.velocity.z); // Y軸の速度をリセット
+            playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // ジャンプ力を加える
 
-        // ジャンプ処理中を解除
-        jumpInProgress = false;
+            // ジャンプのアニメーション
+            playerAnimator.SetTrigger("Jump");
 
-        // ジャンプのアニメーション
-        playerAnimator.SetTrigger("Jump");
+            Debug.Log("Jump");
+        }
+        // ジャンプボタンを押し続けている場合
+        else
+        {
+            // ジャンプ中時間のカウントを行う
+            jumpTimer += Time.deltaTime;
 
-       
-
-        Debug.Log("Jump");
+            if (jumpTimer < maxJumpTime)
+            {
+                float jumpMultiplier = 1f - (jumpTimer / maxJumpTime); // リニア減衰を行う
+                playerRigidbody.AddForce(Vector3.up * jumpBoostForce * jumpMultiplier, ForceMode.Acceleration);
+                Debug.Log("Jumping");
+            }
+            else
+            {
+                isJumping = false;
+                Debug.Log("Jumptime is max.");
+            }
+        }
     }
 
     // 「隠れる」状態が変化したときの処理
@@ -408,6 +428,7 @@ public class PlayerController : MonoBehaviour
     // 入力イベント：移動
     public void OnMove(InputAction.CallbackContext context)
     {
+        // 追加した処理
         if (goal) {
             //ゴールした時移動制限用
             moveDirection = new Vector3(0, 0f, 0);
@@ -427,16 +448,16 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Input:Jump");
 
-        // ジャンプができる条件を満たしていない場合処理を止める
-        if (IsHiding || !isGrounded)
+        // ジャンプ条件を満たしている場合
+        if (context.started && groundTimer > 0)
         {
-            return;
+            JumpPlayer();
         }
-
-        if (context.started)
+        // ジャンプボタンを離した時の処理
+        else if (context.canceled)
         {
-            // ジャンプ処理中にする
-            jumpInProgress = true;
+            isJumping = false;
+            jumpHeld = false;
         }
     }
 

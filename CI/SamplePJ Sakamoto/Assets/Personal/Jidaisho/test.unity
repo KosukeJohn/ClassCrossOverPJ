@@ -14415,24 +14415,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  jumpForce: 600
-  rotationSpeed: 10
-  GroundCheck: {fileID: 1184603864}
+  jumpForce: 5
+  maxJumpTime: 0.7
+  jumpBoostForce: 15
+  rotationSpeed: 5
+  GroundCheck: {fileID: 0}
   GroundLayer:
     serializedVersion: 2
     m_Bits: 0
-  GroundCheckRadius: 0.2
+  GroundCheckRadius: 0.4
+  coyoteTime: 0.05
   moveDirection: {x: 0, y: 0, z: 0}
   isGrounded: 0
+  groundTimer: 0
+  canHide: 0
+  isHiding: 0
+  jumpHeld: 0
+  jumpTimer: 0
   hasKeyItem: 0
   respawnPosition: {x: 0, y: 0, z: 0}
   inSafeArea: 0
-  timeRemaining: 8
-  source: {fileID: 1454667316}
+  timeRemaining: 2
+  source: {fileID: 0}
   clip: {fileID: 8300000, guid: 67b937290d2cbb2449d23e4d37b63bd5, type: 3}
-  canHide: 0
-  isHiding: 0
-  bossPrefab: {fileID: 7822704894105111532, guid: 201f7469d424a5d42941dd54a59bac73, type: 3}
+  bossPrefab: {fileID: 0}
 --- !u!114 &1454667311
 MonoBehaviour:
   m_ObjectHideFlags: 0
