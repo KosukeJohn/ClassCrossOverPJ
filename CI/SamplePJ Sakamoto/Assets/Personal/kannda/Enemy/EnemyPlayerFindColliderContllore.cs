@@ -28,10 +28,19 @@ public class EnemyPlayerFindColliderContllore : MonoBehaviour
             transform.parent.GetComponent<EnemyCoppy>().SetPlayerFind(true);
 
             //player‚Ìó‘Ô‚ğæ“¾
-            bool isHide = false;
-            //other.GetComponent<PlayerController>().GetIsHide();
-            transform.parent.GetComponent<EnemyCoppy>().SetPlayerState(isHide);
+            bool isHide = other.GetComponent<PlayerHide>().GetPlayerisHide();
 
+            transform.parent.GetComponent<EnemyCoppy>().SetPlayerState(isHide);
+            if (isHide) 
+            {
+                if (transform.parent.GetComponent<Enemy3>())
+                {
+                    transform.parent.GetComponent<Enemy3>().SetLenge(3);
+                    transform.parent.GetComponent<Enemy3>().SetPos(other.GetComponent<PlayerHide>().GetHideObjPos());
+                }
+                return;
+            }           
+            
             //target_angle‚ªangle‚É‚¨‚³‚Ü‚Á‚Ä‚¢‚é‚©
             if (target_angle < angle)
             {

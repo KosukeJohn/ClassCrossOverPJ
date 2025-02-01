@@ -14,7 +14,7 @@ public abstract class EnemyCoppy : MonoBehaviour
         Death
     }
 
-    private enum TriggerType 
+    protected enum TriggerType 
     {
         EnterIdle,
         EnterChase,
@@ -23,14 +23,14 @@ public abstract class EnemyCoppy : MonoBehaviour
     }
 
     private StateMachine<StateType,TriggerType> stateMachine;
-    private Animator anim;
-    private Vector3 playerPos;
-    private bool checkHideFlag;
-    private bool playerFindFlag;
-    private bool goPlayerFlag;
-    private int moveDirection;
+    protected Animator anim;
+    protected Vector3 playerPos;
+    protected bool checkHideFlag;
+    protected bool playerFindFlag;
+    protected bool goPlayerFlag;
+    protected int moveDirection;
 
-    [SerializeField] private float ChaseSpeed = 4.0f;//追いかけるスピード
+    [SerializeField] protected float ChaseSpeed = 4.0f;//追いかけるスピード
 
     private void Start()
     {
@@ -90,6 +90,7 @@ public abstract class EnemyCoppy : MonoBehaviour
     private void UpdateChase() 
     {
         if (!playerFindFlag) { ChangeStateMachine(TriggerType.EnterIdle); return; }
+        if (checkHideFlag) { ChangeStateMachine(TriggerType.EnterBack); return; }
 
         if (goPlayerFlag) 
         {
@@ -103,7 +104,7 @@ public abstract class EnemyCoppy : MonoBehaviour
         }
     }
     private void ExitChase() { DebugLog("ExitChase"); }
-    private void EnterBack() { anim.Play("Run", 0, 0); }
+    protected abstract void EnterBack();
     protected abstract void UpdateBack();
     private void ExitBack() { DebugLog("ExitBack"); }
     private void EnterDeath() { }
@@ -114,7 +115,7 @@ public abstract class EnemyCoppy : MonoBehaviour
     private void ExitBorn() { }
 
     private void DebugLog(string code) { Debug.Log(code); }
-    private void ChangeStateMachine(TriggerType trigger) 
+    protected void ChangeStateMachine(TriggerType trigger) 
     {
         if (stateMachine.GetState() == StateType.Non) { return; }
 
