@@ -58,7 +58,7 @@ public class TitleScript : MonoBehaviour
 
         //1/7’Ç‰Á
         player = GameObject.Find("Player");
-        Vector3 pos = new(0, 0, 0);
+        Vector3 pos = new(-10, 0, 0);
         player.GetComponent<PlayerFirstPos>().SetFirstPos(pos);
     }
 
