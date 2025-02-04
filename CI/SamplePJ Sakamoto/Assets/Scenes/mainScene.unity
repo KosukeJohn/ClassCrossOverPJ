@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -15277,23 +15277,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  jumpForce: 600
-  rotationSpeed: 10
+  rotationSpeed: 4
+  jumpForce: 7
+  maxJumpTime: 0.5
+  jumpBoostForce: 15
   GroundCheck: {fileID: 1184603864}
   GroundLayer:
     serializedVersion: 2
     m_Bits: 0
-  GroundCheckRadius: 0.2
+  GroundCheckRadius: 0.3
+  coyoteTime: 0.04
   moveDirection: {x: 0, y: 0, z: 0}
   isGrounded: 0
+  groundTimer: 0
+  isJumping: 0
+  jumpHeld: 0
+  jumpTimer: 0
+  canHide: 0
+  isHiding: 0
   hasKeyItem: 0
   respawnPosition: {x: 0, y: 0, z: 0}
   inSafeArea: 0
   timeRemaining: 8
   source: {fileID: 1454667316}
   clip: {fileID: 8300000, guid: 10d8b072c38da7d43b016b9900ae4925, type: 3}
-  canHide: 0
-  isHiding: 0
   bossPrefab: {fileID: 7822704894105111532, guid: 201f7469d424a5d42941dd54a59bac73, type: 3}
 --- !u!114 &1454667311
 MonoBehaviour:
