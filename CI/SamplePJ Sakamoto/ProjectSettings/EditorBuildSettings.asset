@@ -18,16 +18,16 @@ EditorBuildSettings:
     path: Assets/Scenes/EndingScene Movie.unity
     guid: fb0214dde02010643b4596694f9a5726
   - enabled: 0
-    path: Assets/Personal/kannda/TestSwitch.unity
+    path: Assets/Personal/kannda/Scene/TestSwitch.unity
     guid: 73c8330f49323eb4cbe9722f5beaf13d
   - enabled: 0
-    path: Assets/Personal/kannda/TestScene.unity
+    path: Assets/Personal/kannda/Scene/TestScene.unity
     guid: a5ae04e6f937fd54abe81d260190414d
   - enabled: 0
-    path: Assets/Personal/kannda/Test 1Scene.unity
+    path: Assets/Personal/kannda/Scene/Test 1Scene.unity
     guid: 3db530091bc07c04ca32f410d2b0d8ca
   - enabled: 0
-    path: Assets/Personal/kannda/Test 2Scene.unity
+    path: Assets/Personal/kannda/Scene/Test 2Scene.unity
     guid: 676ff8fd6dce57a4295a534da0de86b0
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 5a8b94077a75fb94c81b1eb7684cdd16, type: 2}
