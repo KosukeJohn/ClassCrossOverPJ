@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour
         hitcheck = GameObject.Find("HitCheck");
         this.transform.position = GetComponent<PlayerFirstPos>().GetFirstPos();
         Fade = GameObject.Find("EndFade");
-         end=Fade.GetComponent<Image>();
+        end = Fade.GetComponent<Image>();
 
 
         //タイマー初期化

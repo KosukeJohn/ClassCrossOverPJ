@@ -79,16 +79,16 @@ public class Jack_HitCheck : MonoBehaviour
                 break;
         }
     }
-    private void OnTriggerStay(Collider other)
-    {
-        //”ÍˆÍ‚ÉN“ü‚µ‚½‚çtrue‚ğ•Ô‚·
-        if(other.tag == "Player")
-        {
-            Debug.Log("jack->Hit");
-            hitflag = true;
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    //”ÍˆÍ‚ÉN“ü‚µ‚½‚çtrue‚ğ•Ô‚·
+    //    if(other.tag == "Player")
+    //    {
+    //        Debug.Log("jack->Hit");
+    //        hitflag = true;
 
-            //“–‚½‚è”»’è‚ğŠÇ—Ò‚É‘—‚é
-            playerhitcheck.GetComponent<PlayerHitCheck>().SetPlayerHitCheck(hitflag);
-        }
-    }
+    //        //“–‚½‚è”»’è‚ğŠÇ—Ò‚É‘—‚é
+    //        playerhitcheck.GetComponent<PlayerHitCheck>().SetPlayerHitCheck(hitflag);
+    //    }
+    //}
 }

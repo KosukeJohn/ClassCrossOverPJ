@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy1 : MonoBehaviour
+public class Enemy1 : EnemyCoppy
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void EnterBack()
     {
-        
+        { anim.Play("Idle", 0, 0); }
     }
-
-    // Update is called once per frame
-    void Update()
+    protected override void UpdateBack() 
     {
-        
+        if (!playerFindFlag) { ChangeStateMachine(TriggerType.EnterIdle); return; }
+        if (!checkHideFlag) { ChangeStateMachine(TriggerType.EnterChase);return; }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerFirstPos : MonoBehaviour
 {
-    private static Vector3 firstPos = new(0, 0, 0);
+    private static Vector3 firstPos = new(-10, 0, 0);
 
     public bool debag;//true‚É‚·‚é‚Æ‚»‚ÌˆÊ’u‚ÅŽn‚Ü‚é
 
