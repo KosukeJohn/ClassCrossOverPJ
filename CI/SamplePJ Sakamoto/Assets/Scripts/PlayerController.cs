@@ -158,29 +158,6 @@ public class PlayerController : MonoBehaviour
         }
 
         // 処理の追加はここに記述してください
-        // pass
-
-        //----------------------------------------------
-        // プレイヤーが隠れている間は行われない処理
-        //----------------------------------------------
-
-        // プレイヤーが隠れている間の処理をここまでにする
-        if (IsHiding)
-        {
-            return;
-        }
-
-        // 移動処理
-        HandleMovement();
-
-        // ジャンプ処理
-        // ボタンを押し続けている間の処理
-        if (jumpHeld && isJumping) 
-        {
-            AddJumpForce();
-        }
-
-        // 処理の追加はここに記述してください
         //足音管理
         if (moveDirection.x == 0 && moveDirection.z == 0)
         {
@@ -196,11 +173,36 @@ public class PlayerController : MonoBehaviour
                 flag = false;
             }
         }
-        if (!isGrounded)
+        if (!isGrounded || isHiding) // 2/6地代所追加(条件にisHiding)
         {
             source.Stop();
             flag = true;
         }
+
+        //----------------------------------------------
+        // プレイヤーが隠れている間は行われない処理
+        //----------------------------------------------
+
+        // プレイヤーが隠れている間の処理をここまでにする
+        if (IsHiding)
+        {
+            // 隠れている間は移動を停止
+            playerRigidbody.velocity = Vector3.zero;
+
+            return;
+        }
+
+        // 移動処理
+        HandleMovement();
+
+        // ジャンプ処理
+        // ボタンを押し続けている間の処理
+        if (jumpHeld && isJumping) 
+        {
+            AddJumpForce();
+        }
+
+        // 処理の追加はここに記述してください
 
         if (goal == true)
         {
@@ -467,9 +469,10 @@ public class PlayerController : MonoBehaviour
             // 隠れる
             IsHiding = true;
 
-            // 移動を停止
-            playerRigidbody.velocity = Vector3.zero;
-            
+            // オブジェクトを無効化
+            // 引数で指定しているので階層を変えないでください！
+            transform.GetChild(0).gameObject.SetActive(false);
+
         }
         else if (context.canceled)
         {
@@ -477,6 +480,9 @@ public class PlayerController : MonoBehaviour
 
             // 隠れるを解除
             IsHiding = false;
+
+            // オブジェクトを有効化
+            transform.GetChild(0).gameObject.SetActive(true);
         }
     }
 }
