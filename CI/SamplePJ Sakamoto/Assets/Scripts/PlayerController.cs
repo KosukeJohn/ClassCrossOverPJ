@@ -462,18 +462,21 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Input:Hide");
 
-        if (context.started && IsHiding)
-        {
-            // 隠れるを解除
-            IsHiding = false;
-        }
-        else if (context.started && canHide)
+        if (context.started && canHide)
         {
             // 隠れる
             IsHiding = true;
-            
+
             // 移動を停止
             playerRigidbody.velocity = Vector3.zero;
+            
+        }
+        else if (context.canceled)
+        {
+            Debug.Log("Canceled:Hide");
+
+            // 隠れるを解除
+            IsHiding = false;
         }
     }
 }
