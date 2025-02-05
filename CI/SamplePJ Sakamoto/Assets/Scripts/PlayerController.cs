@@ -17,8 +17,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 7f; // 初期ジャンプ力
     [SerializeField] private float maxJumpTime = 0.5f; // ジャンプ力を加算する最大時間
     [SerializeField] private float jumpBoostForce = 15f; // ボタンを押し続けによって追加できるジャンプ力
-    [SerializeField] private Transform GroundCheck; // 接地判定に使う空のゲームオブジェクト
-    [SerializeField] private LayerMask GroundLayer; // 接地判定に使うレイヤー
     [SerializeField] private float GroundCheckRadius = 0.3f; // 接地判定の半径
     [SerializeField] private float coyoteTime = 0.04f; // コヨーテタイム（地面から離れたときにジャンプ可能な時間を補正）
 
@@ -58,6 +56,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody playerRigidbody; // プレイヤーのRigidbody
     private Vector2 moveInput; // コントローラーの入力方向
     private Animator playerAnimator; // プレイヤーのAnimator
+    private Transform GroundCheck; // 接地判定に使う空のゲームオブジェクト
+    private LayerMask GroundLayer; // 接地判定に使うレイヤー
 
     // 変数の追加はここに記述してください
     private GameObject hitcheck;
