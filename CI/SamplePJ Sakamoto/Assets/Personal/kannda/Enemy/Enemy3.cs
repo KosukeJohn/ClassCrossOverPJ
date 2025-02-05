@@ -11,6 +11,7 @@ public class Enemy3 : EnemyCoppy
     Vector3[] Pos = new Vector3[4];
     [SerializeField]int seed;
     [SerializeField]Vector3 nextpos;
+
     protected override void EnterBack()
     {
         anim.Play("Run", 0, 0);
@@ -23,6 +24,8 @@ public class Enemy3 : EnemyCoppy
     {
         if (!playerFindFlag) { ChangeStateMachine(TriggerType.EnterIdle); return; }
         if (!checkHideFlag) { ChangeStateMachine(TriggerType.EnterChase); return; }
+        bool isDeath = ChangeStateDeath();
+        if (isDeath) { return; }
 
         // オブジェクトの周りを回る
 

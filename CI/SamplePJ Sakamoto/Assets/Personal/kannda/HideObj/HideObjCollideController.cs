@@ -19,13 +19,18 @@ public class HideObjCollideController : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        OnHide(other);
-        IsHide(other);
-        ExitHide(other);
+        if (other.tag == "Player")
+        {
+            OnHide(other);
+            IsHide(other);
+            ExitHide(other);
+        }
     }
 
     private void OnHide(Collider other)
     {
+        if (!other.GetComponent<PlayerHide>()) { return; }
+
         //プレイヤーがボタンを推した瞬間を取得
         bool EnterHide =
             other.GetComponent<PlayerHide>().GetOnHide();
@@ -41,6 +46,8 @@ public class HideObjCollideController : MonoBehaviour
 
     private void IsHide(Collider other)
     {
+        if (!other.GetComponent<PlayerHide>()) { return; }
+
         //プレイヤーがボタンを押しているか取得
         bool StayHide = 
             other.GetComponent<PlayerHide>().GetIsHIde();
@@ -57,20 +64,19 @@ public class HideObjCollideController : MonoBehaviour
 
     private void ExitHide(Collider other) 
     {
-        if (other.tag == "Player")
-        {
-            //プレイヤーがボタンを離したか取得
-            bool ExitHide =
-                other.GetComponent<PlayerHide>().GetUpHide();
+        if (!other.GetComponent<PlayerHide>()) { return; }
 
-            //ボタンを押している間は処理しない
-            if (!ExitHide) { return; }
+        //プレイヤーがボタンを離したか取得
+        bool ExitHide =
+            other.GetComponent<PlayerHide>().GetUpHide();
 
-            //その場所に戻る
-            other.transform.position = playerPrePos;
-            other.GetComponent<PlayerHide>().SetPlayerIsHide(false);
-            DebugLog("ExitHide");
-        }
+        //ボタンを押している間は処理しない
+        if (!ExitHide) { return; }
+
+        //その場所に戻る
+        other.transform.position = playerPrePos;
+        other.GetComponent<PlayerHide>().SetPlayerIsHide(false);
+        DebugLog("ExitHide");
     }
 
     private void DebugLog(string code) { Debug.Log(code); }

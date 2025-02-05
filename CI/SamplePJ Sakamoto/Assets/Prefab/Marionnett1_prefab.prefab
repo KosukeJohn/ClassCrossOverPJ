@@ -7437,7 +7437,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7553098535175982513}
-  - component: {fileID: 2105104093430407035}
+  - component: {fileID: 2015479709617339723}
   - component: {fileID: 338319986869652782}
   m_Layer: 0
   m_Name: HitBox
@@ -7461,7 +7461,7 @@ Transform:
   m_Father: {fileID: 7343450687778088235}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &2105104093430407035
+--- !u!136 &2015479709617339723
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
