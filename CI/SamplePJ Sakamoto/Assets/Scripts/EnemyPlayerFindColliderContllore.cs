@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyPlayerFindColliderContllore : MonoBehaviour
@@ -28,9 +27,14 @@ public class EnemyPlayerFindColliderContllore : MonoBehaviour
             transform.parent.GetComponent<EnemyCoppy>().SetPlayerFind(true);
 
             //player‚Ìó‘Ô‚ğæ“¾
-            bool isHide = other.GetComponent<PlayerHide>().GetPlayerisHide();
-
+            bool isHide = false;
+            if (other.GetComponent<PlayerHide>())
+            {
+                isHide = other.GetComponent<PlayerHide>().GetPlayerisHide();
+            }             
+            
             transform.parent.GetComponent<EnemyCoppy>().SetPlayerState(isHide);
+
             if (isHide) 
             {
                 if (transform.parent.GetComponent<Enemy3>())

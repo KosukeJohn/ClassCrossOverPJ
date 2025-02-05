@@ -6,7 +6,7 @@ public class Enemy1 : EnemyCoppy
 {
     protected override void EnterBack()
     {
-        { anim.Play("Idle", 0, 0); }
+        { anim.Play("Idle", 0, 0); ChangeLight(ColorType.Blue); }
     }
     protected override void UpdateBack() 
     {
