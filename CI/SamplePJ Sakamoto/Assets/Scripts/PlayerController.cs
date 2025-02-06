@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviour
                 flag = false;
             }
         }
-        if (!isGrounded || isHiding) // 2/6地代所追加(条件にisHiding)
+        if (!isGrounded || isHiding || isCleared) // 2/6地代所追加(条件にisHidingとisCleared)
         {
             source.Stop();
             flag = true;
@@ -188,22 +188,32 @@ public class PlayerController : MonoBehaviour
         {
             // 隠れている間は移動を停止
             playerRigidbody.velocity = Vector3.zero;
-
+            playerAnimator.SetBool("isRunning", false);
             return;
         }
 
-        // 移動処理
-        HandleMovement();
-
-        // ジャンプ処理
-        // ボタンを押し続けている間の処理
-        if (jumpHeld && isJumping) 
+        // クリアしている場合はプレイヤーの操作を行わない
+        if (isCleared)
         {
-            AddJumpForce();
+            // 移動を停止
+            playerRigidbody.velocity = Vector3.zero;
+            moveDirection = Vector3.zero;
+            playerAnimator.SetBool("isRunning", false);
+        }
+        else if (!isCleared)
+        {
+            // 移動処理
+            HandleMovement();
+
+            // ジャンプ処理
+            // ボタンを押し続けている間の処理
+            if (jumpHeld && isJumping)
+            {
+                AddJumpForce();
+            }
         }
 
         // 処理の追加はここに記述してください
-
         if (isCleared == true)
         {
             
@@ -342,13 +352,6 @@ public class PlayerController : MonoBehaviour
         else
         {
             playerAnimator.SetBool("isRunning", false);
-        }
-
-        // クリアしている場合は移動を停止
-        if (isCleared)
-        {
-            moveDirection = new Vector3(0, 0f, 0);
-            return;
         }
     }
 

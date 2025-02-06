@@ -15495,6 +15495,7 @@ MonoBehaviour:
   jumpTimer: 0
   canHide: 0
   isHiding: 0
+  isCleared: 0
   hasKeyItem: 0
   respawnPosition: {x: 0, y: 0, z: 0}
   inSafeArea: 0
