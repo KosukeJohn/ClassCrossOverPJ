@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpTimer; // ジャンプボタン押下時間
     [SerializeField] private bool canHide; // 「隠れる」可能
     [SerializeField] private bool isHiding; // 「隠れる」中
+    [SerializeField] private bool isCleared; // ゲームクリア判定
 
     // 変数の追加はここに記述してください
     [Header("追加変数")]
@@ -41,7 +42,6 @@ public class PlayerController : MonoBehaviour
     public GameObject bossPrefab; // ボスのプレハブ
     private float time;
     bool flag;
-    bool goal;
     GameObject Fade;
     float alfa;
     Image end;
@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviour
         time = 0.0f;
         source.clip = clip;
         flag = false;
-        goal= false;
+        isCleared= false;
         fadespeed = 0.005f;
         alfa = end.color.a;
     }
@@ -204,7 +204,7 @@ public class PlayerController : MonoBehaviour
 
         // 処理の追加はここに記述してください
 
-        if (goal == true)
+        if (isCleared == true)
         {
             
             Debug.Log("End");
@@ -225,13 +225,6 @@ public class PlayerController : MonoBehaviour
                 // エンディングシーンをロード
                 SceneManager.LoadScene("EndingScene Movie");//1/7名称の変更
             }
-        }
-
-        if (goal)
-        {
-            //ゴールした時移動制限用
-            moveDirection = new Vector3(0, 0f, 0);
-            return;
         }
     }
 
@@ -297,9 +290,9 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if (collision.gameObject.name == "EndingScene" && !goal)
+        if (collision.gameObject.name == "EndingScene" && !isCleared)
         {
-            goal = true;
+            isCleared = true;
         }
     }
 
@@ -349,6 +342,13 @@ public class PlayerController : MonoBehaviour
         else
         {
             playerAnimator.SetBool("isRunning", false);
+        }
+
+        // クリアしている場合は移動を停止
+        if (isCleared)
+        {
+            moveDirection = new Vector3(0, 0f, 0);
+            return;
         }
     }
 
