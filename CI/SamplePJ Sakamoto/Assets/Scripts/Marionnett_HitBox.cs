@@ -25,6 +25,14 @@ public class marionetto : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            // ‰B‚ê‚Ä‚¢‚éŠÔ‚Ìˆ—
+            bool isHide = false;
+            if (other.GetComponent<PlayerController>())
+            {
+                isHide = other.GetComponent<PlayerController>().IsHiding;
+            }
+            if (isHide) { return; }
+
             hitFlag = true;
         }
     }
