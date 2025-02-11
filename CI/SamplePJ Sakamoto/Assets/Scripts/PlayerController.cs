@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpTimer; // ジャンプボタン押下時間
     [SerializeField] private bool canHide; // 「隠れる」可能
     [SerializeField] private bool isHiding; // 「隠れる」中
+    [SerializeField] private bool isCleared; // ゲームクリア判定
 
     // 変数の追加はここに記述してください
     [Header("追加変数")]
@@ -41,7 +42,6 @@ public class PlayerController : MonoBehaviour
     public GameObject bossPrefab; // ボスのプレハブ
     private float time;
     bool flag;
-    bool goal;
     GameObject Fade;
     float alfa;
     Image end;
@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviour
         time = 0.0f;
         source.clip = clip;
         flag = false;
-        goal= false;
+        isCleared= false;
         fadespeed = 0.005f;
         alfa = end.color.a;
     }
@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviour
                 flag = false;
             }
         }
-        if (!isGrounded || isHiding) // 2/6地代所追加(条件にisHiding)
+        if (!isGrounded || isHiding || isCleared) // 2/6地代所追加(条件にisHidingとisCleared)
         {
             source.Stop();
             flag = true;
@@ -188,23 +188,33 @@ public class PlayerController : MonoBehaviour
         {
             // 隠れている間は移動を停止
             playerRigidbody.velocity = Vector3.zero;
-
+            playerAnimator.SetBool("isRunning", false);
             return;
         }
 
-        // 移動処理
-        HandleMovement();
-
-        // ジャンプ処理
-        // ボタンを押し続けている間の処理
-        if (jumpHeld && isJumping) 
+        // クリアしている場合はプレイヤーの操作を行わない
+        if (isCleared)
         {
-            AddJumpForce();
+            // 移動を停止
+            playerRigidbody.velocity = Vector3.zero;
+            moveDirection = Vector3.zero;
+            playerAnimator.SetBool("isRunning", false);
+        }
+        else if (!isCleared)
+        {
+            // 移動処理
+            HandleMovement();
+
+            // ジャンプ処理
+            // ボタンを押し続けている間の処理
+            if (jumpHeld && isJumping)
+            {
+                AddJumpForce();
+            }
         }
 
         // 処理の追加はここに記述してください
-
-        if (goal == true)
+        if (isCleared == true)
         {
             
             Debug.Log("End");
@@ -225,13 +235,6 @@ public class PlayerController : MonoBehaviour
                 // エンディングシーンをロード
                 SceneManager.LoadScene("EndingScene Movie");//1/7名称の変更
             }
-        }
-
-        if (goal)
-        {
-            //ゴールした時移動制限用
-            moveDirection = new Vector3(0, 0f, 0);
-            return;
         }
     }
 
@@ -297,9 +300,9 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if (collision.gameObject.name == "EndingScene" && !goal)
+        if (collision.gameObject.name == "EndingScene" && !isCleared)
         {
-            goal = true;
+            isCleared = true;
         }
     }
 
