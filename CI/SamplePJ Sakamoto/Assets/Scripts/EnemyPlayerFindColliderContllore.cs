@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyPlayerFindColliderContllore : MonoBehaviour
@@ -39,14 +40,37 @@ public class EnemyPlayerFindColliderContllore : MonoBehaviour
             if (target_angle < angle)
             {
                 //直線距離にプレイヤーがあるかrayを飛ばす
-                if (Physics.Raycast(this.transform.position, posDelta, out RaycastHit hit))
+                Ray ray = new(this.transform.position, posDelta);
+                Debug.DrawRay(ray.origin, ray.direction , Color.red, Time.deltaTime, false);
+                if (Physics.Raycast(ray, out RaycastHit hit))
                 {
                     if (hit.collider == other)
                     {
                         Debug.Log("player find");
                         Vector3 playerPos = other.transform.position;
-                        transform.parent.GetComponent<EnemyCoppy>().SetPlayerPosition(playerPos);
                         transform.parent.GetComponent<EnemyCoppy>().SetGoPlayer(true);
+                        transform.parent.GetComponent<EnemyCoppy>().SetPlayerPosition(playerPos);                       
+                    }
+                    
+                    //rayがプレイヤー以外に当たったら
+                    if (hit.collider != other)
+                    {
+                        Debug.Log("Toys Find");
+                        //rayの距離を測って一定距離以下なら飛び越えさせる
+                        Vector3 enemypos = this.transform.position;
+                        Vector3 toypos = hit.point;
+                        Vector3 lenge = toypos - enemypos;
+
+                        transform.parent.GetComponent<EnemyCoppy>().SetGoPlayer(true);
+                        transform.parent.GetComponent<EnemyCoppy>().SetPlayerPosition(hit.point);
+
+                        float prelenge = 0.5f;
+                        if (Mathf.Abs(lenge.x) <= prelenge){
+                            if (Mathf.Abs(lenge.z) <= prelenge) {
+                                transform.parent.GetComponent<EnemyCoppy>().SetGoPlayer(false);
+                                transform.parent.GetComponent<EnemyCoppy>().SetIsJump(true);
+                            }
+                        }
                     }
                 }
             }

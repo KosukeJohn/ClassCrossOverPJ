@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Hideable
+  - Toys
+  - Ground
   layers:
   - Default
   - TransparentFX

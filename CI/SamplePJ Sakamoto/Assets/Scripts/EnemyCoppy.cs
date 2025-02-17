@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 public abstract class EnemyCoppy : MonoBehaviour
@@ -12,6 +13,7 @@ public abstract class EnemyCoppy : MonoBehaviour
         Chase,
         Back,
         Attack,
+        Jump,
         Death
     }
 
@@ -21,6 +23,7 @@ public abstract class EnemyCoppy : MonoBehaviour
         EnterChase,
         EnterBack,
         EnterAttack,
+        EnterJump,
         EnterDeath
     }
 
@@ -47,9 +50,18 @@ public abstract class EnemyCoppy : MonoBehaviour
     private Vector3 prePos;
     private float deathTimeCnt;
     private float deathTimeCntMax;
+    private bool isJump;
+    private float enterJumpCnt;
+    private int jumpCnt;
+    private bool enemyHight;
 
-    [Header("追いかけるスピード")]
+    [Header("追いかける")]
     [SerializeField] protected float ChaseSpeed = 4.0f;//追いかけるスピード
+    [Header("飛び越える")]
+    [SerializeField] protected float MaxJumpCnt = 1.0f;
+    [SerializeField] protected float JumpUpSpeed = 5.0f;
+    [SerializeField] protected float JumpFowrdSpeed = 5.0f;
+    [SerializeField] protected float JumpDownSpeed = 5.0f;
     [Header("効果音")]
     [SerializeField] AudioSource source;//オーディオソース
     [SerializeField] AudioClip attack;
@@ -73,10 +85,13 @@ public abstract class EnemyCoppy : MonoBehaviour
         stateMachine.AddTransition(StateType.Chase, StateType.Idle, TriggerType.EnterIdle);
         stateMachine.AddTransition(StateType.Chase, StateType.Back, TriggerType.EnterBack);
         stateMachine.AddTransition(StateType.Chase, StateType.Attack, TriggerType.EnterAttack);
+        stateMachine.AddTransition(StateType.Chase, StateType.Jump, TriggerType.EnterJump);
+        stateMachine.AddTransition(StateType.Jump, StateType.Chase, TriggerType.EnterChase);
         stateMachine.AddTransition(StateType.Back, StateType.Idle, TriggerType.EnterIdle);
         stateMachine.AddTransition(StateType.Back, StateType.Chase, TriggerType.EnterChase);
         stateMachine.AddTransition(StateType.Back, StateType.Attack, TriggerType.EnterAttack);
         stateMachine.AddTransition(StateType.Attack, StateType.Death, TriggerType.EnterDeath);
+        
 
         // Actionの登録
 
@@ -86,6 +101,7 @@ public abstract class EnemyCoppy : MonoBehaviour
         stateMachine.SetupState(StateType.Back, () => EnterBack(), () => ExitBack(), deltatime => UpdateBack());
         stateMachine.SetupState(StateType.Death, () => EnterDeath(), () => ExitDeath(), deltatime => UpdateDeath());
         stateMachine.SetupState(StateType.Attack, () => EnterAttack(), () => ExitAttack(), deltatime => UpdateAttack());
+        stateMachine.SetupState(StateType.Jump, () => EnterJump(), () => ExitJump(), deltatime => UpdateJump());
 
         // 変数の初期化
 
@@ -96,6 +112,7 @@ public abstract class EnemyCoppy : MonoBehaviour
             prePos = transform.position;
             deathTimeCnt = 0;
             deathTimeCntMax = 5.0f;
+            enterJumpCnt = 0;
         }
     }
 
@@ -103,6 +120,8 @@ public abstract class EnemyCoppy : MonoBehaviour
     {
         // ステートマシーンの更新
         stateMachine.Update(Time.deltaTime);
+
+        if (isJump) { isJump = false; }
     }
 
     // ステータスごとのメソッド
@@ -132,10 +151,20 @@ public abstract class EnemyCoppy : MonoBehaviour
     {
         if (!playerFindFlag) { ChangeStateMachine(TriggerType.EnterIdle); return; }
         if (checkHideFlag) { ChangeStateMachine(TriggerType.EnterBack); return; }
+        if (isJump) 
+        {
+            enterJumpCnt += Time.deltaTime;
+            if (enterJumpCnt >= MaxJumpCnt)
+            {
+                enterJumpCnt = 0;
+                ChangeStateMachine(TriggerType.EnterJump);
+                return;
+            }
+        }
         bool isDeath = ChangeStateDeath();
         if (isDeath) { return; }
 
-        if (goPlayerFlag) 
+        if (goPlayerFlag)
         {
             transform.position =
                Vector3.MoveTowards(transform.position, playerPos, ChaseSpeed * Time.deltaTime);
@@ -190,7 +219,65 @@ public abstract class EnemyCoppy : MonoBehaviour
         }
     }
     private void ExitAttack() { DebugLog("ExitAttack"); }
+    private void EnterJump() { anim.Play("Run", 0, 0); jumpCnt = 0; }
+    private void UpdateJump() 
+    {
+        switch (jumpCnt) 
+        {
+            case 0:
+                if (Physics.Raycast(this.transform.position, this.transform.forward, out RaycastHit hit0, 1.0f))
+                {
+                    //上に上がる処理
+                    float upSpeed = JumpUpSpeed * Time.deltaTime;
+                    transform.position += this.transform.up * upSpeed;
+                }
+                else 
+                {
+                    jumpCnt++;
+                }
+                break;
+            case 1:
+                if (Physics.Raycast(this.transform.position, this.transform.up * -1, out RaycastHit hit1))
+                {
+                    //前に進む処理
+                    float moveSpeed = JumpFowrdSpeed * Time.deltaTime;
+                    transform.position += this.transform.forward * moveSpeed;
 
+                    if (hit1.collider.tag != "Ground")
+                    {
+                        enemyHight = true;
+                    }
+
+                    if (enemyHight)
+                    {
+                        if (hit1.collider.tag == "Ground") 
+                        { 
+                            jumpCnt++; 
+                            enemyHight = false;
+                            break;
+                        }
+                    }
+                }
+                break;
+            case 2:
+                {
+                    Vector3 fallpos = new(transform.position.x, 0, transform.position.z);
+
+                    if (this.transform.position.y >= 0.1f)
+                    {
+                        transform.position = fallpos;
+                        ChangeStateMachine(TriggerType.EnterChase);
+                        break;
+                    }
+                    //下に下がる処理
+                    float fallSpeed = JumpDownSpeed;
+                    transform.position =
+                        Vector3.MoveTowards(transform.position, fallpos, fallSpeed * Time.deltaTime);
+                }
+                break;
+        }
+    }
+    private void ExitJump() { DebugLog("ExitJump"); }
     // メソッド
 
     private void DebugLog(string code) { Debug.Log(code); }
@@ -254,6 +341,7 @@ public abstract class EnemyCoppy : MonoBehaviour
     {
         goPlayerFlag = goPlayer;
     }
+    public void SetIsJump(bool IsJump) { this.isJump = IsJump; }
     public void SetPlayerPosition(Vector3 PlayerPos) 
     {
         playerPos = PlayerPos;
