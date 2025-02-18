@@ -63,7 +63,7 @@ public class Enemy2_New : Enemy2
 
         if (this.transform.position.x >= GetAttackPos(attackCnt) - 5f)
         {
-            LightContllore(3);
+            LightContllore(8);
         }
 
         if (this.transform.position.x >= GetAttackPos(attackCnt))
@@ -102,11 +102,12 @@ public class Enemy2_New : Enemy2
     private void LightContllore(int change)
     {
         LightCnt++;
-        bool onlight = false;
+        bool onlight = blueLight.enabled;
 
         if (LightCnt % (change + 1) == 0) 
         {
-            onlight = true;
+            if (onlight) {onlight = false; }
+            else {onlight = true; }
         }
 
         blueLight.enabled = onlight;
