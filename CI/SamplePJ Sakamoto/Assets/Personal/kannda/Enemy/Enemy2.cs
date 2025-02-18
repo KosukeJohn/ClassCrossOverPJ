@@ -29,8 +29,10 @@ public abstract class Enemy2 : MonoBehaviour
     private GameObject HitCheck;
     protected GameObject player;
     protected Animator anim;
-    protected Light redLight;
-    protected Light blueLight;
+    protected GameObject RedLightParent;
+    protected GameObject BlueLightParent;
+    protected Light[] redLight;
+    protected Light[] blueLight;
     protected Collider hitColl;
 
     protected float SpeedY;
@@ -53,10 +55,22 @@ public abstract class Enemy2 : MonoBehaviour
         player = GameObject.Find("Player");
         anim = GetComponent<Animator>();
         hitColl = GetComponent<Collider>();
-        redLight = transform.GetChild(0).GetComponent<Light>();
-        blueLight = transform.GetChild(1).GetComponent<Light>();
-        redLight.enabled = false;
-        blueLight.enabled = false;
+
+        RedLightParent = transform.GetChild(0).gameObject;
+        redLight = new Light[RedLightParent.transform.childCount];
+        for (int i = 0; i < redLight.Length; i++)
+        {
+            redLight[i] = RedLightParent.transform.GetChild(i).GetComponent<Light>();
+            redLight[i].enabled = false;
+        }
+
+        BlueLightParent = transform.GetChild(1).gameObject;
+        blueLight = new Light[BlueLightParent.transform.childCount];
+        for (int i = 0; i < blueLight.Length; i++)
+        {
+            blueLight[i] = BlueLightParent.transform.GetChild(i).GetComponent<Light>();
+            blueLight[i].enabled = false;
+        }
 
         // ëJà⁄èåèÇÃìoò^
 
@@ -145,13 +159,13 @@ public abstract class Enemy2 : MonoBehaviour
     {
         if (onLight)
         {
-            redLight.enabled = true;
-            blueLight.enabled = false;
+            for (int i = 0; i < redLight.Length; i++) { redLight[i].enabled = true; }
+            for (int i = 0; i < blueLight.Length; i++) { blueLight[i].enabled = false; }
         }
         else
         {
-            redLight.enabled = false;
-            blueLight.enabled = true;
+            for (int i = 0; i < redLight.Length; i++) { redLight[i].enabled = false; }
+            for (int i = 0; i < blueLight.Length; i++) { blueLight[i].enabled = true; }
         }
     }
     private void AtkSoundPlay()

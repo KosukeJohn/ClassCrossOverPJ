@@ -102,7 +102,7 @@ public class Enemy2_New : Enemy2
     private void LightContllore(int change)
     {
         LightCnt++;
-        bool onlight = blueLight.enabled;
+        bool onlight = blueLight[0].enabled;
 
         if (LightCnt % (change + 1) == 0) 
         {
@@ -110,6 +110,6 @@ public class Enemy2_New : Enemy2
             else {onlight = true; }
         }
 
-        blueLight.enabled = onlight;
+        for (int i = 0; i < blueLight.Length; i++) { blueLight[i].enabled = onlight; }
     }
 }

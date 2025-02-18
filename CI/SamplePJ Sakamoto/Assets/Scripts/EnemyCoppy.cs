@@ -246,62 +246,6 @@ public abstract class EnemyCoppy : MonoBehaviour
                 ChangeStateMachine(TriggerType.EnterChase);
             }
         }
-
-
-        //switch (jumpCnt) 
-        //{
-        //    case 0:
-        //        if (Physics.Raycast(this.transform.position, this.transform.forward, out RaycastHit hit0, 1.0f))
-        //        {
-        //            //上に上がる処理
-        //            float upSpeed = JumpUpSpeed * Time.deltaTime;
-        //            transform.position += this.transform.up * upSpeed;
-        //        }
-        //        else 
-        //        {
-        //            jumpCnt++;
-        //        }
-        //        break;
-        //    case 1:
-        //        if (Physics.Raycast(this.transform.position, this.transform.up * -1, out RaycastHit hit1))
-        //        {
-        //            //前に進む処理
-        //            float moveSpeed = JumpFowrdSpeed * Time.deltaTime;
-        //            transform.position += this.transform.forward * moveSpeed;
-
-        //            if (hit1.collider.tag != "Ground")
-        //            {
-        //                enemyHight = true;
-        //            }
-
-        //            if (enemyHight)
-        //            {
-        //                if (hit1.collider.tag == "Ground") 
-        //                { 
-        //                    jumpCnt++; 
-        //                    enemyHight = false;
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //        break;
-        //    case 2:
-        //        {
-        //            Vector3 fallpos = new(transform.position.x, 0, transform.position.z);
-
-        //            if (this.transform.position.y >= 0.1f)
-        //            {
-        //                transform.position = fallpos;
-        //                ChangeStateMachine(TriggerType.EnterChase);
-        //                break;
-        //            }
-        //            //下に下がる処理
-        //            float fallSpeed = JumpDownSpeed;
-        //            transform.position =
-        //                Vector3.MoveTowards(transform.position, fallpos, fallSpeed * Time.deltaTime);
-        //        }
-        //        break;
-        //}
     }
     private void ExitJump() { DebugLog("ExitJump"); preLenge = 0; }
     // メソッド
@@ -358,30 +302,17 @@ public abstract class EnemyCoppy : MonoBehaviour
             new(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z);
         Vector3 ForwardPos = this.transform.forward;
 
-        if (Physics.Raycast(prePos + ForwardPos * 1.0f, this.transform.up * -1, out RaycastHit hit1))
+        for (int i = 1; i <= 3; i++)
         {
-            if (hit1.collider.tag == "Ground")
+            if (Physics.Raycast(prePos + ForwardPos * 1.0f * i, this.transform.up * -1, out RaycastHit hit))
             {
-                return 1.0f;
+                if (hit.collider.tag == "Ground")
+                {
+                    return 1.0f * i;
+                }
             }
         }
-
-        if (Physics.Raycast(prePos + ForwardPos * 2.0f, this.transform.up * -1, out RaycastHit hit2))
-        {
-            if (hit2.collider.tag == "Ground")
-            {
-                return 2.0f;
-            }
-        }
-
-        if (Physics.Raycast(prePos + ForwardPos * 1.0f, this.transform.up * -1, out RaycastHit hit3))
-        {
-            if (hit3.collider.tag == "Ground")
-            {
-                return 3.0f;
-            }
-        }
-
+        
         return 5.0f;
     }
 
