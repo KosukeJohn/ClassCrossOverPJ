@@ -302,7 +302,7 @@ public abstract class EnemyCoppy : MonoBehaviour
             new(this.transform.position.x, this.transform.position.y + 5, this.transform.position.z);
         Vector3 ForwardPos = this.transform.forward;
 
-        for (int i = 1; i <= 3; i++)
+        for (int i = 2; i <= 4; i++)
         {
             if (Physics.Raycast(prePos + ForwardPos * 1.0f * i, this.transform.up * -1, out RaycastHit hit))
             {

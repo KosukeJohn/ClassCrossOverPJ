@@ -9,6 +9,8 @@ public class PlatformShake : MonoBehaviour
     private Vector3 originalPosition;
     private bool isShaking = false;
     private bool hasShaken = false;  // óhÇÍÇΩÇ©Ç«Ç§Ç©ÇãLò^Ç∑ÇÈïœêîÇí«â¡
+   [SerializeField] AudioSource shakeSound;
+    bool SEplay = false;
 
     void Start()
     {
@@ -16,12 +18,17 @@ public class PlatformShake : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         rb.useGravity = false;
+        shakeSound=GetComponent<AudioSource>();
         rb.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
     }
 
     void Update()
     {
         DestroyWhenOutOfStage();
+        if (SEplay)
+        {
+            shakeSound.Play();
+        }
     }
 
     public void EnableGravity()
@@ -32,6 +39,7 @@ public class PlatformShake : MonoBehaviour
             rb.constraints = RigidbodyConstraints.FreezePositionX |
                            RigidbodyConstraints.FreezePositionZ |
                            RigidbodyConstraints.FreezeRotation;
+            SEplay = true;
         }
     }
 
