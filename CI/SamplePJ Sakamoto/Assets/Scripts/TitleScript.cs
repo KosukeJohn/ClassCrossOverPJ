@@ -114,7 +114,7 @@ public class TitleScript : MonoBehaviour
             yield return RotateAndFadeIn(targetObject, -150, 2f);
         }
         // フェードイン処理
-        yield return FadeInCoroutine(blackSheet, 1f);
+        yield return FadeInCoroutine(blackSheet, 0.5f);
 
 
         // フェードイン完了後にシーンをロード
