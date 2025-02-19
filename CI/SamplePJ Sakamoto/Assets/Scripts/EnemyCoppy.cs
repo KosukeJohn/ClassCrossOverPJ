@@ -70,7 +70,7 @@ public abstract class EnemyCoppy : MonoBehaviour
 
     private void Start()
     {
-        stateMachine = new StateMachine<StateType, TriggerType>(StateType.Born);
+        stateMachine = new StateMachine<StateType, TriggerType>(StateType.Idle);
         anim = GetComponent<Animator>();
         redLight = transform.GetChild(0).GetComponent<Light>();
         blueLight = transform.GetChild(1).GetComponent<Light>();
