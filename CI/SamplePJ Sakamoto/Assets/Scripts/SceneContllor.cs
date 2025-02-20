@@ -1,33 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.PostProcessing;
 public class Scene : MonoBehaviour
 {
     public GameObject hitCheck;
-    //public GameObject endCheck;
     private bool hitFlag;
-    //private bool clearFlag;
+    private float firstWight;
+
+    [SerializeField] private PostProcessVolume postProcessVolume;
 
     private void Start()
     {
         hitFlag = false;
-        //clearFlag = false;
+        firstWight = postProcessVolume.weight;
     }
 
     private void Update()
     {
         hitFlag = hitCheck.GetComponent<PlayerHitCheck>().GetPlayerHitCheck();
-        //clearFlag = endCheck.GetComponent<GOl>().GetEndFlag();
 
         if (hitFlag)
         {
-            SceneManager.LoadScene("GameOverScene");
+            StartCoroutine(Fadeenumerator(1f));         
+        }
+    }
+
+    private IEnumerator Fadeenumerator(float maxTimeCnt)
+    {
+        float weight = 1 - firstWight;
+        postProcessVolume.weight += weight * Time.deltaTime / maxTimeCnt;
+
+        if (postProcessVolume.weight >= 1) 
+        {
+            postProcessVolume.weight = 1;
+
+            Image image = GameObject.Find("BlackSheet").GetComponent<Image>();
+            image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
         }
 
-        //if (clearFlag)
-        //{
-        //    SceneManager.LoadScene("EndingScene");
-        //}
+        yield return new WaitForSeconds(maxTimeCnt);
+
+        SceneManager.LoadScene("GameOverScene");
     }
 }

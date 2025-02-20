@@ -34,11 +34,14 @@ public abstract class Enemy2 : MonoBehaviour
     protected Light[] redLight;
     protected Light[] blueLight;
     protected Collider hitColl;
+    private Animation animat;
 
     protected float SpeedY;
     protected bool attackFlag;
     private float firstPosY;
     private bool hitFlag;
+    private bool hitStop;
+    private float animTimeCnt;
 
 
     [Header("ステータス")]
@@ -125,8 +128,8 @@ public abstract class Enemy2 : MonoBehaviour
     private void EnterIdle() { anim.Play("Idle", 0, 0); ChangeLightColor(false); }
     private void ExitIdle() { Debug.Log("ExitIdle"); }
     protected abstract void UpdateIdle();
-    private void EnterAttack() { }
-    private void ExitAttack() { Debug.Log("ExitAttack"); }
+    private void EnterAttack() { hitStop = true; }
+    private void ExitAttack() { Debug.Log("ExitAttack");}
     protected abstract void UpdateAttack();
     private void EnterDeath() { anim.Play("Idle", 0, 0); }
     private void ExitDeath() { Debug.Log("ExitDeath"); }
@@ -151,6 +154,13 @@ public abstract class Enemy2 : MonoBehaviour
         {
             if (other.tag == "Player")
             {
+                // ヒットストップ
+                if (hitStop) 
+                {
+                    HitStopManager.instance.StartHitStop(0.3f);
+                    hitStop = false;
+                }
+               
                 hitFlag = true;
             }
         }
