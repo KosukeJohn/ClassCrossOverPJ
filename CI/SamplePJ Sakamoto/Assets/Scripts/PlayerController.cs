@@ -325,6 +325,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // 2/23に追加、プレイヤーが移動しているかの取得用
+    public Vector2 GetMoveInput() { return moveInput; }
     private void DebugLog(string code)
     {
         Debug.Log(code);
