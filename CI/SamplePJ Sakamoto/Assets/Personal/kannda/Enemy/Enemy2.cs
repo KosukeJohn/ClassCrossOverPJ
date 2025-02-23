@@ -187,6 +187,7 @@ public abstract class Enemy2 : MonoBehaviour
         anim.Play("Find+", 0, 0);
         ChangeLightColor(ColorType.Red);
         _timeCnt = 0;
+        Invoke("AtkSoundPlay", 0);
     }
     private void ExitBornAttack() { }
     private void UpdateBornAttack() 
@@ -319,6 +320,9 @@ public abstract class Enemy2 : MonoBehaviour
 
         // タイマーを０にする
         _timeCnt = 0;
+
+        // 効果音
+        Invoke("AtkSoundPlay",0);
     }
     private void ExitAttack() { Debug.Log("ExitAttack"); }
     protected virtual void UpdateAttack() 
