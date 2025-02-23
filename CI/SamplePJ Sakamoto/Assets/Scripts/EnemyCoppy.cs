@@ -248,6 +248,7 @@ public abstract class EnemyCoppy : MonoBehaviour
         }
     }
     private void ExitJump() { DebugLog("ExitJump"); preLenge = 0; }
+
     // ÉÅÉ\ÉbÉh
 
     private void DebugLog(string code) { Debug.Log(code); }

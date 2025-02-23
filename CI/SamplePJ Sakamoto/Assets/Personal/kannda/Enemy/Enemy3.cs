@@ -2,77 +2,187 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy3 : EnemyCoppy
+public class Enemy3 :MonoBehaviour
 {
-    float angle;
-    float lenge;
-    float lenge2;
-    Vector3 HideObjPos;
-    Vector3[] Pos = new Vector3[4];
-    [SerializeField]int seed;
-    [SerializeField]Vector3 nextpos;
-
-    protected override void EnterBack()
+    private enum StateType
     {
-        anim.Play("Run", 0, 0);
-        Debug.Log("Hide");
-
-        // 一番近い点を検索
-        FindNerePosition();
+        Non,
+        Idle,
+        Chase,
+        Attack,
+        Death
     }
-    protected override void UpdateBack()
+
+    private enum TriggerType
     {
-        if (!playerFindFlag) { ChangeStateMachine(TriggerType.EnterIdle); return; }
-        if (!checkHideFlag) { ChangeStateMachine(TriggerType.EnterChase); return; }
-        bool isDeath = ChangeStateDeath();
-        if (isDeath) { return; }
+        EnterChase,
+        EnterAttack,
+        EnterDeath
+    }
 
-        // オブジェクトの周りを回る
+    private StateMachine<StateType, TriggerType> stateMachine;
+    private GameObject HitCheck;
+    private GameObject player;
+    private Animator anim;
+    private Collider hitColl;
 
-        if (playerPos == null) { return; }
+    private bool onMove;
+    private bool hitFlag;
+    private float timeCnt;
 
-        if (Mathf.Approximately(transform.position.x, nextpos.x))
-            if(Mathf.Approximately(transform.position.z,nextpos.z))
-            {
-                seed++;
-                if (seed == 4) { seed = 0; }
-                nextpos = Pos[seed];
-            }
+    [Header("位置角度")]
+    [SerializeField] private float maxHight;
+    [SerializeField] private float rotateY;
 
+    [Header("速度")]
+    [SerializeField] private float speedX;
+    [SerializeField] private float speedY;
+
+    [Header("設定")]
+    [SerializeField] private string AttackAnimName;
+    [SerializeField] private TriggerType nextTriger;
+
+    private void Start() 
+    {
+        stateMachine = new StateMachine<StateType, TriggerType>(StateType.Idle);
+        player = GameObject.Find("Player");
+        HitCheck = GameObject.Find("HitCheck");
+        hitColl = GetComponent<Collider>();
+        hitColl.enabled = false;
+        anim = GetComponent<Animator>();
         transform.position =
-           Vector3.MoveTowards(transform.position, nextpos, ChaseSpeed * Time.deltaTime);
+            new(transform.position.x,-20,transform.position.z);
+        onMove = false;
+
+        // 遷移条件の登録
+
+        stateMachine.AddTransition(StateType.Idle,StateType.Attack,TriggerType.EnterAttack);
+        stateMachine.AddTransition(StateType.Attack, StateType.Chase, TriggerType.EnterChase);
+        stateMachine.AddTransition(StateType.Attack, StateType.Death, TriggerType.EnterDeath);
+        stateMachine.AddTransition(StateType.Chase, StateType.Death, TriggerType.EnterDeath);
+
+        // Actionの登録
+
+        stateMachine.SetupState(StateType.Idle, () => EnterIdle(), () => ExitIdle(), deltatime => UpdateIdle());
+        stateMachine.SetupState(StateType.Chase, () => EnterChase(), () => ExitChase(), deltatime => UpdateChase());
+        stateMachine.SetupState(StateType.Attack, () => EnterAttack(), () => ExitAttack(), deltatime => UpdateAttack());
+        stateMachine.SetupState(StateType.Death, () => EnterDeath(), () => ExitDeath(), deltatime => UpdateDeath());
     }
 
-    private void FindNerePosition() 
+    private void Update()
     {
-        if (HideObjPos == null) { return; }       
-        float[] _lenge = new float[4];
+        // ステートマシーンの更新
+        stateMachine.Update(Time.deltaTime);
 
-        Pos[0] = new(HideObjPos.x + lenge, 0, HideObjPos.z);// 右
-        Pos[1] = new(HideObjPos.x, 0, HideObjPos.z - lenge);// 下
-        Pos[2] = new(HideObjPos.x - lenge, 0, HideObjPos.z);// 左
-        Pos[3] = new(HideObjPos.x, 0, HideObjPos.z + lenge);// 上
+        // 当たり判定の実装
+        HitCheck.GetComponent<PlayerHitCheck>().SetPlayerHitCheck(hitFlag);
+        if (hitFlag) { hitFlag = false; }
+    }
 
-        for (int i = 0; i < 4; i++) 
+    // ステータスごとのメソッド
+
+    private void EnterIdle() 
+    {
+        anim.Play("Idle", 0, 0);
+    }
+    private void ExitIdle() { }
+    private void UpdateIdle() 
+    {
+        if (!onMove) { return; }
+
+        if (this.transform.position.y >= maxHight)
         {
-            Vector3 vector = transform.position - Pos[i];
-            _lenge[i] = vector.magnitude;
+            transform.position =
+                new(this.transform.position.x, maxHight, this.transform.position.z);
+            stateMachine.ExecuteTrigger(TriggerType.EnterAttack);
+            return;
         }
 
-        int min_index = 0;
+        transform.Translate(0, speedY * Time.deltaTime, 0);
+    }
+    private void EnterAttack() 
+    {
+        anim.Play(AttackAnimName, 0, 0);
+        timeCnt = 0;
+    }
+    private void ExitAttack() { }
+    private void UpdateAttack() 
+    {
+        timeCnt += Time.deltaTime;
 
-        for (int i = 0; i < 4; i++)
+        float flamCnt = 0 ;
+        if (AttackAnimName == "Ryote") { flamCnt = 1 / 3; }
+        else { flamCnt = 1 / 2; }
+
+        if (timeCnt >= flamCnt)
         {
-            if (_lenge[i] < _lenge[min_index]) 
+            if (transform.parent.GetComponent<fallFlag>())
             {
-                min_index = i;
+                transform.parent.GetComponent<fallFlag>().SetFallFlag(true);
             }
         }
 
-        seed = min_index;
-        nextpos = Pos[seed];
+        if (timeCnt >= 2.0f)
+        {
+            stateMachine.ExecuteTrigger(nextTriger);
+        }
+    }
+    private void EnterChase() 
+    {
+        anim.Play("Chase", 0, 0);
+        hitColl.enabled = true;
+    }
+    private void ExitChase() { }
+    private void UpdateChase() 
+    {
+        Vector3 playerPos = new(player.transform.position.x, player.transform.position.z, 0);
+        Vector3 enemyPos = new(this.transform.position.x, this.transform.position.z, 0);
+        Vector3 vector = playerPos - enemyPos;
+
+        float rotate = transform.forward.x * vector.y - transform.forward.z * vector.x;
+        bool go = false;
+        if (-0.05f < rotate && rotate < 0.05f) { go = true; }
+
+        if (go)
+        {
+            Vector3 pos =
+                new(playerPos.x, this.transform.position.y, playerPos.y);
+
+            // 移動処理
+            transform.position =
+               Vector3.MoveTowards(transform.position, pos, speedX * Time.deltaTime);
+            return;
+        }
+
+        if (rotate > 0) { transform.Rotate(0f, -5.0f * Time.deltaTime, 0f); }
+        else { transform.Rotate(0f, 5.0f * Time.deltaTime, 0f); }
+    }
+    private void EnterDeath() { anim.Play("Idle", 0, 0); }
+    private void ExitDeath() { }
+    private void UpdateDeath() 
+    {
+        if (!GetComponent<Rigidbody>())
+        {
+            Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+        }
+
+        if (transform.position.y <= -20)
+        {
+            Destroy(gameObject);
+        }
     }
 
-    public void SetLenge(float num) { lenge = num; }
-    public void SetPos(Vector3 pos) { HideObjPos = pos; }
+    // メソッド
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            hitFlag = true;
+        }
+    }
+
+    // 参照可能関数
+
+    public void SetOnMove(bool OnMove) { onMove = OnMove; }
 }

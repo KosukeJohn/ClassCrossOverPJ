@@ -29,20 +29,9 @@ public class PlatformShake_copy : MonoBehaviour
 
     void Update()
     {
-        if (fall.GetComponent<fallFlag>().GetEnemyMoveFlag())
-        {
-            redLight.enabled = true;
-        }
-
         if (fall.GetComponent<fallFlag>().GetFallFlag())
         {
-            //if (!AtkSEPlayed)
-            //{
-            //    AtkSEPlayed = true;
-            //    GameObject atkSE = GameObject.Find("atkSE");
-            //    atkSE.GetComponent<AtkSEPlayer>().AtkSEPlay();
-            //    Debug.Log("atkSEplay");
-            //}
+            redLight.enabled = true;
             StartShake();
         }
 
@@ -103,11 +92,6 @@ public class PlatformShake_copy : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //if (collision.gameObject.CompareTag("Player"))
-        //{
-        //    StartShake();
-        //}
-
         if (collision.gameObject.name == "Gameover Area") 
         {
             Destroy(gameObject);

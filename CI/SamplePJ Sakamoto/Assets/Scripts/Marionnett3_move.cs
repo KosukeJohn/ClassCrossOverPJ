@@ -36,7 +36,7 @@ public class Marionnett3_move : MonoBehaviour
     }
     private void Update()
     {
-        moveFlag = fall.GetComponent<fallFlag>().GetEnemyMoveFlag();
+        //moveFlag = fall.GetComponent<fallFlag>().GetEnemyMoveFlag();
 
         if (moveFlag)
         {
