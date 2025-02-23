@@ -64,9 +64,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 432228340279003027, guid: 29331c31191065246ba310a895ce1a39, type: 3}
+      propertyPath: m_TagString
+      value: Toys
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 29331c31191065246ba310a895ce1a39, type: 3}
       propertyPath: m_Name
       value: horse_car4 (4) Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 29331c31191065246ba310a895ce1a39, type: 3}
+      propertyPath: m_TagString
+      value: Toys
       objectReference: {fileID: 0}
     - target: {fileID: 4696961580303981220, guid: 29331c31191065246ba310a895ce1a39, type: 3}
       propertyPath: m_TagString
@@ -76,6 +84,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 29331c31191065246ba310a895ce1a39, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4044879931892583718}
     - targetCorrespondingSourceObject: {fileID: 4696961580303981220, guid: 29331c31191065246ba310a895ce1a39, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5947945576535945077}
@@ -109,6 +120,32 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.20544396, y: 0.4816831, z: 0.30296314}
   m_Center: {x: -0.021866608, y: 0.657479, z: 0.30880237}
+--- !u!1 &3316626095045510176 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 29331c31191065246ba310a895ce1a39, type: 3}
+  m_PrefabInstance: {fileID: 2505809048251119985}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &4044879931892583718
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3316626095045510176}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.46091455, y: 0.26133865, z: 0.5259346}
+  m_Center: {x: 0.011634766, y: 0.17244916, z: 0.0007143219}
 --- !u!1 &7199172944312574933 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4696961580303981220, guid: 29331c31191065246ba310a895ce1a39, type: 3}

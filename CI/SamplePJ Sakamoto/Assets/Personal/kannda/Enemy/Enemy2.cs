@@ -78,6 +78,7 @@ public abstract class Enemy2 : MonoBehaviour
         player = GameObject.Find("Player");
         anim = GetComponent<Animator>();
         hitColl = GetComponent<Collider>();
+        ColliderCntllore(false);
 
         RedLightParent = transform.GetChild(0).gameObject;
         redLight = new Light[RedLightParent.transform.childCount];
@@ -143,7 +144,11 @@ public abstract class Enemy2 : MonoBehaviour
 
     // ステータスごとのメソッド
 
-    private void EnterBorn() { anim.Play("Idle", 0, 0);}
+    private void EnterBorn() 
+    {
+        ChangeLightColor(ColorType.Blue);
+        anim.Play("Idle", 0, 0);
+    }
     private void ExitBorn() { Debug.Log("ExitBorn"); }
     private void UpdateBorn()
     {
@@ -158,7 +163,11 @@ public abstract class Enemy2 : MonoBehaviour
             stateMachine.ExecuteTrigger(nextTriggerType);
         }
     }
-    private void EnterBornMove() { anim.Play("Idle", 0, 0); }
+    private void EnterBornMove() 
+    {
+        ChangeLightColor(ColorType.Blue, true);
+        anim.Play("Idle", 0, 0);
+    }
     private void ExitBornMove() { }
     private void UpdateBornMove() 
     {
@@ -183,6 +192,9 @@ public abstract class Enemy2 : MonoBehaviour
     private void UpdateBornAttack() 
     {
         _timeCnt += Time.deltaTime;
+
+        if (_timeCnt >= 0.3f) { ColliderCntllore(true); }
+        if (_timeCnt >= 1.5f) { ColliderCntllore(false); }
 
         if (_timeCnt >= 2f) 
         {
@@ -243,7 +255,7 @@ public abstract class Enemy2 : MonoBehaviour
 
         onChase = false;
     }
-    private void ExitFind() { }
+    private void ExitFind() { onChase = false; }
     private void UpdateFind() 
     {
         _timeCnt += Time.deltaTime;
@@ -252,6 +264,12 @@ public abstract class Enemy2 : MonoBehaviour
         if (_timeCnt >= AttackCntMax)
         {
             // Invoke("AtkSoundPlay", 1.0f);
+            if (onChase)
+            {
+                stateMachine.ExecuteTrigger(TriggerType.EnterChase);
+                return;
+            }
+
             stateMachine.ExecuteTrigger(TriggerType.EnterIdle);
             return;
         }
@@ -264,14 +282,12 @@ public abstract class Enemy2 : MonoBehaviour
         if (vector.x != 0) 
         {
             chasePos = player.transform.position.x;
-            stateMachine.ExecuteTrigger(TriggerType.EnterChase);
-            return;
+            onChase = true;
         }
         if (vector.y != 0) 
         {
             chasePos = player.transform.position.x;
-            stateMachine.ExecuteTrigger(TriggerType.EnterChase);            
-            return;
+            onChase = true;
         }
     }
     private void EnterChase() 
@@ -304,12 +320,15 @@ public abstract class Enemy2 : MonoBehaviour
         // タイマーを０にする
         _timeCnt = 0;
     }
-    private void ExitAttack() { Debug.Log("ExitAttack");}
+    private void ExitAttack() { Debug.Log("ExitAttack"); }
     protected virtual void UpdateAttack() 
     {
         _timeCnt += Time.deltaTime;
-        // アニメーションが終わったらIdleにする
+        
+        if (_timeCnt >= 0.4f) { ColliderCntllore(true); }
+        if (_timeCnt >= 1.5f) { ColliderCntllore(false); }
 
+        // アニメーションが終わったらIdleにする
         if (_timeCnt >= 2.0f)
         {
             stateMachine.ExecuteTrigger(TriggerType.EnterIdle);
@@ -333,14 +352,17 @@ public abstract class Enemy2 : MonoBehaviour
     // メソッド
 
     protected abstract void NextStateType();
+    private void ColliderCntllore(bool onColl) { hitColl.enabled = onColl; }
     protected virtual void OnTriggerStay(Collider other)
     {
-        if (attackFlag)
+        if (other.tag == "Player")
         {
-            if (other.tag == "Player")
-            {
-                hitFlag = true;
-            }
+            hitFlag = true;
+        }
+
+        if (other.tag == "Toys")
+        {
+            Destroy(other.gameObject);
         }
     }
     private void ChangeLightColor(ColorType color, bool setFlashing = false)

@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class Stage2GameDirector : MonoBehaviour
     private GameObject enemy;
     private GameObject house;
     private GameObject player;
+    private Collider coll;
     private bool EnemyInstanceFlag;
     private bool HouseInstanceFlag;
     private float HouseInstancePos = 75f;
@@ -22,6 +24,7 @@ public class Stage2GameDirector : MonoBehaviour
     private void Start()
     {
         player = GameObject.Find("Player");
+        coll = GetComponent<Collider>();
         EnemyInstanceFlag = true;
         HouseInstanceFlag = true;
     }
@@ -38,7 +41,9 @@ public class Stage2GameDirector : MonoBehaviour
             }
         }
 
-        if(EnemyInstanceFlag)
+        PlayerMoveLock();
+
+        if (EnemyInstanceFlag)
         {
             if (player.transform.position.x >= EnemyInstancePos)
             {
@@ -61,8 +66,26 @@ public class Stage2GameDirector : MonoBehaviour
         }
     }
 
-    private void DestroyHouse()
+    private void PlayerMoveLock()
     {
-        
+        if (house)
+        {
+            coll.enabled = true;
+        }
+        else 
+        {
+            GameObject camera = GameObject.Find("Virtual Camera");
+            camera.GetComponent<CinemachineVirtualCamera>().Follow = player.transform;
+            coll.enabled = false;
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player") 
+        {
+            GameObject camera = GameObject.Find("Virtual Camera");
+            if(house)
+            camera.GetComponent<CinemachineVirtualCamera>().Follow = house.transform;
+        }
     }
 }

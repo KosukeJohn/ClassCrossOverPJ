@@ -61,6 +61,10 @@ public class PlayerController : MonoBehaviour
 
     // 変数の追加はここに記述してください
     private GameObject hitcheck;
+
+    // 2/24追加
+
+    private bool playerOnMove;
     
     //----------------------------------------------
     // 変数のプロパティ
@@ -200,6 +204,13 @@ public class PlayerController : MonoBehaviour
             moveDirection = Vector3.zero;
             playerAnimator.SetBool("isRunning", false);
         }
+        else if (!playerOnMove) 
+        {
+            // 移動を停止
+            playerRigidbody.velocity = Vector3.zero;
+            moveDirection = Vector3.zero;
+            playerAnimator.SetBool("isRunning", false);
+        }
         else if (!isCleared)
         {
             // 移動処理
@@ -236,6 +247,8 @@ public class PlayerController : MonoBehaviour
                 SceneManager.LoadScene("EndingScene Movie");//1/7名称の変更
             }
         }
+
+        if (!playerOnMove) { playerOnMove = true; }
     }
 
     // オブジェクトが別の物理コライダーと接触した際に一度だけ呼ばれる
@@ -327,6 +340,14 @@ public class PlayerController : MonoBehaviour
 
     // 2/23に追加、プレイヤーが移動しているかの取得用
     public Vector2 GetMoveInput() { return moveInput; }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Enemy" && playerOnMove)
+        {
+            playerOnMove = false;
+        }
+    }
     private void DebugLog(string code)
     {
         Debug.Log(code);

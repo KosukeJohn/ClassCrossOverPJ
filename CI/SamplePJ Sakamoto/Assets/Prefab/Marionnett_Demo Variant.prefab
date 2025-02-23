@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 3506037299893194217}
   m_Layer: 0
   m_Name: HitBox
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -394,6 +394,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 71f3dbf44d2ed7649b96f4e6195a7a20, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 71f3dbf44d2ed7649b96f4e6195a7a20, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
