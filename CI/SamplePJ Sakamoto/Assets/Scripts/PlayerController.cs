@@ -47,7 +47,6 @@ public class PlayerController : MonoBehaviour
     Image end;
     bool playedSE = false;
     float fadespeed;
-    private bool isMoveCheck = false;
 
     //----------------------------------------------
     // スクリプトの処理用
@@ -227,7 +226,9 @@ public class PlayerController : MonoBehaviour
         // 処理の追加はここに記述してください
         if (isCleared == true)
         {
-            
+            bool featherGet = GameObject.Find("EndingScene").GetComponent<FeatherContllore>().GetIsCread();
+            if (!featherGet) { SceneManager.LoadScene("mainScene"); return; }
+
             Debug.Log("End");
             alfa += fadespeed;
             end.color = new Color(255, 255, 255, alfa);

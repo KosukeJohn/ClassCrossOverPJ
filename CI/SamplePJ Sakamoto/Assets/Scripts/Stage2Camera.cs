@@ -14,6 +14,6 @@ public class Stage2Camera : MonoBehaviour
     void Update()
     {
         this.transform.position =
-            new(player.transform.position.x, this.transform.position.y, this.transform.position.z);
+            new(player.transform.position.x, player.transform.position.y, this.transform.position.z);
     }
 }
