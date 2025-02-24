@@ -10654,7 +10654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b5aae0d1205d342975940da172046a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursor: 1
+  cursor: 0
 --- !u!4 &907966370
 Transform:
   m_ObjectHideFlags: 0
@@ -17120,7 +17120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66465b2a90ded484eb80fa851a350a6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debag: 0
+  debag: 1
 --- !u!136 &1454667313
 CapsuleCollider:
   m_ObjectHideFlags: 0
