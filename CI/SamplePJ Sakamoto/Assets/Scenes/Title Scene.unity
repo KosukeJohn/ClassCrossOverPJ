@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -547,6 +547,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b5aae0d1205d342975940da172046a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursor: 0
 --- !u!4 &523119726
 Transform:
   m_ObjectHideFlags: 0
@@ -1155,6 +1156,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   feather: {fileID: 0}
   featherPos: []
+  image:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &1332730398
 GameObject:
   m_ObjectHideFlags: 0
@@ -1606,7 +1611,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 40, y: 270}
+  m_AnchoredPosition: {x: 20, y: 307}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1557927638
@@ -1629,7 +1634,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 60bfcf7f1a5200541945b1db65118e32, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e31ce19a2643ef647b55705db50e9ae2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
