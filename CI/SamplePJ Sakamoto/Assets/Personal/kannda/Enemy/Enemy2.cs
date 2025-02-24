@@ -276,7 +276,7 @@ public abstract class Enemy2 : MonoBehaviour
                 return;
             }
 
-            stateMachine.ExecuteTrigger(TriggerType.EnterIdle);
+            stateMachine.ExecuteTrigger(TriggerType.EnterChase);
             return;
         }
 
