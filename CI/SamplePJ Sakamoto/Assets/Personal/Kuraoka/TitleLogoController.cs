@@ -17,7 +17,7 @@ public class TitleLogoController : MonoBehaviour
     void Update()
     {
         t += Time.deltaTime;
-        if (t > 6)
+        if (t > 6.5)
         {
             logo.SetActive(true);
         }

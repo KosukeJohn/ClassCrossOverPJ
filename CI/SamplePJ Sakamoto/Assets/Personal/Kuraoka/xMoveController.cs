@@ -27,9 +27,9 @@ public class xMoveController : MonoBehaviour
         {
             posy -= 350 * Time.deltaTime;
             rectTransform.position = new Vector3(posx, posy, posz);
-            if (posy < 800)
+            if (posy < 870)
             {
-                posy = 800;
+                posy = 870;
                 rectTransform.position = new Vector3(posx, posy, posz);
             }
         }
