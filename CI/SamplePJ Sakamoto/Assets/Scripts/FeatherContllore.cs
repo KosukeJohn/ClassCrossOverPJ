@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class FeatherContllore : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class FeatherContllore : MonoBehaviour
     [Header("羽オブジェクト")]
     [SerializeField] private GameObject feather;
     [SerializeField] private Vector3[] featherPos;
+    [SerializeField] private Image[] image = new Image[isFeather.Length];
 
     private void Start()
     {
@@ -26,6 +28,7 @@ public class FeatherContllore : MonoBehaviour
             {
                 _feather[i] = Instantiate(feather);
                 _feather[i].transform.position = featherPos[i];
+                image[i].color = new Color(255, 255, 255, 0);
             }
             else { _feather[i] = null; }
         }
@@ -47,6 +50,7 @@ public class FeatherContllore : MonoBehaviour
             if (_feather[i] == null)
             {
                 isFeather[i] = false;
+                image[i].color = new Color(255, 255, 255, 255);
             }
         }
     }

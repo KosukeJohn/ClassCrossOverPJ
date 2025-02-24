@@ -238,10 +238,15 @@ public abstract class Enemy2 : MonoBehaviour
         if (_timeCnt >= ChaseCntMax) 
         {
             stateMachine.ExecuteTrigger(TriggerType.EnterFind);
+            return;
         }
 
         // マリオネットの移動処理
-        this.transform.Translate(SpeedX, SpeedY, 0);
+
+        chasePos = player.transform.position.x;
+        Vector3 pos = new Vector3(chasePos, this.transform.position.y, this.transform.position.z);
+        this.transform.position =
+            Vector3.MoveTowards(this.transform.position, pos, -SpeedX);
     }
     private void EnterFind() 
     {
@@ -277,7 +282,6 @@ public abstract class Enemy2 : MonoBehaviour
 
         // コントローラーを取得して倒れていたら追跡に移行
 
-        GameObject player = GameObject.Find("Player");
         Vector2 vector = player.GetComponent<PlayerController>().GetMoveInput();
 
         if (vector.x != 0) 
@@ -338,16 +342,11 @@ public abstract class Enemy2 : MonoBehaviour
             stateMachine.ExecuteTrigger(TriggerType.EnterIdle);
         }
     }
-    private void EnterDeath() { anim.Play("Idle", 0, 0); }
+    private void EnterDeath() { anim.Play("Idle", 0, 0); SpeedY = -2 * Time.deltaTime; }
     private void ExitDeath() { Debug.Log("ExitDeath"); }
     private void UpdateDeath() 
     {
-        if (!GetComponent<Rigidbody>())
-        {
-            this.gameObject.AddComponent<Rigidbody>();
-            Rigidbody rb = GetComponent<Rigidbody>();
-            rb.isKinematic = false;
-        }
+        this.transform.Translate(0, SpeedY, 0);
 
         if (this.transform.position.y <= -20)
         {

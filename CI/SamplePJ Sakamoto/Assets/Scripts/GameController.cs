@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [Header("マウスカーソル")]
+    [SerializeField] bool cursor;
     void Start()
     {
-        // Cursor.visible = false;
+        if(!cursor)
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
