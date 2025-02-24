@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static Unity.VisualScripting.Member;
 
 public class FeatherContllore : MonoBehaviour
 {
     private static bool[] isFeather = new []{ true, true, true };
+    private bool[] isSound = new bool[isFeather.Length];
     private bool isCread;
     private GameObject[] _feather = new GameObject[isFeather.Length];
     private string sceneName;
@@ -15,6 +17,10 @@ public class FeatherContllore : MonoBehaviour
     [SerializeField] private GameObject feather;
     [SerializeField] private Vector3[] featherPos;
     [SerializeField] private Image[] image = new Image[isFeather.Length];
+
+    [Header("効果音")]
+    [SerializeField] AudioSource source;//オーディオソース
+    [SerializeField] AudioClip Get;
 
     private void Start()
     {
@@ -29,8 +35,12 @@ public class FeatherContllore : MonoBehaviour
                 _feather[i] = Instantiate(feather);
                 _feather[i].transform.position = featherPos[i];
                 image[i].color = new Color(255, 255, 255, 0);
+                isSound[i] = true;
             }
-            else { _feather[i] = null; }
+            else 
+            {
+                _feather[i] = null;
+            }
         }
 
         isCread = false;
@@ -51,6 +61,7 @@ public class FeatherContllore : MonoBehaviour
             {
                 isFeather[i] = false;
                 image[i].color = new Color(255, 255, 255, 255);
+                if (isSound[i]) { isSound[i] = false; Sound(); }
             }
         }
     }
@@ -73,7 +84,11 @@ public class FeatherContllore : MonoBehaviour
             isFeather[i] = true;
         }
     }
-
+    private void Sound()
+    {
+        source.clip = Get;
+        source.Play();
+    }
     // 参照可能
     public bool GetIsCread() { return isCread; }
 }

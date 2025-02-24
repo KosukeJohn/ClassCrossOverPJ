@@ -107,6 +107,7 @@ public abstract class Enemy2 : MonoBehaviour
         stateMachine.AddTransition(StateType.Find, StateType.Chase, TriggerType.EnterChase);
         stateMachine.AddTransition(StateType.Find, StateType.Idle, TriggerType.EnterIdle);
         stateMachine.AddTransition(StateType.Chase, StateType.Attack, TriggerType.EnterAttack);
+        stateMachine.AddTransition(StateType.Chase, StateType.Idle, TriggerType.EnterIdle);
         stateMachine.AddTransition(StateType.Attack, StateType.Idle, TriggerType.EnterIdle);
 
         // Action‚Ì“o˜^
@@ -267,10 +268,9 @@ public abstract class Enemy2 : MonoBehaviour
         _timeCnt += Time.deltaTime;
 
         // ˆê’èŽžŠÔ‚Å‘Ò‹@‚É–ß‚é
-        if (_timeCnt >= AttackCntMax)
+        if (_timeCnt >= toAttackCntMax)
         {
-            // Invoke("AtkSoundPlay", 1.0f);
-            if (onChase)
+            if (onChase) 
             {
                 stateMachine.ExecuteTrigger(TriggerType.EnterChase);
                 return;
@@ -301,7 +301,7 @@ public abstract class Enemy2 : MonoBehaviour
     }
     private void ExitChase() { }
     private void UpdateChase() 
-    {
+    {      
         bool onAttack = Mathf.Approximately(this.transform.position.x, chasePos);
         if (onAttack)
         {
