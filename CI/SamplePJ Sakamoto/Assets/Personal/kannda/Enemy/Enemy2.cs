@@ -344,8 +344,8 @@ public abstract class Enemy2 : MonoBehaviour
     {
         if (!GetComponent<Rigidbody>())
         {
-            Rigidbody rb =
-                this.gameObject.AddComponent<Rigidbody>();
+            this.gameObject.AddComponent<Rigidbody>();
+            Rigidbody rb = GetComponent<Rigidbody>();
             rb.isKinematic = false;
         }
 

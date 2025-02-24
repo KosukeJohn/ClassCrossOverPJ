@@ -475,6 +475,7 @@ MonoBehaviour:
   JumpDownSpeed: 5
   source: {fileID: -8708935663741470792}
   attack: {fileID: 8300000, guid: e85e76b18c6b45d4cad9dde1326a46c0, type: 3}
+  Born: {fileID: 8300000, guid: 0d0ffd2d000c66d488fd31acdc46fab6, type: 3}
 --- !u!82 &-8708935663741470792
 AudioSource:
   m_ObjectHideFlags: 0

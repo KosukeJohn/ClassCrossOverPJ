@@ -67,6 +67,7 @@ public abstract class EnemyCoppy : MonoBehaviour
     [Header("効果音")]
     [SerializeField] AudioSource source;//オーディオソース
     [SerializeField] AudioClip attack;
+    [SerializeField] AudioClip Born;
 
     private void Start()
     {
@@ -115,6 +116,9 @@ public abstract class EnemyCoppy : MonoBehaviour
             deathTimeCntMax = 5.0f;
             enterJumpCnt = 0;
         }
+        anim.Play("Idle", 0, 0); 
+        ChangeLight(ColorType.Blue);
+        BornSound();
     }
 
     private void Update()
@@ -196,7 +200,7 @@ public abstract class EnemyCoppy : MonoBehaviour
                (0f, 20.0f, 0f);
     }
     private void ExitDeath() { DebugLog("ExitDeath"); }
-    private void EnterBorn() { anim.Play("Idle", 0, 0); ChangeLight(ColorType.Non); }
+    private void EnterBorn() { }
     private void UpdateBorn() 
     {
         bornTimeCnt += Time.deltaTime;
@@ -295,6 +299,11 @@ public abstract class EnemyCoppy : MonoBehaviour
     private void AttackSound() 
     {
         source.clip = attack;
+        source.Play();
+    }
+    private void BornSound()
+    {
+        source.clip = Born;
         source.Play();
     }
     private float CheckFallPosition()

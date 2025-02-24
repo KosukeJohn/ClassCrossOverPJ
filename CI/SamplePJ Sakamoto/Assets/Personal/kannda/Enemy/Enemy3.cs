@@ -29,6 +29,7 @@ public class Enemy3 :MonoBehaviour
     private bool onMove;
     private bool hitFlag;
     private float timeCnt;
+    private bool AtkSEPlayed;
 
     [Header("à íuäpìx")]
     [SerializeField] private float maxHight;
@@ -118,6 +119,7 @@ public class Enemy3 :MonoBehaviour
         {
             if (transform.parent.GetComponent<fallFlag>())
             {
+                AttackSE();
                 transform.parent.GetComponent<fallFlag>().SetFallFlag(true);
             }
         }
@@ -179,6 +181,16 @@ public class Enemy3 :MonoBehaviour
         if (other.tag == "Player")
         {
             hitFlag = true;
+        }
+    }
+    private void AttackSE()
+    {
+        if (!AtkSEPlayed)
+        {
+            AtkSEPlayed = true;
+            GameObject atkSE = GameObject.Find("atkSE");
+            atkSE.GetComponent<AtkSEPlayer>().AtkSEPlay();
+            Debug.Log("atkSEplay");
         }
     }
 
