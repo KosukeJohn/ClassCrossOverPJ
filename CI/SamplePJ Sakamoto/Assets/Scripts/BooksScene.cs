@@ -16,7 +16,7 @@ public class BooksScene : MonoBehaviour
 
         // “®‰æ€”õ
         videoPlayer = GameObject.Find("videoPlayer").GetComponent<VideoPlayer>();
-        videoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath,"Books_video.mp4");
+        videoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, "marionette_2.mp4");
         videoPlayer.Prepare();
 
         // “®‰æ‚Ì€”õŠ®—¹‚ÌƒCƒxƒ“ƒg‚ğ“o˜^
