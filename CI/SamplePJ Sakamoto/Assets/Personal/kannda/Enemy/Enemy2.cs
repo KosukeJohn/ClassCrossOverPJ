@@ -344,7 +344,9 @@ public abstract class Enemy2 : MonoBehaviour
     {
         if (!GetComponent<Rigidbody>())
         {
-            this.gameObject.AddComponent<Rigidbody>();
+            Rigidbody rb =
+                this.gameObject.AddComponent<Rigidbody>();
+            rb.isKinematic = false;
         }
 
         if (this.transform.position.y <= -20)

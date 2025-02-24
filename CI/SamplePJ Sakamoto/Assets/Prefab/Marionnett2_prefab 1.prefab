@@ -917,9 +917,6 @@ PrefabInstance:
       addedObject: {fileID: 4155714765934321162}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cba26db10e04e2d46bfa46a13b4c51f2, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8570485673337079951}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cba26db10e04e2d46bfa46a13b4c51f2, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1187955465861693904}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cba26db10e04e2d46bfa46a13b4c51f2, type: 3}
       insertIndex: -1
@@ -962,26 +959,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8570485673337079951
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9136110469079314319}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02d898d8aed674c478474acbbe07736b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SpeedX: 13
-  ChaseCntMax: 3
-  toAttackCntMax: 1
-  AttackCntMax: 2
-  changeCntSpeedPos: 170
-  destroyEnemyPos: 198.1
-  source: {fileID: 8769803352365558025}
-  atk: {fileID: 8300000, guid: e85e76b18c6b45d4cad9dde1326a46c0, type: 3}
 --- !u!114 &1187955465861693904
 MonoBehaviour:
   m_ObjectHideFlags: 0

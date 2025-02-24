@@ -74,8 +74,11 @@ public class Stage2GameDirector : MonoBehaviour
         }
         else 
         {
+            if (player.transform.position.x <= EnemyInstancePos) { return; }
+
             GameObject camera = GameObject.Find("Virtual Camera");
-            camera.GetComponent<CinemachineVirtualCamera>().Follow = player.transform;
+            Transform _transform = GameObject.Find("CameraTranse").GetComponentInChildren<Transform>();
+            camera.GetComponent<CinemachineVirtualCamera>().Follow = _transform;
             coll.enabled = false;
         }
     }

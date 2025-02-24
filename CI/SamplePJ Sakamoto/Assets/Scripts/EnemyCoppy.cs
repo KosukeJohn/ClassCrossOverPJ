@@ -70,7 +70,7 @@ public abstract class EnemyCoppy : MonoBehaviour
 
     private void Start()
     {
-        stateMachine = new StateMachine<StateType, TriggerType>(StateType.Idle);
+        stateMachine = new StateMachine<StateType, TriggerType>(StateType.Born);
         anim = GetComponent<Animator>();
         redLight = transform.GetChild(0).GetComponent<Light>();
         blueLight = transform.GetChild(1).GetComponent<Light>();
@@ -108,7 +108,7 @@ public abstract class EnemyCoppy : MonoBehaviour
 
         {
             bornTimeCnt = 0;
-            bornTimeCntMax = 2.0f;
+            bornTimeCntMax = 3.0f;
             chacePosMax = 67.67566f;
             prePos = transform.position;
             deathTimeCnt = 0;
@@ -196,7 +196,7 @@ public abstract class EnemyCoppy : MonoBehaviour
                (0f, 20.0f, 0f);
     }
     private void ExitDeath() { DebugLog("ExitDeath"); }
-    private void EnterBorn() { anim.Play("Find", 0, 0); ChangeLight(ColorType.Non); }
+    private void EnterBorn() { anim.Play("Idle", 0, 0); ChangeLight(ColorType.Non); }
     private void UpdateBorn() 
     {
         bornTimeCnt += Time.deltaTime;
